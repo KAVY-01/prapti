@@ -657,6 +657,12 @@ def api_ics(scheme_id):
 
 @app.errorhandler(404)
 def not_found(_e):
+    if os.environ.get("VERCEL"):  # TEMP: hosting diagnosis
+        app.logger.warning("404 path=%r script=%r qs=%r uri=%r", request.environ.get("PATH_INFO"),
+                           request.environ.get("SCRIPT_NAME"), request.environ.get("QUERY_STRING"),
+                           request.environ.get("RAW_URI") or request.environ.get("REQUEST_URI"))
+        return Response(f"debug path={request.environ.get('PATH_INFO')!r} script={request.environ.get('SCRIPT_NAME')!r} "
+                        f"qs={request.environ.get('QUERY_STRING')!r}", status=404, mimetype="text/plain")
     return render_template("error.html", page="", title="Page not found",
                            text="This page does not exist. Your saved schemes and tracker are safe."), 404
 
