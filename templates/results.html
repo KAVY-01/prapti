@@ -45,6 +45,16 @@
 </section>
 {% endif %}
 
+{% if trip.unique > 1 and trip.schemes | length > 1 %}
+<section class="slip trip-card" aria-labelledby="trip-card-title">
+  <div class="next-body">
+    <h2 id="trip-card-title" class="next-title">{{ icon('map-pin', 20) }} {{ t('trip.card_title') }}</h2>
+    <p class="next-text">{{ t('trip.card_text', s=trip.schemes | length, t=trip.total, u=trip.unique) }}</p>
+    <a class="btn btn-secondary btn-block" href="/documents">{{ t('trip.card_btn') }} {{ icon('arrow-right', 20) }}</a>
+  </div>
+</section>
+{% endif %}
+
 <div id="speak-results" hidden>{% if r.summary.likely_count %}{% if sample_name %}{{ t('res.who_name', name=sample_name, n=r.summary.likely_count) }}{% else %}{{ t('res.who_you', n=r.summary.likely_count) }}{% endif %} {{ r.summary.likely_value_text }}. {% for m in r.likely %}{{ m.name }}. {% endfor %}{% if first %}{{ t('res.next_title') }}: {% if first.deadline %}{{ t('res.next_text', name=first.name, d=nice_date(first.deadline)) }}{% else %}{{ t('res.next_text_nodate', name=first.name) }}{% endif %}{% endif %}{% else %}{{ t('res.none') }}. {{ t('res.try') }}{% endif %}</div>
 
 <section class="understood" aria-labelledby="understood-title">

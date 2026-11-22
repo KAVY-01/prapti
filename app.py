@@ -11,7 +11,7 @@ from flask import (Flask, Response, abort, has_request_context, jsonify, redirec
 from engine.extract import PROFILE_KEYS, extract
 from engine.ics import build_ics
 from engine.match import (FIELD_LABEL, LEVEL_LABEL, DATA_DIR, SCHEMES_PATH, fields_that_matter,
-                          format_value, match_all, match_scheme)
+                          applies, format_value, match_all, match_scheme)
 from engine.match import load_schemes as load_file_schemes
 
 app = Flask(__name__)
@@ -408,6 +408,55 @@ def update_profile():
     return redirect(url_for("results"))
 
 
+# ---------- One trip: every document the student's schemes need, collected once ----------
+TRIP_WHERE = ["mee_seva", "hospital", "college", "home"]  # the slow certificates first
+
+
+def doc_name(d, lang):
+    return tr("doc." + d["key"], lang) if d.get("key") and ("doc." + d["key"]) in I18N else d["name"]
+
+
+def one_trip(result, lang):
+    """Merge the document lists of the schemes a student will apply for into one list, grouped by place.
+
+    Uses the 'likely' schemes that are still open (or the 'maybe' ones if there are none), and each
+    scheme's own document list, which already leaves out documents this student does not need.
+    """
+    def open_(m):
+        return m["days_left"] is None or m["days_left"] >= 0
+    chosen = [m for m in result["likely"] if open_(m)] or [m for m in result["maybe"] if open_(m)]
+    items, total = {}, 0
+    for m in chosen:
+        for d in m["documents"]:
+            total += 1
+            key = d.get("key") or d["name"]
+            it = items.setdefault(key, {"key": key, "name": doc_name(d, lang), "hint": d.get("hint", ""),
+                                        "where": d.get("where", "home"), "days": d.get("days"), "schemes": []})
+            it["schemes"].append({"id": m["id"], "name": m["name"], "days_left": m["days_left"]})
+    for it in items.values():
+        it["rush"] = None
+        if it["days"]:
+            soon = sorted((sc for sc in it["schemes"] if sc["days_left"] is not None), key=lambda sc: sc["days_left"])
+            if soon and soon[0]["days_left"] <= it["days"]:
+                it["rush"] = {"name": soon[0]["name"], "d": soon[0]["days_left"], "n": it["days"]}
+    groups = []
+    for where in TRIP_WHERE:
+        group = sorted((it for it in items.values() if it["where"] == where), key=lambda it: -len(it["schemes"]))
+        if group:
+            groups.append({"where": where, "items": group})
+    return {"schemes": chosen, "groups": groups, "total": total, "unique": len(items),
+            "mee_seva": sum(1 for it in items.values() if it["where"] == "mee_seva")}
+
+
+@app.route("/documents")
+def documents():
+    if not session.get("profile"):
+        return redirect(url_for("index"))
+    lang = get_lang()
+    trip = one_trip(match_all(current_profile(), load_schemes(), lang=lang), lang)
+    return render_template("documents.html", page="find", trip=trip)
+
+
 @app.route("/results")
 def results():
     profile = current_profile()
@@ -418,6 +467,7 @@ def results():
     missing = [f for f in CHIP_FIELDS if profile.get(f) is None]
     first = next((m for m in result["likely"] if m["category"] != "loan" and (m["days_left"] is None or m["days_left"] >= 0)), None)
     return render_template("results.html", first=first, page="find", r=result, profile=profile,
+                           trip=one_trip(result, lang),
                            chips=understood_chips(profile, lang), options=FIELD_OPTIONS,
                            field_label=FIELD_LABEL, chip_fields=CHIP_FIELDS, missing=missing,
                            selected=selected_options(profile),
@@ -438,8 +488,12 @@ def scheme_detail(scheme_id):
 
 @app.route("/tracker")
 def tracker():
-    """The tracker lives on the student's own device (localStorage); the page only needs scheme facts."""
+    """The tracker lives on the student's own device (localStorage); the page only needs scheme facts.
+
+    Documents are listed the same way as on the scheme page (only the ones this student needs, by key),
+    so ticks made on the scheme page or the one-trip list count here too."""
     meta = []
+    profile = current_profile()
     today = date.today()
     lang = get_lang()
     for s in load_schemes():
@@ -450,7 +504,8 @@ def tracker():
             "deadline": s.get("deadline"),
             "deadline_note": s.get("deadline_note"),
             "days_left": (date.fromisoformat(s["deadline"]) - today).days if s.get("deadline") else None,
-            "documents": [{"name": d["name"], "hint": d.get("hint", "")} for d in s.get("documents", [])],
+            "documents": [{"key": d.get("key") or d["name"], "name": doc_name(d, lang), "hint": d.get("hint", "")}
+                          for d in s.get("documents", []) if applies(d.get("needed_if"), profile)],
             "portal": next((st["link"] for st in s.get("steps", []) if st.get("link")), s.get("source_url")),
             "source_name": s.get("source_name"),
         })

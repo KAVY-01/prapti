@@ -457,8 +457,8 @@
   },
   "det.english_note": {
     "en": "",
-    "te": "క్రింది పత్రాలు, దశలు అధికారిక పోర్టల్‌లో ఉన్నట్టే ఇంగ్లీష్‌లో ఉన్నాయి.",
-    "hi": "नीचे के दस्तावेज़ और कदम आधिकारिक पोर्टल की तरह अंग्रेज़ी में हैं।"
+    "te": "క్రింది దరఖాస్తు దశలు అధికారిక పోర్టల్‌లో ఉన్నట్టే ఇంగ్లీష్‌లో ఉన్నాయి.",
+    "hi": "नीचे के आवेदन के कदम आधिकारिक पोर्टल की तरह अंग्रेज़ी में हैं।"
   },
   "q.title": {
     "en": "A few quick questions",
@@ -1119,5 +1119,140 @@
     "en": "Back",
     "te": "వెనక్కి",
     "hi": "पीछे"
+  },
+  "trip.card_title": {
+    "en": "One trip to Mee Seva",
+    "te": "మీ సేవకు ఒక్క ట్రిప్",
+    "hi": "मी सेवा का एक ही चक्कर"
+  },
+  "trip.card_text": {
+    "en": "Your {s} schemes ask for {t} documents, but only {u} are different. Get each one once.",
+    "te": "మీ {s} పథకాలకు మొత్తం {t} పత్రాలు అడుగుతారు, కానీ వేర్వేరు పత్రాలు {u} మాత్రమే. ఒక్కొక్కటి ఒక్కసారే తీసుకోండి.",
+    "hi": "आपकी {s} योजनाओं में कुल {t} दस्तावेज़ माँगे जाते हैं, पर अलग-अलग सिर्फ़ {u} हैं। हर एक बस एक बार बनवाइए।"
+  },
+  "trip.card_btn": {
+    "en": "See my one-trip list",
+    "te": "నా ఒక్క-ట్రిప్ జాబితా చూపించండి",
+    "hi": "मेरी एक-चक्कर सूची दिखाइए"
+  },
+  "trip.title": {
+    "en": "Everything you need, in one list",
+    "te": "మీకు కావలసినవన్నీ, ఒకే జాబితాలో",
+    "hi": "जो कुछ चाहिए, एक ही सूची में"
+  },
+  "trip.lead": {
+    "en": "For your {s} schemes. Grouped by where you get each document, so you make each trip only once. Ticking a document here ticks it in every scheme.",
+    "te": "మీ {s} పథకాల కోసం. ప్రతి పత్రం ఎక్కడ దొరుకుతుందో దాని ప్రకారం విభజించాం, కాబట్టి ఒక్కో చోటికి ఒక్కసారే వెళ్ళండి. ఇక్కడ టిక్ చేస్తే అన్ని పథకాల్లో టిక్ అవుతుంది.",
+    "hi": "आपकी {s} योजनाओं के लिए। हर दस्तावेज़ कहाँ मिलता है, उसके हिसाब से बाँटा है, ताकि हर जगह एक ही बार जाना पड़े। यहाँ टिक करने से हर योजना में टिक हो जाता है।"
+  },
+  "trip.where.mee_seva": {
+    "en": "At a Mee Seva centre: go first, these take the longest",
+    "te": "మీ సేవ కేంద్రంలో: ముందు ఇక్కడికి వెళ్ళండి, వీటికి ఎక్కువ సమయం పడుతుంది",
+    "hi": "मी सेवा केंद्र पर: पहले यहाँ जाएँ, इनमें सबसे ज़्यादा समय लगता है"
+  },
+  "trip.where.hospital": {
+    "en": "At a SADAREM camp or government hospital",
+    "te": "సదరం క్యాంపు లేదా ప్రభుత్వ ఆసుపత్రిలో",
+    "hi": "सदरम कैंप या सरकारी अस्पताल में"
+  },
+  "trip.where.college": {
+    "en": "At your school or college office",
+    "te": "మీ స్కూల్ లేదా కాలేజీ ఆఫీసులో",
+    "hi": "अपने स्कूल या कॉलेज के ऑफ़िस में"
+  },
+  "trip.where.home": {
+    "en": "Things you probably already have at home",
+    "te": "ఇంట్లో ఇప్పటికే ఉండే అవకాశం ఉన్నవి",
+    "hi": "जो शायद घर पर पहले से हैं"
+  },
+  "trip.for_n": {
+    "en": "Needed for {n} of your schemes",
+    "te": "మీ {n} పథకాలకు అవసరం",
+    "hi": "आपकी {n} योजनाओं के लिए ज़रूरी"
+  },
+  "trip.for_one": {
+    "en": "Needed for 1 scheme",
+    "te": "1 పథకానికి అవసరం",
+    "hi": "1 योजना के लिए ज़रूरी"
+  },
+  "trip.days": {
+    "en": "Can take up to {n} days",
+    "te": "{n} రోజుల వరకు పట్టవచ్చు",
+    "hi": "{n} दिन तक लग सकते हैं"
+  },
+  "trip.rush": {
+    "en": "Apply for this today. {name} closes in {d} days, and this can take up to {n} days.",
+    "te": "ఈ రోజే దరఖాస్తు చేయండి. {name} గడువు {d} రోజుల్లో ముగుస్తుంది, దీనికి {n} రోజుల వరకు పట్టవచ్చు.",
+    "hi": "आज ही आवेदन करें। {name} की आख़िरी तारीख़ {d} दिन में है, और इसमें {n} दिन तक लग सकते हैं।"
+  },
+  "trip.none": {
+    "en": "No documents to collect yet. First find schemes you are likely eligible for.",
+    "te": "ఇంకా సేకరించాల్సిన పత్రాలు లేవు. ముందుగా మీకు అర్హత ఉండే పథకాలను కనుగొనండి.",
+    "hi": "अभी कोई दस्तावेज़ नहीं जुटाना है। पहले वे योजनाएँ ढूँढिए जिनके लिए आप पात्र हो सकते हैं।"
+  },
+  "trip.print": {
+    "en": "Print this list",
+    "te": "ఈ జాబితాను ప్రింట్ చేయండి",
+    "hi": "यह सूची प्रिंट करें"
+  },
+  "trip.back": {
+    "en": "Back to my schemes",
+    "te": "నా పథకాలకు తిరిగి",
+    "hi": "मेरी योजनाओं पर वापस"
+  },
+  "trip.never_pay": {
+    "en": "These certificates have a small fixed government fee at Mee Seva. Never pay a middleman to apply for a scholarship.",
+    "te": "ఈ సర్టిఫికెట్లకు మీ సేవలో చిన్న ప్రభుత్వ రుసుము మాత్రమే ఉంటుంది. స్కాలర్‌షిప్ దరఖాస్తు కోసం ఎప్పుడూ మధ్యవర్తికి డబ్బు ఇవ్వకండి.",
+    "hi": "मी सेवा पर इन प्रमाण पत्रों की छोटी सरकारी फ़ीस ही लगती है। छात्रवृत्ति के आवेदन के लिए किसी बिचौलिए को कभी पैसे न दें।"
+  },
+  "doc.income": {
+    "en": "Income certificate (current year)",
+    "te": "ఆదాయ ధృవీకరణ పత్రం (ఈ సంవత్సరం)",
+    "hi": "आय प्रमाण पत्र (इस साल का)"
+  },
+  "doc.caste": {
+    "en": "Caste certificate",
+    "te": "కుల ధృవీకరణ పత్రం",
+    "hi": "जाति प्रमाण पत्र"
+  },
+  "doc.marks": {
+    "en": "Marks memo of your last exam",
+    "te": "చివరి పరీక్ష మార్కుల మెమో",
+    "hi": "पिछली परीक्षा की मार्कशीट"
+  },
+  "doc.bonafide": {
+    "en": "Bonafide / study certificate",
+    "te": "బోనఫైడ్ / స్టడీ సర్టిఫికెట్",
+    "hi": "बोनाफ़ाइड / अध्ययन प्रमाण पत्र"
+  },
+  "doc.bank": {
+    "en": "Bank passbook front page (account in student's name)",
+    "te": "బ్యాంక్ పాస్‌బుక్ మొదటి పేజీ (విద్యార్థి పేరు మీద ఖాతా)",
+    "hi": "बैंक पासबुक का पहला पन्ना (छात्र के नाम पर खाता)"
+  },
+  "doc.photo": {
+    "en": "Passport-size photo",
+    "te": "పాస్‌పోర్ట్ సైజు ఫోటో",
+    "hi": "पासपोर्ट साइज़ फ़ोटो"
+  },
+  "doc.aadhaar": {
+    "en": "Aadhaar card (show it on the official portal only)",
+    "te": "ఆధార్ కార్డు (అధికారిక పోర్టల్‌లో మాత్రమే చూపించండి)",
+    "hi": "आधार कार्ड (सिर्फ़ आधिकारिक पोर्टल पर दिखाएँ)"
+  },
+  "doc.minority_decl": {
+    "en": "Minority community self-declaration",
+    "te": "మైనారిటీ స్వీయ ధృవీకరణ పత్రం",
+    "hi": "अल्पसंख्यक स्व-घोषणा पत्र"
+  },
+  "doc.admission": {
+    "en": "Admission letter / fee receipt",
+    "te": "అడ్మిషన్ లెటర్ / ఫీజు రసీదు",
+    "hi": "प्रवेश पत्र / फ़ीस रसीद"
+  },
+  "doc.disability": {
+    "en": "Disability certificate (40% or more)",
+    "te": "వికలాంగ ధృవీకరణ పత్రం (40% లేదా ఎక్కువ)",
+    "hi": "दिव्यांगता प्रमाण पत्र (40% या अधिक)"
   }
 }

@@ -1,4 +1,5 @@
 import os
+import pathlib
 import unittest
 
 os.environ["PRAPTI_AI"] = "off"  # tests never call the API
@@ -24,7 +25,7 @@ class TestFlow(unittest.TestCase):
         try:
             judge, other = app.test_client(), app.test_client()
             judge.post("/admin/login", data={"password": "prapti-demo"})
-            before = open(app_module.SCHEMES_PATH, encoding="utf-8").read()
+            before = pathlib.Path(app_module.SCHEMES_PATH).read_text(encoding="utf-8")
             form = {"benefit_text": "Changed by a judge", "benefit_max_inr": "1", "deadline": "",
                     "deadline_note": "", "source_url": "https://example.gov.in"}
             sch = app_module.scheme_by_id("nmms")
@@ -32,13 +33,44 @@ class TestFlow(unittest.TestCase):
                 form.update({f"field_{i}": r["field"], f"op_{i}": r["op"], f"text_{i}": r["text_en"],
                              f"value_{i}": ", ".join(map(str, r["value"])) if isinstance(r["value"], list) else str(r["value"])})
             self.assertEqual(judge.post("/admin/schemes/nmms", data=form).status_code, 302)
-            self.assertEqual(open(app_module.SCHEMES_PATH, encoding="utf-8").read(), before)  # file untouched
+            self.assertEqual(pathlib.Path(app_module.SCHEMES_PATH).read_text(encoding="utf-8"), before)  # file untouched
             self.assertIn("Changed by a judge", judge.get("/scheme/nmms").get_data(as_text=True))
             self.assertNotIn("Changed by a judge", other.get("/scheme/nmms").get_data(as_text=True))
             judge.post("/admin/reset")
             self.assertNotIn("Changed by a judge", judge.get("/scheme/nmms").get_data(as_text=True))
         finally:
             app_module.SANDBOX = False
+
+    def test_one_trip_document_list(self):
+        import app as app_module
+        self.c.post("/find", data={"sample": "lakshmi"})
+        r = app_module.match_all(dict(app_module.load_samples()[0]["profile"]), app_module.load_file_schemes())
+        trip = app_module.one_trip(r, "en")
+        keys = [it["key"] for g in trip["groups"] for it in g["items"]]
+        self.assertEqual(len(keys), len(set(keys)))                 # each document listed once
+        self.assertEqual(trip["unique"], len(keys))
+        self.assertGreater(trip["total"], trip["unique"])            # several schemes share documents
+        self.assertEqual(trip["groups"][0]["where"], "mee_seva")     # slow certificates come first
+        income = next(it for g in trip["groups"] for it in g["items"] if it["key"] == "income")
+        self.assertEqual(len(income["schemes"]), len(trip["schemes"]))  # every scheme needs it
+        page = self.c.get("/documents").get_data(as_text=True)
+        self.assertIn('data-schemes="', page)
+        self.assertIn("Income certificate", page)
+        self.assertIn("/documents", self.c.get("/results").get_data(as_text=True))
+        self.c.get("/lang/te")
+        self.assertIn("ఆదాయ ధృవీకరణ పత్రం", self.c.get("/documents").get_data(as_text=True))
+
+    def test_rush_warning_when_certificate_is_slower_than_deadline(self):
+        import app as app_module
+        m = {"id": "x", "name": "X", "days_left": 5, "documents": [
+            {"key": "caste", "name": "Caste certificate", "where": "mee_seva", "days": 15}]}
+        trip = app_module.one_trip({"likely": [m], "maybe": []}, "en")
+        self.assertEqual(trip["groups"][0]["items"][0]["rush"], {"name": "X", "d": 5, "n": 15})
+
+    def test_checklists_use_document_keys(self):
+        page = self.c.get("/scheme/ts-rtf").get_data(as_text=True)
+        self.assertIn('value="income"', page)
+        self.assertNotIn('type="checkbox" value="0"', page)
 
     def test_security_headers_and_limits(self):
         r = self.c.get("/")

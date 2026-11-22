@@ -167,6 +167,35 @@
     update();
   }
 
+  // ---------- One-trip list: one tick covers the same document in every scheme ----------
+  var trip = document.querySelectorAll("[data-trip] input[type=checkbox]");
+  if (trip.length) {
+    var tripText = document.querySelector("[data-trip-progress]");
+    var tripBar = document.querySelector("[data-trip-bar]");
+    function schemesOf(box) { return box.dataset.schemes.split(" ").filter(Boolean); }
+    function tripUpdate() {
+      var done = 0;
+      trip.forEach(function (b) {
+        b.closest(".check-item").classList.toggle("is-done", b.checked);
+        if (b.checked) done += 1;
+      });
+      if (tripText) tripText.textContent = T("det.ready", { a: done, b: trip.length });
+      if (tripBar) tripBar.style.width = (done / trip.length) * 100 + "%";
+    }
+    trip.forEach(function (b) {
+      b.checked = schemesOf(b).every(function (id) { return (store("prapti:docs:" + id) || []).indexOf(b.value) !== -1; });
+      b.addEventListener("change", function () {
+        schemesOf(b).forEach(function (id) {
+          var have = (store("prapti:docs:" + id) || []).filter(function (k) { return k !== b.value; });
+          if (b.checked) have.push(b.value);
+          store("prapti:docs:" + id, have);
+        });
+        tripUpdate();
+      });
+    });
+    tripUpdate();
+  }
+
   // ---------- Scheme detail: add to tracker ----------
   var trackBtn = document.querySelector("[data-track]");
   var head = document.querySelector("[data-scheme-id]");

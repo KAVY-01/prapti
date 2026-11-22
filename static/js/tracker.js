@@ -52,7 +52,7 @@
     var docs = (m && m.documents) || [];
     var portal = (m && m.source_name) || T("nx.portal");
     if (item.status === "not_started") {
-      var missing = docs.filter(function (d, i) { return done.indexOf(String(i)) === -1; });
+      var missing = docs.filter(function (d) { return done.indexOf(d.key) === -1; });
       if (missing.length) return T("nx.get", { doc: missing[0].name.replace(/ \(.*\)$/, "").toLowerCase(), hint: missing[0].hint });
       return T("nx.docs_done", { portal: portal });
     }
@@ -83,7 +83,7 @@
       var left = daysLeft(deadline);
       var status = STATUSES.filter(function (s) { return s.id === item.status; })[0] || STATUSES[0];
       var finished = status.id === "received" || status.id === "rejected";
-      var done = docsDone(item.id);
+      var done = docsDone(item.id).filter(function (k) { return !m || m.documents.some(function (d) { return d.key === k; }); });
       var total = m ? m.documents.length : 0;
 
       node.style.setProperty("--i", i);

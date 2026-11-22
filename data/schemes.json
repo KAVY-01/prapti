@@ -84,10 +84,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -99,27 +103,39 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "bonafide",
           "name": "Bonafide / study certificate",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "photo",
           "name": "Passport-size photo",
-          "hint": "Recent, plain background"
+          "hint": "Recent, plain background",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -239,10 +255,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -254,27 +274,39 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "bonafide",
           "name": "Bonafide / study certificate",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "photo",
           "name": "Passport-size photo",
-          "hint": "Recent, plain background"
+          "hint": "Recent, plain background",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -393,37 +425,52 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "minority_decl",
           "name": "Minority community self-declaration",
           "hint": "Simple signed form; your college can help",
           "needed_if": {
             "field": "community",
             "op": "eq",
             "value": "Minority"
-          }
+          },
+          "where": "college"
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "bonafide",
           "name": "Bonafide / study certificate",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "photo",
           "name": "Passport-size photo",
-          "hint": "Recent, plain background"
+          "hint": "Recent, plain background",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -594,10 +641,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -609,32 +660,44 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "minority_decl",
           "name": "Minority community self-declaration",
           "hint": "Simple signed form; your college can help",
           "needed_if": {
             "field": "community",
             "op": "eq",
             "value": "Minority"
-          }
+          },
+          "where": "college"
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "admission",
           "name": "Admission letter / fee receipt",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -731,10 +794,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -746,28 +813,38 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "minority_decl",
           "name": "Minority community self-declaration",
           "hint": "Simple signed form; your college can help",
           "needed_if": {
             "field": "community",
             "op": "eq",
             "value": "Minority"
-          }
+          },
+          "where": "college"
         },
         {
+          "key": "bonafide",
           "name": "Bonafide / study certificate",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -896,10 +973,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -911,23 +992,33 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "bonafide",
           "name": "Bonafide / study certificate",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -1016,24 +1107,35 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "admission",
           "name": "Admission letter / fee receipt",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -1129,10 +1231,14 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "caste",
           "name": "Caste certificate",
           "hint": "Get it from: Mee Seva centre, about 7–15 days",
           "needed_if": {
@@ -1144,27 +1250,39 @@
               "BC",
               "EBC"
             ]
-          }
+          },
+          "where": "mee_seva",
+          "days": 15
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "admission",
           "name": "Admission letter / fee receipt",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "photo",
           "name": "Passport-size photo",
-          "hint": "Recent, plain background"
+          "hint": "Recent, plain background",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -1260,28 +1378,41 @@
       ],
       "documents": [
         {
+          "key": "disability",
           "name": "Disability certificate (40% or more)",
-          "hint": "Get it from: SADAREM camp / government hospital"
+          "hint": "Get it from: SADAREM camp / government hospital",
+          "where": "hospital"
         },
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "admission",
           "name": "Admission letter / fee receipt",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [
@@ -1361,24 +1492,35 @@
       ],
       "documents": [
         {
+          "key": "income",
           "name": "Income certificate (current year)",
-          "hint": "Get it from: Mee Seva centre, about 7 days"
+          "hint": "Get it from: Mee Seva centre, about 7 days",
+          "where": "mee_seva",
+          "days": 7
         },
         {
+          "key": "admission",
           "name": "Admission letter / fee receipt",
-          "hint": "Get it from: your college office"
+          "hint": "Get it from: your college office",
+          "where": "college"
         },
         {
+          "key": "marks",
           "name": "Marks memo of your last exam",
-          "hint": "Your school or board marks sheet"
+          "hint": "Your school or board marks sheet",
+          "where": "home"
         },
         {
+          "key": "bank",
           "name": "Bank passbook front page (account in student's name)",
-          "hint": "Any bank; account must be linked for direct transfer"
+          "hint": "Any bank; account must be linked for direct transfer",
+          "where": "home"
         },
         {
+          "key": "aadhaar",
           "name": "Aadhaar card (show it on the official portal only)",
-          "hint": "Never share the number here or with middlemen"
+          "hint": "Never share the number here or with middlemen",
+          "where": "home"
         }
       ],
       "steps": [

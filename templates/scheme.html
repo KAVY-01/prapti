@@ -75,10 +75,11 @@
     {% for d in m.documents %}
     <li class="check-item">
       <label>
-        <input type="checkbox" value="{{ loop.index0 }}">
+        <input type="checkbox" value="{{ d.key or d.name }}">
         <span class="check-box" aria-hidden="true">{{ icon('check-circle', 16) }}</span>
         <span class="check-text">
-          <span class="check-name">{{ d.name }}</span>
+          {% set dn = t('doc.' ~ d.key) if d.key else d.name %}
+          <span class="check-name">{{ d.name if dn == 'doc.' ~ d.key else dn }}</span>
           <span class="check-hint">{{ d.hint }}</span>
         </span>
       </label>

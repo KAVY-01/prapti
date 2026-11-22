@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}{{ t('trip.title') }} – Prapti{% endblock %}
+{% block content %}
+<a class="back-link noprint" href="/results">{{ icon('arrow-left', 20) }}{{ t('trip.back') }}</a>
+
+<header class="trip-head">
+  <h1 class="detail-title">{{ t('trip.title') }}</h1>
+  {% if trip.unique %}
+  <p class="helper-lead">{{ t('trip.lead', s=trip.schemes | length) }}</p>
+  <ul class="chip-row trip-schemes">
+    {% for m in trip.schemes %}<li class="chip chip-static">{{ m.name }}</li>{% endfor %}
+  </ul>
+  <div class="section-head">
+    <span class="progress-text" data-trip-progress>{{ t('det.ready', a=0, b=trip.unique) }}</span>
+    <button type="button" class="link-btn noprint" onclick="window.print()">{{ icon('printer', 16) }}{{ t('trip.print') }}</button>
+  </div>
+  <div class="progress"><span class="progress-bar" data-trip-bar></span></div>
+  {% endif %}
+</header>
+
+{% if not trip.unique %}
+<p class="notice">{{ t('trip.none') }}</p>
+{% endif %}
+
+{% for g in trip.groups %}
+<section class="detail-section trip-group trip-{{ g.where }}" aria-labelledby="trip-{{ g.where }}">
+  <h2 id="trip-{{ g.where }}" class="section-title">{{ t('trip.where.' ~ g.where) }}</h2>
+  <ul class="checklist" data-trip>
+    {% for it in g['items'] %}
+    <li class="check-item">
+      <label>
+        <input type="checkbox" value="{{ it.key }}" data-schemes="{{ it.schemes | map(attribute='id') | join(' ') }}">
+        <span class="check-box" aria-hidden="true">{{ icon('check-circle', 16) }}</span>
+        <span class="check-text">
+          <span class="check-name">{{ it.name }}</span>
+          <span class="check-hint">
+            {% if it.schemes | length == 1 %}{{ t('trip.for_one') }}{% else %}{{ t('trip.for_n', n=it.schemes | length) }}{% endif %}:
+            {{ it.schemes | map(attribute='name') | join(', ') }}{% if it.days %} · {{ t('trip.days', n=it.days) }}{% endif %}
+          </span>
+          {% if g.where == 'home' and lang == 'en' and it.hint %}<span class="check-hint">{{ it.hint }}</span>{% endif %}
+          {% if it.rush %}<span class="trip-rush">{{ icon('alert-triangle', 16) }}{{ t('trip.rush', name=it.rush.name, d=it.rush.d, n=it.rush.n) }}</span>{% endif %}
+        </span>
+      </label>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}
+
+{% if trip.mee_seva %}
+<p class="help-note">{{ icon('info', 20) }}<span>{{ t('trip.never_pay') }}</span></p>
+{% endif %}
+{% endblock %}
