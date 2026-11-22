@@ -7,8 +7,8 @@
     </linearGradient>
   </defs>
   <rect width="800" height="1000" fill="url(#sky)"/>
-  <circle cx="610" cy="210" r="90" fill="#f2b84b" opacity="0.9"/>
-  <circle cx="610" cy="210" r="130" fill="#f2b84b" opacity="0.18"/>
+  <circle cx="610" cy="210" r="90" fill="#ffffff" opacity="0.9"/>
+  <circle cx="610" cy="210" r="130" fill="#ffffff" opacity="0.18"/>
   <g fill="#f2f8fe">
     <ellipse cx="190" cy="230" rx="120" ry="38"/><ellipse cx="260" cy="205" rx="70" ry="44"/><ellipse cx="140" cy="215" rx="50" ry="30"/>
     <ellipse cx="640" cy="420" rx="110" ry="32"/><ellipse cx="690" cy="400" rx="60" ry="38"/>
@@ -18,9 +18,9 @@
   <g transform="translate(400 470)">
     <path d="M-210 0 l210 -90 l210 90 l-210 90 z" fill="#1f3b70"/>
     <path d="M-130 40 v90 q130 60 260 0 v-90 l-130 56 z" fill="#2f5d9e"/>
-    <path d="M150 15 v120" stroke="#f2b84b" stroke-width="8" stroke-linecap="round"/>
-    <circle cx="150" cy="142" r="14" fill="#f2b84b"/>
-    <circle cx="0" cy="0" r="12" fill="#f2b84b"/>
+    <path d="M150 15 v120" stroke="#3f7fd0" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="150" cy="142" r="14" fill="#3f7fd0"/>
+    <circle cx="0" cy="0" r="12" fill="#3f7fd0"/>
   </g>
   <g transform="translate(400 760) rotate(-8)">
     <rect x="-190" y="-46" width="380" height="92" rx="46" fill="#f2f8fe"/>
@@ -28,9 +28,9 @@
     <circle cx="-190" cy="0" r="22" fill="#bcd6ef"/>
     <rect x="-120" y="-14" width="210" height="10" rx="5" fill="#a9c8e6"/>
     <rect x="-120" y="8" width="150" height="10" rx="5" fill="#a9c8e6"/>
-    <path d="M110 -46 v130 l22 -22 l22 22 v-130 z" fill="#f2b84b"/>
-    <circle cx="132" cy="-40" r="30" fill="#f2b84b"/>
-    <circle cx="132" cy="-40" r="18" fill="#d99a2b"/>
+    <path d="M110 -46 v130 l22 -22 l22 22 v-130 z" fill="#3f7fd0"/>
+    <circle cx="132" cy="-40" r="30" fill="#3f7fd0"/>
+    <circle cx="132" cy="-40" r="18" fill="#2a5ea8"/>
   </g>
   <g fill="#f2f8fe">
     <path d="M150 560 l7 16 l16 7 l-16 7 l-7 16 l-7 -16 l-16 -7 l16 -7 z"/>

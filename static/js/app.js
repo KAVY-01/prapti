@@ -13,10 +13,13 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if ("IntersectionObserver" in window && !reduceMotion) {
     document.documentElement.classList.add("js");
-    var groups = document.querySelectorAll(".moments, .sheet, .faq, .detail-section, .source-box, .footer-card, .about-block, .helper-list-wrap, .admin-log");
+    var groups = document.querySelectorAll(".moments, .sheet, .sheet-page, .faq, .detail-section, .source-box, .footer-card, .about-block, .helper-list-wrap, .admin-log");
+    var ioWorks = false;
     var io = new IntersectionObserver(function (entries) {
+      ioWorks = true;
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
+        e.target.classList.add("is-seen");
         e.target.querySelectorAll("[data-reveal]").forEach(function (el) { el.classList.add("is-in"); });
         if (e.target.hasAttribute("data-reveal")) e.target.classList.add("is-in");
         io.unobserve(e.target);
@@ -31,9 +34,11 @@
       });
       io.observe(g);
     });
-    // Safety: never leave content hidden.
+    // Safety: if the observer never reports, never leave content hidden.
     setTimeout(function () {
+      if (ioWorks) return;
       document.querySelectorAll("[data-reveal]").forEach(function (el) { el.classList.add("is-in"); });
+      groups.forEach(function (g) { g.classList.add("is-seen"); });
     }, 4000);
   }
 
@@ -317,4 +322,57 @@
     return days >= -1 && days <= 7;
   });
   if (dot && soon) dot.classList.add("is-visible");
+
+  // ---------- Home FAQ (payard.io pattern): one open at a time, slide then fade; pill tabs follow the scroll ----------
+  var faq = document.querySelector("[data-faq]");
+  if (faq) {
+    var items = Array.prototype.slice.call(faq.querySelectorAll(".faq-item"));
+    faq.classList.add("faq-js");
+    items.forEach(function (item) {
+      var head = item.querySelector("summary");
+      var body = item.querySelector(".faq-body");
+      item.open = true; // keep answers in the page; height does the hiding
+      head.setAttribute("aria-expanded", "false");
+      function close(it) {
+        var b = it.querySelector(".faq-body");
+        b.style.height = b.scrollHeight + "px";
+        void b.offsetHeight; // start from the real height
+        it.classList.remove("is-open");
+        it.querySelector("summary").setAttribute("aria-expanded", "false");
+        b.style.height = "0px";
+      }
+      head.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        if (item.classList.contains("is-open")) { close(item); return; }
+        items.forEach(function (other) { if (other !== item && other.classList.contains("is-open")) close(other); });
+        item.classList.add("is-open");
+        head.setAttribute("aria-expanded", "true");
+        body.style.height = reduceMotion ? "auto" : body.scrollHeight + "px";
+        setTimeout(settle, 800); // in case transitionend never fires
+      });
+      function settle() { if (item.classList.contains("is-open")) body.style.height = "auto"; }
+      body.addEventListener("transitionend", function (ev) { if (ev.propertyName === "height") settle(); });
+    });
+
+    var tabs = Array.prototype.slice.call(faq.querySelectorAll("[data-faq-tab]"));
+    var fgroups = Array.prototype.slice.call(faq.querySelectorAll("[data-faq-group]"));
+    function setTab(id) {
+      tabs.forEach(function (tb) { tb.classList.toggle("is-active", tb.getAttribute("href") === "#" + id); });
+    }
+    tabs.forEach(function (tb) {
+      tb.addEventListener("click", function (ev) {
+        var target = document.querySelector(tb.getAttribute("href"));
+        if (!target) return;
+        ev.preventDefault();
+        setTab(target.id);
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      });
+    });
+    if ("IntersectionObserver" in window) {
+      var tio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) setTab(e.target.id); });
+      }, { rootMargin: "-40% 0px -55% 0px" });
+      fgroups.forEach(function (g) { tio.observe(g); });
+    }
+  }
 })();

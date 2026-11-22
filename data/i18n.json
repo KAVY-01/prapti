@@ -71,9 +71,9 @@
     "hi": "मेरी योजनाएँ दिखाएँ"
   },
   "home.speak": {
-    "en": "Tap and speak",
-    "te": "నొక్కి మాట్లాడండి",
-    "hi": "दबाकर बोलिए"
+    "en": "Tap and speak in any language",
+    "te": "నొక్కి ఏ భాషలోనైనా మాట్లాడండి",
+    "hi": "दबाइए और किसी भी भाषा में बोलिए"
   },
   "home.listening": {
     "en": "Listening… tap to stop",
@@ -209,6 +209,21 @@
     "en": "Never pay anyone to apply for a government scholarship. The application is free. A Mee Seva centre charges only the official certificate fee.",
     "te": "ప్రభుత్వ స్కాలర్‌షిప్ దరఖాస్తుకు ఎవరికీ డబ్బు ఇవ్వకండి. దరఖాస్తు ఉచితం. మీసేవ కేంద్రం అధికారిక సర్టిఫికెట్ ఫీజు మాత్రమే తీసుకుంటుంది.",
     "hi": "सरकारी छात्रवृत्ति के आवेदन के लिए कभी किसी को पैसे न दें। आवेदन मुफ़्त है। मी-सेवा केंद्र सिर्फ़ प्रमाणपत्र की सरकारी फ़ीस लेता है।"
+  },
+  "faq.g1": {
+    "en": "your safety",
+    "te": "మీ భద్రత",
+    "hi": "आपकी सुरक्षा"
+  },
+  "faq.g2": {
+    "en": "your results",
+    "te": "మీ ఫలితాలు",
+    "hi": "आपके नतीजे"
+  },
+  "faq.g3": {
+    "en": "about Prapti",
+    "te": "ప్రాప్తి గురించి",
+    "hi": "प्राप्ति के बारे में"
   },
   "removed_id": {
     "en": "We removed a number that looked like an ID. You never need to share ID numbers here.",

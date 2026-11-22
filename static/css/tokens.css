@@ -22,13 +22,13 @@
   /* Status */
   --likely: #1f3b70;
   --likely-bg: #d0e4f7;
-  --maybe: #7d4f0c;       /* warm amber stays: "check one thing" should stand out */
-  --maybe-bg: #f1e4c8;
+  --maybe: #553a8a;       /* soft violet: "check one thing" stands out without yellow */
+  --maybe-bg: #e3dbf3;
   --no: #38506b;
   --no-bg: #d8e3ee;
   --urgent: #a3261b;
   --urgent-bg: #f1d9d2;
-  --focus: #c26a00;       /* focus ring only: amber, so it shows on blue buttons */
+  --focus: #0b63c9;       /* focus ring only: bright blue, no yellow */
 
   /* Type */
   --font-display: "Anek Latin", "Anek Telugu", "Anek Devanagari", system-ui, sans-serif;

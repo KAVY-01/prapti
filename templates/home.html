@@ -15,6 +15,7 @@
   {% endif %}
   <div class="slip slip-hero" data-ground="field">
     <div class="slip-body">
+      <div class="hero-main">
       <h1 class="hero-title">{{ t('home.title') }}</h1>
       <p class="hero-lead">{{ t('home.lead') }}</p>
 
@@ -27,24 +28,29 @@
           {{ icon('arrow-right', 28) }}
         </button>
       </form>
+      </div>
 
       <p class="or-line" aria-hidden="true"><span>{{ t('home.or') }}</span></p>
+      <div class="hero-type">
       <h2 class="type-title">{{ t('home.type_title') }}</h2>
 
       <form class="ask" action="/find" method="post" data-ask>
         <label class="visually-hidden" for="ask-text">{{ t('home.describe') }}</label>
-        <textarea id="ask-text" name="text" rows="4" required
+        <div class="ask-box">
+          <textarea id="ask-text" name="text" rows="4" required
           data-examples='["I&#39;m in Inter 2nd year in Warangal, my father is a daily wage worker, we are BC, income around 1 lakh.", "నేను డిగ్రీ మొదటి సంవత్సరం, మా ఊరు నల్గొండ, మేము SC, మా ఆదాయం 80 వేలు.", "मैं हैदराबाद में B.Tech कर रही हूँ, हम minority हैं, family income 1.5 लाख है।"]'
           placeholder="I'm in Inter 2nd year in Warangal, my father is a daily wage worker, we are BC, income around 1 lakh.">{{ text }}</textarea>
+          <div class="mic-row" data-mic-row hidden>
+            <span class="mic-label" data-mic-label>{{ t('home.speak') }}</span>
+            <button type="button" class="mic" data-mic aria-pressed="false" aria-label="{{ t('home.speak') }}">{{ icon('mic', 18) }}</button>
+          </div>
+        </div>
         <p class="ask-hint">{{ t('home.hint') }}</p>
         <div class="ask-actions">
           <button type="submit" class="btn btn-primary">{{ t('home.find') }} {{ icon('arrow-right', 20) }}</button>
-          <div class="mic-row" data-mic-row hidden>
-            <button type="button" class="mic" data-mic aria-pressed="false" aria-label="{{ t('home.speak') }}">{{ icon('mic', 22) }}</button>
-            <span class="mic-label" data-mic-label>{{ t('home.speak') }}</span>
-          </div>
         </div>
       </form>
+      </div>
     </div>
 
     <div class="perforation" aria-hidden="true"></div>
@@ -95,8 +101,9 @@
   <div class="sheet">
     <h2 id="sheet-title" class="sheet-title">{{ t('sheet.title') }}</h2>
     <p class="sheet-note">{{ t('sheet.note') }}</p>
+    <div class="sheet-spread">
     {% for group, label in [('Telangana', t('gov.ts') ~ ' · ePASS'), ('Central', t('gov.in') ~ ' · NSP, AICTE')] %}
-    <div class="sheet-group">
+    <div class="sheet-group sheet-page">
       <h3 class="sheet-group-title">{{ label }}</h3>
       <ul class="sheet-list">
         {% for s in schemes if s.run_by == group %}
@@ -111,19 +118,36 @@
       </ul>
     </div>
     {% endfor %}
+    </div>
     <p class="sheet-foot">{{ t('sheet.foot') }}</p>
   </div>
 </section>
 
-<section class="faq" aria-labelledby="faq-title">
-  <h2 id="faq-title" class="section-head-title">{{ t('faq.title') }}</h2>
-  <div class="faq-list">
-    {% for i in range(1, 6) %}
-    <details>
-      <summary>{{ t('faq.q' ~ i) }}</summary>
-      <p>{{ t('faq.a' ~ i) }}</p>
-    </details>
-    {% endfor %}
+<section class="faq" aria-labelledby="faq-title" data-faq>
+  <h2 id="faq-title" class="faq-title">{{ t('faq.title') }}</h2>
+  {% set faq_groups = [('safety', 'faq.g1', [1, 5]), ('results', 'faq.g2', [2, 4]), ('prapti', 'faq.g3', [3])] %}
+  <nav class="faq-tabs" aria-label="{{ t('faq.title') }}">
+    <div class="faq-tabs-track">
+      {% for gid, gkey, qs in faq_groups %}
+      <a class="faq-tab{% if loop.first %} is-active{% endif %}" href="#faq-{{ gid }}" data-faq-tab>{{ t(gkey) }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+  {% for gid, gkey, qs in faq_groups %}
+  <div class="faq-group" id="faq-{{ gid }}" data-faq-group>
+    <h3 class="faq-sticker">{{ t(gkey) }}</h3>
+    <div class="faq-list">
+      {% for i in qs %}
+      <details class="faq-item">
+        <summary class="faq-head">
+          <span class="faq-q">{{ t('faq.q' ~ i) }}</span>
+          <span class="faq-plus" aria-hidden="true"><span></span><span></span></span>
+        </summary>
+        <div class="faq-body"><p>{{ t('faq.a' ~ i) }}</p></div>
+      </details>
+      {% endfor %}
+    </div>
   </div>
+  {% endfor %}
 </section>
 {% endblock %}

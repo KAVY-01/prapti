@@ -369,7 +369,7 @@ h3 {
 /* ---------- Home: hero field + the slip ---------- */
 .hero-field {
   background: linear-gradient(180deg, #bcd8f2 0%, #d4e7f8 100%); /* soft sky */
-  padding: clamp(32px, 7vw, 96px) var(--gutter) clamp(48px, 8vw, 120px);
+  padding: clamp(12px, 2.5vw, 28px) var(--gutter) clamp(48px, 8vw, 120px);
 }
 
 .slip-hero {
@@ -378,7 +378,81 @@ h3 {
 }
 
 .slip-body {
-  padding: clamp(28px, 5vw, 64px) clamp(20px, 5vw, 64px) clamp(24px, 4vw, 40px);
+  padding: clamp(24px, 4vw, 48px) clamp(20px, 5vw, 64px) clamp(24px, 4vw, 40px);
+}
+
+/* Phone: tighter steps so the main choices sit higher on the first screen */
+@media (max-width: 1023px) {
+  .slip-hero .hero-lead {
+    margin-top: var(--space-4);
+  }
+  .slip-hero .tap-start {
+    margin-top: var(--space-5);
+  }
+  .slip-hero .or-line {
+    margin: var(--space-5) 0 var(--space-3);
+  }
+}
+
+/* Desktop: both ways in, side by side, so the whole slip fits one screen */
+@media (min-width: 1024px) {
+  .slip-hero {
+    max-width: 1200px;
+  }
+  .slip-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) auto minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+    align-items: start;
+    padding: clamp(32px, 3vw, 48px) clamp(32px, 4vw, 56px) clamp(24px, 2.5vw, 36px);
+  }
+  .slip-hero .hero-title {
+    font-size: clamp(3rem, 1.4rem + 3.4vw, 5rem);
+  }
+  :lang(te) .slip-hero .hero-title,
+  :lang(hi) .slip-hero .hero-title {
+    font-size: clamp(2.25rem, 1.2rem + 2.4vw, 3.5rem);
+  }
+  .slip-hero .hero-lead {
+    margin-top: var(--space-4);
+    font-size: clamp(1.125rem, 0.9rem + 0.5vw, 1.375rem);
+  }
+  .slip-hero .tap-start {
+    margin-top: var(--space-5);
+  }
+  .slip-hero .or-line {
+    flex-direction: column;
+    align-self: stretch;
+    margin: 0;
+  }
+  .slip-hero .or-line::before,
+  .slip-hero .or-line::after {
+    flex: 1;
+    width: 4px;
+    height: auto;
+  }
+  .slip-hero .hero-type {
+    padding-top: var(--space-2);
+  }
+  .slip-hero .ask {
+    margin-top: var(--space-3);
+  }
+  .slip-hero .ask textarea {
+    min-height: 136px;
+  }
+  .slip-hero .ask-hint {
+    font-size: 15px;
+  }
+  .slip-hero .ask-actions {
+    margin-top: var(--space-1);
+  }
+  .slip-hero .slip-stub {
+    padding-top: var(--space-4);
+    padding-bottom: clamp(20px, 2vw, 32px);
+  }
+  .slip-hero .sample-row {
+    margin-top: var(--space-3);
+  }
 }
 
 .hero-title {
@@ -451,10 +525,23 @@ h3 {
   flex: 1 1 260px;
 }
 
+/* Mic sits inside the message box, bottom right */
+.ask-box {
+  position: relative;
+}
+
+.ask-box textarea {
+  padding-bottom: 60px;
+  resize: none; /* the mic sits where the resize grip would be */
+}
+
 .mic-row {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   isolation: isolate;
 }
 
@@ -466,8 +553,9 @@ h3 {
   position: relative;
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  flex: none;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 0;
   background: var(--ink);
@@ -487,7 +575,7 @@ h3 {
 .mic::after {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -6px;
   z-index: -1;
   border-radius: 50%;
   background: var(--brand-soft);
@@ -508,8 +596,11 @@ h3 {
 }
 
 .mic-label {
-  font-size: 16px;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 500;
   color: var(--ink-2);
+  text-align: right;
 }
 
 .slip-stub {
@@ -673,9 +764,58 @@ h3 {
   background: var(--paper);
 }
 
+/* Desktop: the list opens like a book, two pages side by side */
 @media (min-width: 1024px) {
   .sheet {
-    margin: 0 4vw 0 auto;
+    width: min(100%, 1180px);
+    padding-inline: clamp(32px, 4vw, 64px);
+  }
+  .sheet-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: var(--space-7);
+    perspective: 2400px;
+  }
+  .sheet-spread .sheet-page {
+    margin-top: 0;
+    padding: 0 clamp(24px, 3vw, 48px);
+  }
+  .sheet-spread .sheet-page:first-child {
+    padding-left: 0;
+    box-shadow: inset -1px 0 0 var(--surface-2);
+    background: linear-gradient(to left, rgba(15, 35, 64, 0.045), transparent 48px);
+  }
+  .sheet-spread .sheet-page:last-child {
+    padding-right: 0;
+    background: linear-gradient(to right, rgba(15, 35, 64, 0.045), transparent 48px);
+  }
+  .js .sheet-page {
+    opacity: 0;
+    transition: transform 1100ms cubic-bezier(0.65, 0.05, 0, 1), opacity 700ms var(--ease);
+  }
+  .js .sheet-page:first-child {
+    transform-origin: right center;
+    transform: rotateY(32deg);
+  }
+  .js .sheet-page:last-child {
+    transform-origin: left center;
+    transform: rotateY(-32deg);
+  }
+  .js .sheet.is-seen .sheet-page {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Phone and tablet: same single list, each part unrolls downward */
+@media (max-width: 1023px) {
+  /* Clip the content, not the watched block: a fully clipped block never counts as on screen */
+  .js .sheet-page > * {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 900ms cubic-bezier(0.65, 0.05, 0, 1);
+  }
+  .js .sheet-page.is-seen > * {
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -749,63 +889,215 @@ h3 {
   text-align: center;
 }
 
-/* ---------- Home: questions ---------- */
+/* ---------- Home: questions (pattern from payard.io/faq) ----------
+   Big centred title, pill tabs, a tilted sticker per group, thin divider rows,
+   a plus that folds into a minus, answers that slide open then fade in. One open at a time. */
 .faq {
-  display: grid;
-  gap: var(--space-6);
   max-width: 1280px;
   margin: 0 auto;
   padding: clamp(96px, 12vw, 180px) var(--gutter) clamp(80px, 10vw, 140px);
 }
 
-@media (min-width: 1024px) {
-  .faq {
-    grid-template-columns: 5fr 7fr;
-    gap: var(--space-8);
-  }
+.faq-title {
+  font-size: var(--step-head);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-align: center;
 }
 
-.faq-list details {
-  padding: var(--space-4) 0;
-}
-
-.faq-list summary {
+.faq-tabs {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-4);
-  min-height: 48px;
-  font-family: var(--font-display);
-  font-size: 22px;
-  line-height: 1.25;
-  cursor: pointer;
-  list-style: none;
+  justify-content: center;
+  margin: clamp(24px, 3vw, 40px) auto clamp(40px, 5vw, 72px);
 }
 
-.faq-list summary::-webkit-details-marker {
+.faq-tabs-track {
+  display: flex;
+  gap: 2px;
+  max-width: 100%;
+  padding: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--paper);
+  border: 1px solid rgba(15, 35, 64, 0.1);
+  border-radius: 999px;
+}
+
+.faq-tabs-track::-webkit-scrollbar {
   display: none;
 }
 
-.faq-list summary::after {
-  content: "";
-  flex-shrink: 0;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  border-right: 2px solid var(--brand);
-  border-bottom: 2px solid var(--brand);
-  transform: rotate(45deg) translateY(-3px);
-  transition: transform var(--dur-fast) var(--ease);
-}
-
-.faq-list details[open] summary::after {
-  transform: rotate(225deg) translateY(-3px);
-}
-
-.faq-list details p {
-  margin-top: var(--space-3);
-  max-width: 36em;
+.faq-tab {
+  flex: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 18px;
+  line-height: 1.2;
   color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 400ms var(--ease), color 400ms var(--ease), opacity 300ms;
+}
+
+.faq-tab:hover {
+  opacity: 0.6;
+}
+
+.faq-tab.is-active {
+  background: var(--brand);
+  color: var(--brand-ink);
+  opacity: 1;
+}
+
+.faq-group {
+  position: relative;
+  scroll-margin-top: 96px;
+}
+
+.faq-group + .faq-group {
+  margin-top: clamp(56px, 7vw, 96px);
+}
+
+.faq-sticker {
+  width: fit-content;
+  margin: 0 0 var(--space-5) 4px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  font-family: var(--font-text);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: #bcd6ef;
+  box-shadow: -8px 8px 40px 10px rgba(15, 35, 64, 0.08);
+}
+
+.faq-group:nth-of-type(2) .faq-sticker { background: #cfe3f7; }
+.faq-group:nth-of-type(3) .faq-sticker { background: #a9c8e6; }
+
+.faq-list {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.faq-item:last-of-type {
+  border-bottom: 1px solid rgba(15, 35, 64, 0.16);
+}
+
+.faq-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding: 22px 0;
+  border-top: 1px solid rgba(15, 35, 64, 0.16);
+  cursor: pointer;
+  list-style: none;
+  transition: opacity 500ms;
+}
+
+.faq-head::-webkit-details-marker {
+  display: none;
+}
+
+@media (hover: hover) {
+  .faq-head:hover {
+    opacity: 0.5;
+  }
+}
+
+.faq-head:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.faq-q {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 1rem + 1.3vw, 36px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.faq-plus {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 0.2em;
+}
+
+.faq-plus span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--ink);
+  transform: translateY(-50%);
+  transition: rotate 500ms cubic-bezier(0.65, 0.05, 0, 1), scale 500ms cubic-bezier(0.02, 0.09, 0.15, 1.54);
+}
+
+.faq-plus span:nth-child(2) {
+  rotate: -90deg;
+}
+
+.faq-item[open] .faq-plus span:nth-child(2),
+.faq-item.is-open .faq-plus span:nth-child(2) {
+  rotate: 0deg;
+}
+
+.faq-body p {
+  max-width: 40em;
+  padding: 0 clamp(0px, 5vw, 96px) 24px 0;
+  font-size: var(--step-body);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* With script: the answer slides open, then fades in from a soft blur */
+.faq-js .faq-item .faq-plus span:nth-child(2) {
+  rotate: -90deg;
+}
+
+.faq-js .faq-item.is-open .faq-plus span:nth-child(2) {
+  rotate: 0deg;
+}
+
+.faq-js .faq-body {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(4px);
+  transition: height 700ms cubic-bezier(0.65, 0.05, 0, 1), filter 500ms, opacity 500ms;
+}
+
+.faq-js .faq-item.is-open .faq-body {
+  opacity: 1;
+  filter: blur(0);
+  transition: height 700ms cubic-bezier(0.65, 0.05, 0, 1), filter 700ms cubic-bezier(0.65, 0.05, 0, 1) 300ms, opacity 500ms 300ms;
+}
+
+/* Desktop: the sticker sits tilted in the left margin, like Payard */
+@media (min-width: 1024px) {
+  .faq-sticker {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    margin: 0;
+    rotate: 12deg;
+  }
+  .faq-group:nth-of-type(2n) .faq-sticker {
+    rotate: -12deg;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+  .faq-list {
+    width: min(100%, 720px);
+    margin-right: 0;
+  }
 }
 
 /* ---------- Notices ---------- */
@@ -3258,11 +3550,11 @@ h1, h2, h3,
 /* ---------- Near misses: only one rule stands in the way ---------- */
 .scheme-near {
   display: inline-block; margin: 4px 0 2px; padding: 3px 10px; border-radius: 999px;
-  background: #f3e6cf; color: #7a4a0c; font-size: 0.85em; font-weight: 600;
+  background: var(--maybe-bg); color: var(--maybe); font-size: 0.85em; font-weight: 600;
 }
 .near-count {
   margin-left: 8px; padding: 2px 9px; border-radius: 999px;
-  background: #f3e6cf; color: #7a4a0c; font-size: 0.75em; font-weight: 600; vertical-align: middle;
+  background: var(--maybe-bg); color: var(--maybe); font-size: 0.75em; font-weight: 600; vertical-align: middle;
 }
 
 /* ---------- How we keep the rules right ---------- */

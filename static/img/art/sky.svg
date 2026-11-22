@@ -6,8 +6,8 @@
     </linearGradient>
   </defs>
   <rect width="800" height="1000" fill="url(#g)"/>
-  <circle cx="640" cy="160" r="80" fill="#f2b84b" opacity="0.85"/>
-  <circle cx="640" cy="160" r="120" fill="#f2b84b" opacity="0.15"/>
+  <circle cx="640" cy="160" r="80" fill="#ffffff" opacity="0.85"/>
+  <circle cx="640" cy="160" r="120" fill="#ffffff" opacity="0.15"/>
   <g fill="#eaf3fc" opacity="0.9">
     <ellipse cx="170" cy="200" rx="130" ry="40"/><ellipse cx="240" cy="172" rx="80" ry="48"/><ellipse cx="120" cy="185" rx="55" ry="32"/>
     <ellipse cx="560" cy="430" rx="120" ry="34"/><ellipse cx="610" cy="408" rx="66" ry="40"/>

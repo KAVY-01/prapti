@@ -26,9 +26,9 @@
     <rect x="448" y="360" width="34" height="30" rx="8"/><rect x="494" y="360" width="34" height="30" rx="8"/><rect x="586" y="360" width="34" height="30" rx="8"/>
   </g>
   <rect x="540" y="360" width="34" height="30" rx="8" fill="#1f3b70"/>
-  <circle cx="557" cy="375" r="28" fill="none" stroke="#f2b84b" stroke-width="6"/>
+  <circle cx="557" cy="375" r="28" fill="none" stroke="#3f7fd0" stroke-width="6"/>
   <g transform="translate(650 160)">
-    <circle cx="0" cy="0" r="46" fill="#f2b84b"/>
+    <circle cx="0" cy="0" r="46" fill="#3f7fd0"/>
     <path d="M-18 12 q0 -34 18 -34 q18 0 18 34 l6 6 h-48 z" fill="#f2f8fe"/>
     <circle cx="0" cy="24" r="6" fill="#f2f8fe"/>
     <path d="M30 -30 q12 10 12 26 M-30 -30 q-12 10 -12 26" stroke="#f2f8fe" stroke-width="5" fill="none" stroke-linecap="round"/>
