@@ -1,0 +1,20 @@
+{
+  "https://telanganaepass.cgg.gov.in": {
+    "file": "0dbc00667ef8.txt",
+    "taken": "2026-11-22",
+    "chars": 1493
+  },
+  "https://scholarships.gov.in": {
+    "file": "07b07159bf6d.txt",
+    "taken": "2026-11-22",
+    "chars": 5718
+  },
+  "https://www.aicte-india.org/schemes/students-development-schemes": {
+    "error": "URLError: <urlopen error [Errno 54] Connection reset by peer>"
+  },
+  "https://pmvidyalaxmi.co.in": {
+    "file": "7cf8323727bf.txt",
+    "taken": "2026-11-22",
+    "chars": 17127
+  }
+}
