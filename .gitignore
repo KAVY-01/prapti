@@ -38,3 +38,4 @@ tsconfig.json
 
 # Codebenders IDE screenshots
 preview/
+tsconfig.tsbuildinfo
