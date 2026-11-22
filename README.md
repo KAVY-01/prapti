@@ -22,7 +22,7 @@ Paste any of these into the box on the home page:
 Or tap **Answer simple questions** for a no-typing path. The scheme editor (`/admin/schemes`, password `prapti-demo`) is a sandbox on the demo: your changes show up in your own results but nobody else's.
 
 <p>
-<img src="docs/screens/1-results.jpg" width="260" alt="Results: likely eligible for 4 schemes, worth up to ₹85,000 a year, with the first step">
+<img src="docs/screens/1-results.jpg" width="260" alt="Results: likely eligible for 5 schemes, worth up to ₹1,05,000 a year, with the first step">
 <img src="docs/screens/2-reasons.jpg" width="260" alt="Every rule as a sentence with the student's own answer, and the last date">
 <img src="docs/screens/3-one-trip.jpg" width="260" alt="One trip to Mee Seva: documents grouped by place, with a warning that the caste certificate takes longer than the days left">
 </p>
