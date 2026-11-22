@@ -30,7 +30,7 @@
       if (!parts.length) { g.setAttribute("data-reveal", ""); }
       parts.forEach(function (el, i) {
         el.setAttribute("data-reveal", "");
-        el.style.setProperty("--d", Math.min(i, 8) * 75 + "ms");
+        el.style.setProperty("--d", Math.min(i, 6) * 45 + "ms");
       });
       io.observe(g);
     });
@@ -53,18 +53,28 @@
 
   // ---------- Toast ----------
   var toastTimer;
-  function toast(msg) {
+  function toast(msg, action) {
     var el = document.querySelector(".toast");
     if (!el) return;
     el.textContent = msg;
+    function hide() {
+      el.classList.remove("is-visible");
+      setTimeout(function () { el.hidden = true; }, 300);
+    }
+    if (action) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "toast-action";
+      b.textContent = action.label;
+      b.addEventListener("click", function () { clearTimeout(toastTimer); action.run(); hide(); });
+      el.appendChild(b);
+    }
     el.hidden = false;
     requestAnimationFrame(function () { el.classList.add("is-visible"); });
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      el.classList.remove("is-visible");
-      setTimeout(function () { el.hidden = true; }, 300);
-    }, 3000);
+    toastTimer = setTimeout(hide, action ? 6000 : 3000);
   }
+  window.praptiToast = toast;
 
   // Links for screens that arrive in later steps.
   document.querySelectorAll("[data-soon]").forEach(function (a) {
@@ -154,6 +164,7 @@
         } catch (e) { stopUI(); toast(T("home.mic_error")); return; }
         mic.setAttribute("aria-pressed", "true");
         micLabel.textContent = T("home.listening");
+        try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
       }
       mic.addEventListener("click", function () {
         if (rec) { try { rec.stop(); } catch (e) { stopUI(); } return; }
@@ -331,9 +342,45 @@
   }
 
   // ---------- Questions: show the choice instantly before the next screen loads ----------
-  document.querySelectorAll("[data-q-form] .q-tile").forEach(function (tile) {
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {} } // a tiny tick on Android
+  var tiles = Array.prototype.slice.call(document.querySelectorAll("[data-q-form] .q-tile"));
+  tiles.forEach(function (tile) {
     tile.addEventListener("click", function () {
       tile.classList.add("is-chosen");
+      buzz();
+    });
+  });
+  // Keyboard answers, like Typeform: 1-9 picks an answer, S skips (never while typing in a box)
+  if (tiles.length) {
+    document.addEventListener("keydown", function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.altKey || ev.repeat) return;
+      if (/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "")) return;
+      if (document.body.classList.contains("tour-on")) return;
+      var n = parseInt(ev.key, 10);
+      if (n >= 1 && n <= tiles.length && n <= 9) { ev.preventDefault(); tiles[n - 1].click(); return; }
+      if (ev.key === "s" || ev.key === "S") {
+        var skip = document.querySelector(".q-skip");
+        if (skip) { ev.preventDefault(); skip.click(); }
+      }
+    });
+  }
+
+  // ---------- Every button that sends a form shows it is working, and can't be pressed twice ----------
+  document.addEventListener("submit", function (ev) {
+    var b = ev.submitter;
+    if (!b) return;
+    if (b.getAttribute("aria-busy") === "true") { ev.preventDefault(); return; }
+    if (b.matches(".btn, .tap-btn, .sample-card, .q-skip, .q-pill")) {
+      b.classList.add("is-busy");
+      b.setAttribute("aria-busy", "true");
+    }
+  });
+  // Coming back with the browser's Back button shows the page as it was: clear any "working" state
+  window.addEventListener("pageshow", function (ev) {
+    if (!ev.persisted) return;
+    document.querySelectorAll(".is-busy, .is-chosen").forEach(function (b) {
+      b.classList.remove("is-busy", "is-chosen");
+      b.removeAttribute("aria-busy");
     });
   });
 

@@ -1,9 +1,8 @@
 // Prapti service worker: pages and files you have opened keep working offline
 // (a weak signal at a Mee Seva centre or on a bus). Network first, so you always get fresh
 // rules when online; the saved copy is only used when the network fails.
-var CACHE = "prapti-v2";
-var PRECACHE = ["/", "/static/css/tokens.css", "/static/css/app.css", "/static/js/app.js",
-  "/static/js/tracker.js", "/static/img/icon.svg", "/static/manifest.json"];
+var CACHE = "prapti-v3";
+var PRECACHE = ["/"];
 // Only these pages are kept: nothing from admin, helper print-outs or the API.
 var KEEP = /^\/(?:$|about$|tracker$|documents$|results$|changes$|scheme\/[\w-]+$|static\/)/;
 
@@ -28,6 +27,16 @@ self.addEventListener("fetch", function (e) {
     if (req.mode === "navigate") {
       e.respondWith(fetch(req).catch(function () { return caches.match("/").then(function (h) { return h || Response.error(); }); }));
     }
+    return;
+  }
+  // Fingerprinted files (?v=...) never change: answer from the saved copy at once.
+  if (url.pathname.indexOf("/static/") === 0 && url.searchParams.get("v")) {
+    e.respondWith(caches.match(req).then(function (hit) {
+      return hit || fetch(req).then(function (res) {
+        if (res && res.ok) { var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, copy); }); }
+        return res;
+      });
+    }));
     return;
   }
   e.respondWith(

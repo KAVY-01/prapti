@@ -52,6 +52,7 @@
       </button>
       {% endfor %}
     </form>
+    {% if options | length <= 9 %}<p class="q-keys" aria-hidden="true">{{ t('q.keys', a=1, b=options | length) }}</p>{% endif %}
 
     <form class="q-skip-row" action="/questions" method="post">
       <input type="hidden" name="field" value="{{ field }}">

@@ -1367,7 +1367,7 @@ h3 {
   text-decoration: none;
   transition: transform var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
   animation: card-in var(--dur-card) var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 70ms);
+  animation-delay: calc(min(var(--i, 0), 6) * 45ms);
 }
 
 .scheme-card:hover {
@@ -1999,8 +1999,8 @@ h3 {
 /* ---------- Entrances (content is visible without script) ---------- */
 .js [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+  transform: translateY(14px);
+  transition: opacity 420ms var(--ease), transform 420ms var(--ease);
   transition-delay: var(--d, 0ms);
 }
 
@@ -2010,7 +2010,7 @@ h3 {
 }
 
 .slip-hero {
-  animation: slip-in 700ms var(--ease) both;
+  animation: slip-in 460ms var(--ease) both;
 }
 
 @keyframes slip-in {
@@ -2018,8 +2018,10 @@ h3 {
   to { opacity: 1; transform: none; }
 }
 
-.sheet-ground {
-  animation: drift 24s ease-in-out infinite alternate;
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .sheet-ground {
+    animation: drift 24s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes drift {
@@ -2199,7 +2201,7 @@ h3 {
 
 .track-item {
   animation: card-in var(--dur-card) var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 70ms);
+  animation-delay: calc(min(var(--i, 0), 6) * 45ms);
 }
 
 .track-item.is-urgent {
@@ -2635,7 +2637,7 @@ h3 {
 
 .helper-row {
   animation: card-in var(--dur-card) var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 60ms);
+  animation-delay: calc(min(var(--i, 0), 6) * 45ms);
 }
 
 .helper-row-main {
@@ -2880,7 +2882,7 @@ h3 {
   max-height: 82vh;
   object-fit: cover;
   object-position: 50% 62%;  /* keeps the cap and the certificate in view when cropped */
-  animation: slip-in 700ms var(--ease) both;
+  animation: slip-in 460ms var(--ease) both;
 }
 
 @media (max-width: 899px) {
@@ -3437,7 +3439,7 @@ h1, h2, h3,
   border-radius: var(--radius-tile);
   cursor: pointer;
   animation: tile-in 380ms var(--ease) both;
-  animation-delay: calc(120ms + var(--i, 0) * 45ms);
+  animation-delay: calc(60ms + min(var(--i, 0), 8) * 30ms);
   transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 
@@ -3782,3 +3784,43 @@ h1, h2, h3,
 p, li { text-wrap: pretty; }
 html { -webkit-tap-highlight-color: transparent; }
 .tour-focus { scroll-margin-top: 96px; scroll-margin-bottom: 220px; }
+
+/* ---------- Speed and feel ---------- */
+/* Smooth page-to-page change (Chrome, Edge, Safari 18+): the top bar stays put, the page fades up */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .topbar { view-transition-name: topbar; }
+  .bottom-nav { view-transition-name: bottombar; }
+  ::view-transition-old(root) { animation: vt-out 140ms ease-in both; }
+  ::view-transition-new(root) { animation: vt-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* A button that is sending shows a small spinner and can't be pressed again */
+.is-busy { position: relative; cursor: progress; }
+.is-busy::after {
+  content: ""; position: absolute; right: 14px; top: 50%; width: 18px; height: 18px; margin-top: -9px;
+  border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent;
+  animation: spin 700ms linear infinite; opacity: 0.9;
+}
+.btn.is-busy > .icon, .tap-btn.is-busy > .icon, .sample-card.is-busy .sample-arrow { opacity: 0; }
+.q-skip.is-busy::after, .q-pill.is-busy::after { right: auto; left: 50%; margin-left: -9px; }
+.q-skip.is-busy, .q-pill.is-busy { color: transparent; }
+.q-skip.is-busy::after, .q-pill.is-busy::after { border-color: var(--ink-2); border-right-color: transparent; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast with an action (Undo) */
+.toast { display: flex; align-items: center; gap: var(--space-4); }
+.toast[hidden] { display: none; }
+.toast-action {
+  flex: none; min-height: 40px; padding: 0 14px; border: 0; border-radius: 999px; font: inherit; font-weight: 700;
+  color: var(--ink); background: var(--brand-soft); cursor: pointer;
+}
+
+/* Keyboard tip on the questions (only where there is a keyboard) */
+.q-keys { display: none; margin-top: var(--space-3); font-size: 14px; color: var(--ink-2); }
+@media (hover: hover) and (pointer: fine) { .q-keys { display: block; } }
+
+/* Snappier press feedback everywhere */
+.btn:active, .tap-btn:active, .sample-card:active, .q-tile:active { transition-duration: 60ms; }

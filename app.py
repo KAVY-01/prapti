@@ -46,8 +46,37 @@ CSP = "; ".join([
 ])
 
 
+_ASSET_HASH = {}
+
+
+def _asset_version(filename):
+    """A short fingerprint of a static file's contents, so its URL changes whenever the file does."""
+    path = os.path.join(app.static_folder, filename)
+    try:
+        st = os.stat(path)
+    except OSError:
+        return None
+    key = (filename, st.st_mtime_ns, st.st_size)
+    if key not in _ASSET_HASH:
+        import hashlib
+        with open(path, "rb") as f:
+            _ASSET_HASH[key] = hashlib.md5(f.read()).hexdigest()[:10]
+    return _ASSET_HASH[key]
+
+
+@app.url_defaults
+def versioned_static(endpoint, values):
+    # Every url_for('static', ...) gets ?v=<fingerprint>, which lets browsers and the CDN keep it for a year.
+    if endpoint == "static" and "filename" in values and "v" not in values:
+        v = _asset_version(values["filename"])
+        if v:
+            values["v"] = v
+
+
 @app.after_request
 def security_headers(resp):
+    if request.path.startswith("/static/") and request.args.get("v") and resp.status_code == 200:
+        resp.headers["Cache-Control"] = "public, max-age=31536000, s-maxage=31536000, immutable"
     resp.headers.setdefault("Content-Security-Policy", CSP)
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     resp.headers.setdefault("X-Frame-Options", "DENY")

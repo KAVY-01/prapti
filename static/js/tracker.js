@@ -131,8 +131,13 @@
       if (deadline && left != null && left >= 0) ics.href = "/api/ics/" + item.id; else ics.remove();
 
       node.querySelector("[data-remove]").addEventListener("click", function () {
-        write("prapti:tracker", read("prapti:tracker", []).filter(function (t) { return t.id !== item.id; }));
+        var before = read("prapti:tracker", []);
+        write("prapti:tracker", before.filter(function (t) { return t.id !== item.id; }));
         render();
+        // Removing is one tap, so it can be undone for a few seconds
+        if (window.praptiToast) {
+          window.praptiToast(T("tr.removed"), { label: T("tr.undo"), run: function () { write("prapti:tracker", before); render(); } });
+        }
       });
 
       list.appendChild(node);

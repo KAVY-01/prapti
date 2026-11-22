@@ -17,10 +17,19 @@
   <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;500;600;700&family=Anek+Telugu:wght@400;500;600;700&family=Anek+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {# Fonts load without holding up the first paint; text shows at once in the fallback and swaps in. #}
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;500;600;700&family=Anek+Telugu:wght@400;500;600;700&family=Anek+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;500;600;700&family=Anek+Telugu:wght@400;500;600;700&family=Anek+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  {# Chrome/Edge/Android load the page you're about to open while your finger or mouse is on the link. Never
+     for links that change something (language, demo, admin, shared links). #}
+  <script type="speculationrules">
+  {"prefetch": [{"where": {"and": [{"href_matches": "/*"}, {"not": {"href_matches": "/lang/*"}}, {"not": {"href_matches": "/demo"}},
+    {"not": {"href_matches": "/admin/*"}}, {"not": {"href_matches": "/r/*"}}, {"not": {"href_matches": "/api/*"}},
+    {"not": {"selector_matches": "[target=_blank], [download], [data-no-prefetch]"}}]}, "eagerness": "moderate"}]}
+  </script>
 </head>
 <body class="page-{{ page|default('') }}">
   <a class="skip-link" href="#main">{{ t('skip_link') }}</a>
