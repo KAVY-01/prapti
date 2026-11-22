@@ -16,7 +16,7 @@
   {# First screen: one clear job. Everything else is one scroll away. #}
   <div class="hero-simple">
     {% set title_parts = t('home.title').split('{') %}
-    <h1 class="hero-title">{{ title_parts[0] }}{% if title_parts | length > 1 %}{% set rest = title_parts[1].split('}') %}<span class="hero-claim">{{ rest[0] }}<svg class="hero-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg></span>{{ rest[1] if rest | length > 1 }}{% endif %}</h1>
+    <h1 class="hero-title">{{ title_parts[0] }}{% if title_parts | length > 1 %}{% set rest = title_parts[1].split('}') %}<span class="hero-claim">{{ rest[0] }}<svg class="hero-star" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="star-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b8"/><stop offset="0.35" stop-color="#f5c542"/><stop offset="0.7" stop-color="#d49b12"/><stop offset="1" stop-color="#a8740a"/></linearGradient></defs><path fill="url(#star-gold)" d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg></span>{{ rest[1] if rest | length > 1 }}{% endif %}</h1>
     <p class="hero-lead">{{ t('home.lead') }}</p>
     <form action="/start" method="post" class="tap-start">
       <button type="submit" class="tap-btn">

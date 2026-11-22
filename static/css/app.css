@@ -3981,3 +3981,24 @@ html { -webkit-tap-highlight-color: transparent; }
 .hero-simple .tap-btn { background: #81d8d0; color: var(--ink); --bubble: #5ccbc1; }
 .hero-simple .tap-btn:hover { background: #81d8d0; }
 .hero-simple .tap-btn .tap-btn-sub { color: #1e4d5c; }
+
+/* Main button: on hover the navy bubble fills it completely and the text turns white */
+@media (hover: hover) and (pointer: fine) {
+  .hero-simple .tap-btn { --bubble: var(--brand); transition: color 0.35s var(--ease); }
+  .hero-simple .tap-btn .tap-btn-sub { transition: color 0.35s var(--ease); }
+  .hero-simple .tap-btn:hover { color: var(--brand-ink); }
+  .hero-simple .tap-btn:hover .tap-btn-sub { color: var(--field-ink-2); }
+}
+
+/* The star: shiny gold, tilted 45 degrees (it is drawn with a gold gradient fill on purpose) */
+.hero-star {
+  fill: url(#star-gold);
+  transform: rotate(45deg);
+  filter: drop-shadow(0 0 0.06em rgba(245, 197, 66, 0.55)); /* taste-skill-ignore: a little shine on the star */
+}
+@keyframes star-in { from { opacity: 0; transform: scale(0.6) rotate(-15deg); } to { opacity: 1; transform: rotate(45deg); } }
+@keyframes star-twinkle {
+  0%, 82%, 100% { transform: rotate(45deg) scale(1); opacity: 1; }
+  88% { transform: rotate(90deg) scale(0.55); opacity: 0.7; }
+  94% { transform: rotate(135deg) scale(1.12); opacity: 1; }
+}
