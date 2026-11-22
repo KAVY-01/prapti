@@ -1,34 +1,34 @@
 /* Prapti design tokens.
    Direction: "the page is the object" — every result is the paper slip a student
-   carries to the Mee Seva counter. Bone ground, chocolate ink, one green. */
+   carries to the Mee Seva counter. Soft blue-grey ground, navy ink, calm blues. */
 :root {
-  /* Colour: paper, ink, one green */
-  --bg: #e5e1d8;          /* bone ground */
-  --paper: #f3f2ee;       /* the slip */
-  --surface: #f3f2ee;     /* alias kept for older rules */
-  --surface-2: #dad5ca;   /* tone step: chips, inset panels */
-  --surface-3: #cfc8bb;   /* deeper step: pressed, tracks */
-  --ink: #2a1d17;         /* chocolate */
-  --ink-2: #5a4a40;       /* soft ink, secondary text */
-  --ink-3: #7a6a5f;       /* hints (only on paper or bone) */
-  --brand: #456f3a;       /* the one green: action + one large field */
-  --brand-hover: #385d2f;
+  /* Colour: soothing blues. Every text/background pair is 4.5:1 or better. */
+  --bg: #e6edf4;          /* soft blue-grey ground */
+  --paper: #f6f9fc;       /* the slip */
+  --surface: #f6f9fc;     /* alias kept for older rules */
+  --surface-2: #d8e3ee;   /* tone step: chips, inset panels */
+  --surface-3: #c6d5e4;   /* deeper step: pressed, tracks */
+  --ink: #10233a;         /* deep navy */
+  --ink-2: #38506b;       /* soft ink, secondary text */
+  --ink-3: #4f6985;       /* hints */
+  --brand: #2563a6;       /* calm ocean blue: actions */
+  --brand-hover: #1c5089;
   --brand-ink: #ffffff;
-  --brand-soft: #dfe6d4;
-  --field: #456f3a;
+  --brand-soft: #d8e7f6;  /* pale sky: secondary buttons, selected chips */
+  --field: #2a5f97;       /* the one large field (results summary, footer) */
   --field-ink: #ffffff;
-  --field-ink-2: #dfe9d8;
+  --field-ink-2: #d5e5f5;
 
-  /* Status, mixed from the same inks */
-  --likely: #3b6332;
-  --likely-bg: #dfe6d4;
-  --maybe: #7d4f0c;
-  --maybe-bg: #ecdfc4;
-  --no: #5a4a40;
-  --no-bg: #dad5ca;
+  /* Status */
+  --likely: #1d5a8c;
+  --likely-bg: #d8e7f6;
+  --maybe: #7d4f0c;       /* warm amber stays: "check one thing" should stand out */
+  --maybe-bg: #f1e4c8;
+  --no: #38506b;
+  --no-bg: #d8e3ee;
   --urgent: #a3261b;
   --urgent-bg: #f1d9d2;
-  --focus: #1f4fd1;       /* focus ring only */
+  --focus: #c26a00;       /* focus ring only: amber, so it shows on blue buttons */
 
   /* Type */
   --font-display: "Anek Latin", "Anek Telugu", "Anek Devanagari", system-ui, sans-serif;
