@@ -35,8 +35,10 @@
         <span class="check-text">
           <span class="check-name">{{ it.name }}</span>
           <span class="check-hint">
-            {% if it.schemes | length == 1 %}{{ t('trip.for_one') }}{% else %}{{ t('trip.for_n', n=it.schemes | length) }}{% endif %}:
-            {{ it.schemes | map(attribute='name') | join(', ') }}{% if it.days %} · {{ t('trip.days', n=it.days) }}{% endif %}
+            {% if it.schemes | length == trip.schemes | length and trip.schemes | length > 1 %}{{ t('trip.for_all', n=it.schemes | length) }}
+            {%- elif it.schemes | length == 1 %}{{ t('trip.for_one') }}: {{ it.schemes[0].name }}
+            {%- else %}{{ t('trip.for_n', n=it.schemes | length) }}: {{ it.schemes | map(attribute='name') | join(', ') }}{% endif %}
+            {%- if it.days %} · {{ t('trip.days', n=it.days) }}{% endif %}
           </span>
           {% if g.where == 'home' and lang == 'en' and it.hint %}<span class="check-hint">{{ it.hint }}</span>{% endif %}
           {% if it.rush %}<span class="trip-rush">{{ icon('alert-triangle', 16) }}{{ t('trip.rush', name=it.rush.name, d=it.rush.d, n=it.rush.n) }}</span>{% endif %}
