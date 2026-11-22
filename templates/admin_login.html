@@ -5,6 +5,7 @@
   <div class="slip-body">
     <h1 class="helper-title">Scheme editor</h1>
     <p class="helper-lead">For the people who keep the scheme rules up to date.</p>
+    {% if sandbox %}<p class="notice">Demo: the password is <strong>prapti-demo</strong>. Your changes only affect your own visit, so try changing a limit and watch the results follow.</p>{% endif %}
     {% if error %}<p class="notice" role="alert">{{ error }}</p>{% endif %}
     <form action="/admin/login" method="post" class="helper-form">
       <label class="helper-label" for="pw">Password</label>

@@ -4,15 +4,22 @@ import os
 import secrets
 from datetime import date, datetime
 
-from flask import (Flask, Response, abort, jsonify, redirect, render_template,
-                   request, session, url_for)
+from flask import (Flask, Response, abort, has_request_context, jsonify, redirect,
+                   render_template, request, session, url_for)
 
 from engine.extract import PROFILE_KEYS, extract
 from engine.ics import build_ics
 from engine.match import (FIELD_LABEL, LEVEL_LABEL, DATA_DIR, SCHEMES_PATH, fields_that_matter,
-                          format_value, load_schemes, match_all, match_scheme)
+                          format_value, match_all, match_scheme)
+from engine.match import load_schemes as load_file_schemes
 
 app = Flask(__name__)
+
+# Sandbox: on a public demo the scheme editor must not change the real rules for everyone.
+# Edits are kept in the visitor's own session instead, so a judge can try the editor and
+# see their change in results, while everyone else still sees the verified data.
+SANDBOX = os.environ.get("PRAPTI_SANDBOX", "").lower() in ("1", "on", "true") or bool(os.environ.get("VERCEL"))
+MAX_TEXT = 600  # characters of free text we read; plenty for "who I am", and keeps AI cost and cookies small
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 180  # remember language and answers for 6 months
 # The session only holds the student's answers (never ID numbers) on their own device.
 # Without SECRET_KEY a random key is made once and kept in .secret_key (git-ignored), so nobody can
@@ -116,6 +123,21 @@ def sample_display_name(sample_id, lang):
     return sample.get(f"name_{lang}") or sample["name"]
 
 
+def load_schemes():
+    """Scheme data for this request: the verified file, plus this visitor's sandbox edits (demo only)."""
+    schemes = load_file_schemes()
+    overrides = session.get("sandbox") if SANDBOX and has_request_context() else None
+    if overrides:
+        for sch in schemes:
+            o = overrides.get(sch["id"])
+            if not o:
+                continue
+            sch.update(o.get("fields", {}))
+            for rule, changed in zip(sch["rules"], o.get("rules", [])):
+                rule.update(changed)
+    return schemes
+
+
 def scheme_by_id(scheme_id):
     return next((s for s in load_schemes() if s["id"] == scheme_id), None)
 
@@ -212,7 +234,7 @@ def inject_helpers():
     js_keys = {k: (v.get(lang) if v.get(lang) is not None else v.get("en")) for k, v in I18N.items()
                if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop")}
     return {"nice_date": nice_date, "lang": lang, "t": lambda key, **kw: tr(key, lang, **kw),
-            "opt": lambda label: opt(label, lang), "js_text": js_keys}
+            "opt": lambda label: opt(label, lang), "js_text": js_keys, "sandbox": SANDBOX}
 
 
 @app.route("/lang/<code>")
@@ -246,7 +268,7 @@ def find():
         session["asked"] = {}
         session["history"] = []
     else:
-        text = (request.form.get("text") or "").strip()
+        text = (request.form.get("text") or "").strip()[:MAX_TEXT]
         if not text:
             return redirect(url_for("index"))
         result = extract(text)
@@ -296,7 +318,7 @@ def questions_back():
 
 def pending_questions(profile, skipped):
     """Missing details that would change at least one result, in a sensible order."""
-    matter = set(fields_that_matter(profile))
+    matter = set(fields_that_matter(profile, load_schemes()))
     return [f for f in QUESTIONS if f in matter and f not in skipped and profile.get(f) is None]
 
 
@@ -354,7 +376,7 @@ def results():
     if not session.get("profile"):
         return redirect(url_for("index"))
     lang = get_lang()
-    result = match_all(profile, lang=lang)
+    result = match_all(profile, load_schemes(), lang=lang)
     missing = [f for f in CHIP_FIELDS if profile.get(f) is None]
     first = next((m for m in result["likely"] if m["category"] != "loan" and (m["days_left"] is None or m["days_left"] >= 0)), None)
     return render_template("results.html", first=first, page="find", r=result, profile=profile,
@@ -417,8 +439,8 @@ def helper():
 @app.route("/api/helper-check", methods=["POST"])
 def api_helper_check():
     data = request.get_json(silent=True) or {}
-    extracted = extract(data.get("text", ""))
-    result = match_all(extracted["profile"], lang="en")
+    extracted = extract(str(data.get("text") or "")[:MAX_TEXT])
+    result = match_all(extracted["profile"], load_schemes(), lang="en")
     upcoming = sorted([m for m in result["likely"] if m["deadline"] and (m["days_left"] or 0) >= 0],
                       key=lambda m: m["days_left"])
     return jsonify({
@@ -501,17 +523,25 @@ def admin_schemes():
     for sch in schemes:
         lv = sch.get("last_verified")
         sch["stale"] = (not lv) or (today - date.fromisoformat(lv)).days > 90
-    return render_template("admin_list.html", page="admin", schemes=schemes, log=_read_log()[:12],
-                           saved=request.args.get("saved"), default_password=ADMIN_PASSWORD == "prapti-demo")
+    log = (session.get("sandbox_log", []) if SANDBOX else []) + _read_log()
+    return render_template("admin_list.html", page="admin", schemes=schemes, log=log[:12],
+                           saved=request.args.get("saved"), has_edits=bool(session.get("sandbox")),
+                           default_password=ADMIN_PASSWORD == "prapti-demo" and not SANDBOX)
+
+
+@app.route("/admin/reset", methods=["POST"])
+def admin_reset():
+    """Sandbox only: forget this visitor's edits and go back to the verified data."""
+    session.pop("sandbox", None)
+    session.pop("sandbox_log", None)
+    return redirect(url_for("admin_schemes"))
 
 
 @app.route("/admin/schemes/<scheme_id>", methods=["GET", "POST"])
 def admin_edit(scheme_id):
     if not _is_admin():
         return render_template("admin_login.html", page="admin")
-    with open(SCHEMES_PATH, encoding="utf-8") as f:
-        data = json.load(f)
-    sch = next((x for x in data["schemes"] if x["id"] == scheme_id), None)
+    sch = scheme_by_id(scheme_id)
     if not sch:
         abort(404)
     if request.method == "GET":
@@ -555,10 +585,32 @@ def admin_edit(scheme_id):
 
     sch["last_verified"] = date.today().isoformat()
     changes.append("marked verified")
+    entry = {"when": datetime.now().strftime("%Y-%m-%d %H:%M"), "scheme": sch["name_en"], "changes": changes}
+
+    if SANDBOX:
+        overrides = dict(session.get("sandbox", {}))
+        overrides[scheme_id] = {
+            "fields": {k: sch.get(k) for k in ("benefit_text", "benefit_max_inr", "deadline", "deadline_note",
+                                               "source_url", "last_verified")},
+            "rules": [{k: r[k] for k in ("field", "op", "value", "text_en")} for r in sch["rules"]],
+        }
+        # the session is a cookie (about 4 KB), so a demo visitor can hold edits to a few schemes at a time
+        if len(json.dumps(overrides, ensure_ascii=False)) > 4500:
+            return render_template("admin_edit.html", page="admin", s=sch, fields=RULE_FIELDS, ops=OPS,
+                                   error="The demo can hold changes to only a few schemes at once. "
+                                         "Use 'Undo my changes' on the list first."), 400
+        session["sandbox"] = overrides
+        entry["changes"] = changes[:6]
+        session["sandbox_log"] = ([entry] + list(session.get("sandbox_log", [])))[:5]
+        return redirect(url_for("admin_schemes", saved=sch["name_en"]))
+
+    with open(SCHEMES_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+    data["schemes"] = [sch if x["id"] == scheme_id else x for x in data["schemes"]]
     with open(SCHEMES_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     log = _read_log()
-    log.insert(0, {"when": datetime.now().strftime("%Y-%m-%d %H:%M"), "scheme": sch["name_en"], "changes": changes})
+    log.insert(0, entry)
     with open(CHANGELOG_PATH, "w", encoding="utf-8") as f:
         json.dump(log[:200], f, ensure_ascii=False, indent=2)
     return redirect(url_for("admin_schemes", saved=sch["name_en"]))
@@ -567,7 +619,7 @@ def admin_edit(scheme_id):
 @app.route("/api/extract", methods=["POST"])
 def api_extract():
     data = request.get_json(silent=True) or {}
-    return jsonify(extract(data.get("text", "")))
+    return jsonify(extract(str(data.get("text") or "")[:MAX_TEXT]))
 
 
 @app.route("/api/match", methods=["POST"])
@@ -575,7 +627,8 @@ def api_match():
     data = request.get_json(silent=True) or {}
     raw = data.get("profile") if isinstance(data.get("profile"), dict) else {}
     profile = {k: (_coerce(k, raw.get(k)) if k in FIELD_OPTIONS else raw.get(k)) for k in PROFILE_KEYS}
-    return jsonify(match_all(profile, lang=data.get("lang", "en")))
+    lang = data.get("lang") if data.get("lang") in LANGS else "en"
+    return jsonify(match_all(profile, load_schemes(), lang=lang))
 
 
 @app.route("/api/scheme/<scheme_id>")

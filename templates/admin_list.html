@@ -6,6 +6,8 @@
 <header class="admin-head">
   <h1 class="helper-title">Scheme editor</h1>
   <p class="helper-lead">Rules live in data/schemes.json. Change a limit or a date here and every result follows, with no code change. Saving marks the scheme as verified today.</p>
+  {% if sandbox %}<p class="notice">Demo mode: your changes only affect your own visit. Everyone else still sees the verified rules.</p>
+  {% if has_edits %}<form action="/admin/reset" method="post"><button class="link-btn" type="submit">Undo my changes</button></form>{% endif %}{% endif %}
   {% if default_password %}<p class="notice">Demo password in use. Set the ADMIN_PASSWORD environment variable before going live.</p>{% endif %}
 </header>
 

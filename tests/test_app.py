@@ -18,6 +18,28 @@ class TestFlow(unittest.TestCase):
         self.c = app.test_client()
 
 
+    def test_sandbox_edits_stay_with_one_visitor(self):
+        import app as app_module
+        app_module.SANDBOX = True
+        try:
+            judge, other = app.test_client(), app.test_client()
+            judge.post("/admin/login", data={"password": "prapti-demo"})
+            before = open(app_module.SCHEMES_PATH, encoding="utf-8").read()
+            form = {"benefit_text": "Changed by a judge", "benefit_max_inr": "1", "deadline": "",
+                    "deadline_note": "", "source_url": "https://example.gov.in"}
+            sch = app_module.scheme_by_id("nmms")
+            for i, r in enumerate(sch["rules"]):
+                form.update({f"field_{i}": r["field"], f"op_{i}": r["op"], f"text_{i}": r["text_en"],
+                             f"value_{i}": ", ".join(map(str, r["value"])) if isinstance(r["value"], list) else str(r["value"])})
+            self.assertEqual(judge.post("/admin/schemes/nmms", data=form).status_code, 302)
+            self.assertEqual(open(app_module.SCHEMES_PATH, encoding="utf-8").read(), before)  # file untouched
+            self.assertIn("Changed by a judge", judge.get("/scheme/nmms").get_data(as_text=True))
+            self.assertNotIn("Changed by a judge", other.get("/scheme/nmms").get_data(as_text=True))
+            judge.post("/admin/reset")
+            self.assertNotIn("Changed by a judge", judge.get("/scheme/nmms").get_data(as_text=True))
+        finally:
+            app_module.SANDBOX = False
+
     def test_bad_form_values_do_not_crash(self):
         self.c.post("/start")
         r = self.c.post("/questions", data={"field": "annual_income", "value": "lots"})
