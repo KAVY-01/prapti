@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A calm blue sky with soft clouds">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fc2e6"/>
+      <stop offset="1" stop-color="#d4e7f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#g)"/>
+  <circle cx="640" cy="160" r="80" fill="#f2b84b" opacity="0.85"/>
+  <circle cx="640" cy="160" r="120" fill="#f2b84b" opacity="0.15"/>
+  <g fill="#eaf3fc" opacity="0.9">
+    <ellipse cx="170" cy="200" rx="130" ry="40"/><ellipse cx="240" cy="172" rx="80" ry="48"/><ellipse cx="120" cy="185" rx="55" ry="32"/>
+    <ellipse cx="560" cy="430" rx="120" ry="34"/><ellipse cx="610" cy="408" rx="66" ry="40"/>
+    <ellipse cx="210" cy="680" rx="140" ry="40"/><ellipse cx="270" cy="652" rx="74" ry="46"/>
+    <ellipse cx="640" cy="860" rx="130" ry="36"/><ellipse cx="690" cy="838" rx="70" ry="42"/>
+  </g>
+</svg>

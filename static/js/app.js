@@ -126,20 +126,38 @@
     }
   }
 
-  // ---------- Results: edit panel ----------
+  // ---------- Results: edit my details (one line per detail, one opens at a time) ----------
   var editToggle = document.querySelector("[data-edit-toggle]");
   var editPanel = document.getElementById("edit-panel");
   if (editToggle && editPanel) {
-    editToggle.addEventListener("click", function () {
-      var open = editPanel.hidden;
+    var rows = editPanel.querySelectorAll("[data-edit-row]");
+    function showPanel(open) {
       editPanel.hidden = !open;
       editToggle.setAttribute("aria-expanded", String(open));
-      if (open) editPanel.querySelector("input").focus({ preventScroll: true });
-    });
-    if (location.hash === "#edit-panel") {
-      editPanel.hidden = false;
-      editToggle.setAttribute("aria-expanded", "true");
     }
+    function openRow(field) {
+      showPanel(true);
+      var row = document.getElementById("edit-" + field);
+      if (!row) return;
+      row.open = true;
+      row.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
+      row.querySelector("summary").focus({ preventScroll: true });
+    }
+    editToggle.addEventListener("click", function () {
+      showPanel(editPanel.hidden);
+      if (!editPanel.hidden) editPanel.querySelector("summary").focus({ preventScroll: true });
+    });
+    rows.forEach(function (row) {
+      row.addEventListener("toggle", function () {
+        if (!row.open) return;
+        rows.forEach(function (other) { if (other !== row) other.open = false; });
+      });
+    });
+    document.querySelectorAll("[data-open-edit]").forEach(function (a) {
+      a.addEventListener("click", function (e) { e.preventDefault(); openRow(a.dataset.openEdit); });
+    });
+    if (location.hash === "#edit-panel") showPanel(true);
+    else if (location.hash.indexOf("#edit-") === 0) openRow(location.hash.slice(6));
   }
 
   // ---------- Scheme detail: checklist ----------

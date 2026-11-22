@@ -122,6 +122,6 @@ Planned in the Codebenders IDE (its Nexen Guide, on Claude Haiku 5.5, produced t
 
 ## Credits
 
-Photographs from Wikimedia Commons: Kakatiya torana at Warangal Fort by Ms Sarah Welch (CC0); Department of Telugu classroom, Osmania University by Myadam Abhilash (CC0); Osmania University Arts College corridor and window by iMahesh (CC BY-SA 4.0). Typefaces: Anek Latin, Anek Telugu, Anek Devanagari by Ek Type (Google Fonts, OFL).
+Illustrations drawn for Prapti (static/img/art, SVG). Typefaces: Anek Latin, Anek Telugu, Anek Devanagari by Ek Type (Google Fonts, OFL).
 
 *Prapti is a free guide, not a government website. Final eligibility is decided by the scheme authority. Never pay anyone to apply.*

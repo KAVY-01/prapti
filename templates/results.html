@@ -64,35 +64,43 @@
 <section class="understood" aria-labelledby="understood-title">
   <div class="understood-head">
     <h2 id="understood-title" class="t-label understood-title">{{ t('res.understood') }}</h2>
-    <button type="button" class="link-btn" data-edit-toggle aria-expanded="{{ 'true' if missing else 'false' }}" aria-controls="edit-panel">
+    <button type="button" class="link-btn" data-edit-toggle aria-expanded="false" aria-controls="edit-panel">
       {{ icon('pencil', 16) }}{{ t('res.edit') }}
     </button>
   </div>
   <ul class="chip-row">
     {% for c in chips %}<li class="chip chip-static">{{ c }}</li>{% endfor %}
-    {% for f in missing %}<li class="chip chip-missing">{{ t('field.' ~ f) }}?</li>{% endfor %}
+    {% for f in missing %}<li><a class="chip chip-missing" href="#edit-{{ f }}" data-open-edit="{{ f }}">{{ t('field.' ~ f) }}?</a></li>{% endfor %}
   </ul>
 
-  <form id="edit-panel" class="edit-panel" action="/profile" method="post" {% if not missing %}hidden{% endif %}>
+  <div id="edit-panel" class="edit-list" hidden>
+    <p class="edit-lead">{{ t('res.edit_lead') }}</p>
     {% for f in chip_fields %}
-    <fieldset class="edit-field">
-      <legend>{{ t('field.' ~ f) }}</legend>
-      <div class="chip-options">
-        {% for value, label in options[f] %}
-        <label class="chip chip-select">
-          <input type="radio" name="{{ f }}" value="{{ value | lower if value is sameas true or value is sameas false else value }}" {% if selected[f] is not none and selected[f] == value %}checked{% endif %}>
-          <span>{{ icon('check-circle', 16, 'chip-check') }}{{ opt(label) }}</span>
-        </label>
-        {% endfor %}
-        <label class="chip chip-select chip-skip">
-          <input type="radio" name="{{ f }}" value="" {% if profile.get(f) is none %}checked{% endif %}>
-          <span>{{ t('res.notsure') }}</span>
-        </label>
-      </div>
-    </fieldset>
+    <details class="edit-row" id="edit-{{ f }}" data-edit-row>
+      <summary>
+        <span class="edit-label">{{ t('field.' ~ f) }}</span>
+        <span class="edit-value{% if current[f] is none %} is-missing{% endif %}">{{ current[f] if current[f] is not none else t('res.not_told') }}</span>
+        <span class="edit-change">{{ t('res.add') if current[f] is none else t('res.change') }}</span>
+      </summary>
+      <form class="edit-options" action="/profile" method="post">
+        <fieldset>
+          <legend class="visually-hidden">{{ t('field.' ~ f) }}</legend>
+          {% for value, label in options[f] %}
+          <label class="edit-option">
+            <input type="radio" name="{{ f }}" value="{{ value | lower if value is sameas true or value is sameas false else value }}" {% if selected[f] is not none and selected[f] == value %}checked{% endif %}>
+            <span>{{ opt(label) }}</span>
+          </label>
+          {% endfor %}
+          <label class="edit-option edit-option-skip">
+            <input type="radio" name="{{ f }}" value="" {% if profile.get(f) is none %}checked{% endif %}>
+            <span>{{ t('res.notsure') }}</span>
+          </label>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-block">{{ t('res.save') }}</button>
+      </form>
+    </details>
     {% endfor %}
-    <button type="submit" class="btn btn-primary btn-block">{{ t('res.update') }}</button>
-  </form>
+  </div>
 </section>
 
 <section class="slip share-card" aria-labelledby="share-title">

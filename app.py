@@ -261,6 +261,22 @@ def for_matching(profile, lang):
     return p
 
 
+def current_labels(profile, lang):
+    """The answer shown on each line of 'Edit my details', in the student's words (or None if not told)."""
+    shown, bands, out = selected_options(profile), profile.get("_bands") or {}, {}
+    for f in CHIP_FIELDS:
+        v = profile.get(f)
+        if v is None:
+            out[f] = None
+        elif f in bands:
+            out[f] = opt(bands[f], lang)
+        elif f in ("annual_income", "marks_percent"):
+            out[f] = format_value(f, v)  # typed exactly, e.g. "₹96,000", "72%"
+        else:
+            out[f] = opt(dict(FIELD_OPTIONS[f]).get(shown[f], format_value(f, v)), lang)
+    return out
+
+
 def understood_chips(profile, lang=None):
     chips = []
     bands = profile.get("_bands") or {}
@@ -563,7 +579,7 @@ def results():
                            wa_text=quote(share_message(result, first, link, lang)),
                            chips=understood_chips(profile, lang), options=FIELD_OPTIONS,
                            field_label=FIELD_LABEL, chip_fields=CHIP_FIELDS, missing=missing,
-                           selected=selected_options(profile),
+                           selected=selected_options(profile), current=current_labels(profile, lang),
                            removed_id=session.pop("removed_id", False),
                            sample_name=sample_display_name(session.get("sample_name"), lang))
 

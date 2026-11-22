@@ -2547,7 +2547,7 @@ h3 {
   aspect-ratio: 4 / 5;
   max-height: 82vh;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 62%;  /* keeps the cap and the certificate in view when cropped */
   animation: slip-in 700ms var(--ease) both;
 }
 
@@ -3279,3 +3279,33 @@ h1, h2, h3,
 .share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .share-actions .btn { flex: 1 1 180px; justify-content: center; }
 .copy-box { width: 100%; margin-top: 10px; font-size: 14px; }
+
+/* ---------- Edit my details: one line per detail ("check your answers"), one opens at a time ---------- */
+.chip-row a.chip-missing { text-decoration: none; cursor: pointer; }
+.edit-list { margin-top: var(--space-4); background: var(--paper); border-radius: var(--radius-card); overflow: hidden; }
+.edit-list[hidden] { display: none; }
+.edit-lead { margin: 0; padding: var(--space-4) var(--space-5) var(--space-2); color: var(--ink-2); font-size: var(--step-small); }
+.edit-row { border-top: 1px solid var(--surface-2); }
+.edit-row:first-of-type { border-top: 0; }
+.edit-row summary {
+  display: grid; grid-template-columns: 1fr auto; grid-template-areas: "label change" "value change";
+  gap: 2px var(--space-3); align-items: center; min-height: 64px;
+  padding: var(--space-3) var(--space-5); cursor: pointer; list-style: none;
+}
+.edit-row summary::-webkit-details-marker { display: none; }
+.edit-row summary:hover { background: #f8fbff; }
+.edit-row summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.edit-label { grid-area: label; font-size: var(--step-small); color: var(--ink-2); }
+.edit-value { grid-area: value; font-weight: 600; color: var(--ink); }
+.edit-value.is-missing { color: var(--maybe); }
+.edit-change { grid-area: change; color: var(--brand); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.edit-row[open] summary { background: var(--brand-soft); }
+.edit-row[open] .edit-change { visibility: hidden; }
+.edit-options { padding: var(--space-3) var(--space-5) var(--space-5); background: var(--brand-soft); }
+.edit-options fieldset { border: 0; margin: 0 0 var(--space-4); padding: 0; display: grid; gap: var(--space-2); }
+.edit-option { display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: 0 var(--space-4);
+  background: var(--paper); border-radius: 14px; cursor: pointer; }
+.edit-option input { width: 22px; height: 22px; accent-color: var(--brand); margin: 0; }
+.edit-option:has(input:checked) { outline: 2px solid var(--brand); }
+.edit-option-skip span { color: var(--ink-2); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
