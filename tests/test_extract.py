@@ -22,6 +22,16 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(p["area"], "rural")
         self.assertEqual(p["district"], "Nalgonda")
 
+    def test_native_digits(self):
+        p = extract("మా ఆదాయం ౮౦ వేలు, ఇంటర్ రెండవ సంవత్సరం")["profile"]
+        self.assertEqual(p["annual_income"], 80000)
+        p = extract("परिवार की आय १.२ लाख है")["profile"]
+        self.assertEqual(p["annual_income"], 120000)
+
+    def test_native_digit_aadhaar_is_removed(self):
+        out = extract("मेरा आधार १२३४ ५६७८ ९०१२ है")
+        self.assertTrue(out["removed_id"])
+
     def test_hindi(self):
         p = extract("मैं हैदराबाद में B.Tech कर रही हूँ, हम minority हैं, family income 1.5 लाख है।")["profile"]
         self.assertEqual(p["education_level"], "professional")

@@ -85,6 +85,26 @@
     "te": "మీ మాట వినిపించలేదు. మైక్ అనుమతి చూసి మళ్ళీ ప్రయత్నించండి.",
     "hi": "आवाज़ नहीं सुनाई दी। माइक की अनुमति जाँचकर फिर कोशिश कीजिए।"
   },
+  "home.mic_lang": {
+    "en": "Language you will speak",
+    "te": "మీరు మాట్లాడే భాష",
+    "hi": "आप किस भाषा में बोलेंगे"
+  },
+  "home.mic_denied": {
+    "en": "Microphone is blocked. Allow it in your browser settings, or type instead.",
+    "te": "మైక్ అనుమతి లేదు. బ్రౌజర్ సెట్టింగ్స్‌లో అనుమతించండి, లేదా టైప్ చేయండి.",
+    "hi": "माइक बंद है। ब्राउज़र सेटिंग में अनुमति दें, या टाइप करें।"
+  },
+  "home.mic_nospeech": {
+    "en": "Didn't hear anything. Tap the mic and speak again.",
+    "te": "ఏమీ వినిపించలేదు. మైక్ నొక్కి మళ్ళీ మాట్లాడండి.",
+    "hi": "कुछ सुनाई नहीं दिया। माइक दबाकर फिर से बोलिए।"
+  },
+  "home.mic_network": {
+    "en": "Voice typing needs the internet. You can still type.",
+    "te": "వాయిస్ టైపింగ్‌కు ఇంటర్నెట్ కావాలి. టైప్ చేయవచ్చు.",
+    "hi": "आवाज़ से लिखने के लिए इंटरनेट चाहिए। आप टाइप कर सकते हैं।"
+  },
   "home.samples": {
     "en": "Or try a sample student",
     "te": "లేదా ఒక నమూనా విద్యార్థిని చూడండి",

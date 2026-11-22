@@ -2,7 +2,7 @@
 
 **ACE Builders Hackathon 2026 · Problem Statement 5: Claim What's Yours**
 
-A student from a low-income family in Telangana describes their life in plain words, the way they would type it to a friend. Prapti shows which scholarships they are **likely eligible** for, the exact rule behind every match, one combined document list, the steps on the official portal, and reminders before each last date. Free, in English, Telugu and Hindi, and it never asks for an ID number.
+A student from a low-income family in Telangana describes their life in plain words, the way they would type it to a friend. Prapti shows which scholarships they are **likely eligible** for, the exact rule behind every match, one combined document list, the steps on the official portal, and reminders before each last date. Free, in English, Telugu and Hindi, works offline once opened, and never asks for an ID number.
 
 *Prapti* (ప్రాప్తి in Telugu, प्राप्ति in Hindi) means "receiving what is due to you".
 
@@ -31,7 +31,7 @@ Or tap **Answer simple questions** for a no-typing path. The scheme editor (`/ad
 
 | The brief asks for | In Prapti |
 |---|---|
-| Plain-language input, typed or spoken, regional language | One text box, or voice (te-IN, hi-IN, en-IN). Reads English, Telugu, Hindi, and Telugu or Hindi typed in English letters ("aadayam nelaku 8 velu" = ₹96,000 a year). Works offline. |
+| Plain-language input, typed or spoken, regional language | One text box, or voice with a language pill (English, Telugu, Hindi). Reads English, Telugu, Hindi, and Telugu or Hindi typed in English letters ("aadayam nelaku 8 velu" = ₹96,000 a year); Telugu and Hindi digits too. The reader needs no internet, and pages you have opened keep working offline (service worker). |
 | Help for people who don't know which details matter | Asks only the questions whose answer would change a result, one tap each, with "why we ask". A tap-only path for people who find typing hard, and read-aloud. |
 | Matching that shows its reasoning | A plain rules engine. Every scheme lists each rule as a sentence with the student's own answer. If only income or marks stands in the way, it says so: "Nearly a match · ₹20,000 over the income limit". |
 | Personalised document checklist and step-by-step guide | Each scheme's checklist shows only the documents this student needs. **One trip to Mee Seva**: all documents for all their schemes, listed once and grouped by where to get them ("5 schemes ask for 30 documents, but only 8 are different"). Portal steps and what happens after applying. |

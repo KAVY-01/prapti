@@ -94,39 +94,70 @@
       }, 4000);
     }
 
-    // ---------- Voice input (Web Speech API) ----------
+    // ---------- Voice input (Web Speech API): speak in English, Telugu or Hindi ----------
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     var micRow = document.querySelector("[data-mic-row]");
     var mic = document.querySelector("[data-mic]");
     var micLabel = document.querySelector("[data-mic-label]");
+    var micLang = document.querySelector("[data-mic-lang]");
     if (SR && micRow && mic) {
       micRow.hidden = false;
       var rec = null;
       var base = "";
-      var lang = document.documentElement.lang === "te" ? "te-IN" : document.documentElement.lang === "hi" ? "hi-IN" : "en-IN";
-      mic.addEventListener("click", function () {
-        if (rec) { rec.stop(); return; }
-        rec = new SR();
-        rec.lang = lang;
+      var heard = false;
+      var pageLang = { te: "te-IN", hi: "hi-IN" }[document.documentElement.lang] || "en-IN";
+      if (micLang) {
+        var saved = store("prapti:mic-lang");
+        micLang.value = saved || pageLang; // an unknown saved value leaves it empty, caught below
+        if (!micLang.value) micLang.value = "en-IN";
+        micLang.addEventListener("change", function () {
+          store("prapti:mic-lang", micLang.value);
+          if (rec) { rec.onend = null; try { rec.abort(); } catch (e) {} stopUI(); start(); }
+        });
+      }
+      function stopUI() {
+        rec = null;
+        mic.setAttribute("aria-pressed", "false");
+        micLabel.textContent = T("home.speak");
+      }
+      function start() {
+        try {
+          rec = new SR();
+        } catch (e) { toast(T("home.mic_error")); return; }
+        rec.lang = micLang ? micLang.value : pageLang;
         rec.interimResults = true;
         rec.continuous = true;
         base = textarea.value ? textarea.value.trim() + " " : "";
+        heard = false;
         rec.onresult = function (ev) {
           var text = "";
           for (var i = 0; i < ev.results.length; i++) text += ev.results[i][0].transcript;
+          if (text.trim()) heard = true;
           textarea.value = base + text;
         };
+        rec.onerror = function (ev) {
+          var err = ev && ev.error;
+          if (err === "aborted") return;
+          if (err === "not-allowed" || err === "service-not-allowed" || err === "audio-capture") toast(T("home.mic_denied"));
+          else if (err === "network") toast(T("home.mic_network"));
+          else if (err === "no-speech") toast(T("home.mic_nospeech"));
+          else toast(T("home.mic_error"));
+          heard = true; // the toast already explained; don't add a second one on end
+        };
         rec.onend = function () {
-          rec = null;
-          mic.setAttribute("aria-pressed", "false");
-          micLabel.textContent = T("home.speak");
+          var silent = !heard;
+          stopUI();
+          if (silent) toast(T("home.mic_nospeech"));
         };
-        rec.onerror = function () {
-          toast(T("home.mic_error"));
-        };
-        rec.start();
+        try {
+          rec.start();
+        } catch (e) { stopUI(); toast(T("home.mic_error")); return; }
         mic.setAttribute("aria-pressed", "true");
         micLabel.textContent = T("home.listening");
+      }
+      mic.addEventListener("click", function () {
+        if (rec) { try { rec.stop(); } catch (e) { stopUI(); } return; }
+        start();
       });
     }
   }
@@ -307,6 +338,13 @@
   });
 
   // ---------- Offline notice ----------
+  // Keep opened pages working offline (see /sw.js)
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/sw.js").catch(function () {});
+    });
+  }
+
   var offline = document.querySelector("[data-offline]");
   function net() { if (offline) offline.hidden = navigator.onLine !== false; }
   window.addEventListener("online", net);

@@ -317,6 +317,16 @@ def inject_helpers():
             "opt": lambda label: opt(label, lang), "js_text": js_keys, "sandbox": SANDBOX}
 
 
+@app.route("/sw.js")
+def service_worker():
+    # Served from the root so it can keep pages working offline across the whole site.
+    resp = app.send_static_file("js/sw.js")
+    resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
+    resp.headers["Cache-Control"] = "no-cache"
+    resp.headers["Service-Worker-Allowed"] = "/"
+    return resp
+
+
 @app.route("/lang/<code>")
 def set_lang(code):
     if code in LANGS:

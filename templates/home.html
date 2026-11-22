@@ -42,6 +42,12 @@
           placeholder="I'm in Inter 2nd year in Warangal, my father is a daily wage worker, we are BC, income around 1 lakh.">{{ text }}</textarea>
           <div class="mic-row" data-mic-row hidden>
             <span class="mic-label" data-mic-label>{{ t('home.speak') }}</span>
+            <label class="visually-hidden" for="mic-lang">{{ t('home.mic_lang') }}</label>
+            <select id="mic-lang" class="mic-lang" data-mic-lang>
+              <option value="en-IN" lang="en">English</option>
+              <option value="te-IN" lang="te">తెలుగు</option>
+              <option value="hi-IN" lang="hi">हिंदी</option>
+            </select>
             <button type="button" class="mic" data-mic aria-pressed="false" aria-label="{{ t('home.speak') }}">{{ icon('mic', 18) }}</button>
           </div>
         </div>

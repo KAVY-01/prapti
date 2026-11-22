@@ -33,6 +33,13 @@ DISTRICT_ALIASES = {
 }
 URBAN_DISTRICTS = {"Hyderabad", "Medchal", "Rangareddy"}
 
+# Telugu and Devanagari digits, read as 0-9 (voice typing and phone keyboards can return them)
+_DIGITS = str.maketrans("౦౧౨౩౪౫౬౭౮౯०१२३४५६७८९", "0123456789" * 2)
+
+
+def normalise_digits(text: str) -> str:
+    return (text or "").translate(_DIGITS)
+
 
 def scrub_ids(text: str) -> tuple[str, bool]:
     """Remove ID-like numbers. Returns (clean_text, removed_anything)."""
@@ -225,7 +232,7 @@ def _college(t: str):
 
 
 def extract_fallback(text: str) -> dict:
-    t = text or ""
+    t = normalise_digits(text)
     district = _district(t)
     return {
         "education_level": _education(t),
@@ -247,7 +254,7 @@ def extract(text: str, use_ai: bool = True) -> dict:
     ID-like numbers are removed before anything else sees the text.
     The optional AI reading fills what it can; the offline parser fills any gaps.
     """
-    clean, removed = scrub_ids(text or "")
+    clean, removed = scrub_ids(normalise_digits(text))
     offline = extract_fallback(clean)
     ai = None
     if use_ai:
