@@ -1,27 +1,27 @@
 /* Prapti design tokens.
    Direction: "the page is the object" — every result is the paper slip a student
-   carries to the Mee Seva counter. Soft blue-grey ground, navy ink, calm blues. */
+   carries to the Mee Seva counter. Light sky-blue ground, pale cards, navy actions. */
 :root {
   /* Colour: soothing blues. Every text/background pair is 4.5:1 or better. */
-  --bg: #e6edf4;          /* soft blue-grey ground */
-  --paper: #f6f9fc;       /* the slip */
-  --surface: #f6f9fc;     /* alias kept for older rules */
-  --surface-2: #d8e3ee;   /* tone step: chips, inset panels */
-  --surface-3: #c6d5e4;   /* deeper step: pressed, tracks */
-  --ink: #10233a;         /* deep navy */
-  --ink-2: #38506b;       /* soft ink, secondary text */
-  --ink-3: #46607c;       /* hints */
-  --brand: #2563a6;       /* calm ocean blue: actions */
-  --brand-hover: #1c5089;
+  --bg: #d4e7f8;          /* light sky-blue ground */
+  --paper: #f2f8fe;       /* the slip: palest sky, not stark white */
+  --surface: #f2f8fe;     /* alias kept for older rules */
+  --surface-2: #c2dbf1;   /* tone step: chips, inset panels */
+  --surface-3: #a9c8e6;   /* deeper step: pressed, tracks */
+  --ink: #0f2340;         /* deep navy */
+  --ink-2: #2f4a68;       /* soft ink, secondary text */
+  --ink-3: #3e5877;       /* hints */
+  --brand: #1f3b70;       /* navy: buttons and actions */
+  --brand-hover: #162c56;
   --brand-ink: #ffffff;
-  --brand-soft: #d8e7f6;  /* pale sky: secondary buttons, selected chips */
-  --field: #2a5f97;       /* the one large field (results summary, footer) */
+  --brand-soft: #bcd6ef;  /* sky: secondary buttons, selected chips */
+  --field: #24467e;       /* the one large field (results summary, footer) */
   --field-ink: #ffffff;
-  --field-ink-2: #d5e5f5;
+  --field-ink-2: #cfe0f3;
 
   /* Status */
-  --likely: #1d5a8c;
-  --likely-bg: #d8e7f6;
+  --likely: #1f3b70;
+  --likely-bg: #d0e4f7;
   --maybe: #7d4f0c;       /* warm amber stays: "check one thing" should stand out */
   --maybe-bg: #f1e4c8;
   --no: #38506b;

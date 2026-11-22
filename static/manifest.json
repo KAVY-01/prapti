@@ -3,8 +3,8 @@
   "short_name": "Prapti",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#e6edf4",
-  "theme_color": "#e6edf4",
+  "background_color": "#d4e7f8",
+  "theme_color": "#d4e7f8",
   "icons": [
     { "src": "/static/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
