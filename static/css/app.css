@@ -3976,3 +3976,8 @@ html { -webkit-tap-highlight-color: transparent; }
 .ask-error { margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--urgent-bg); color: var(--urgent); font-size: 16px; font-weight: 600; }
 .ask-error[hidden] { display: none; }
 .ask textarea[aria-invalid="true"] { outline: 3px solid var(--urgent); outline-offset: -3px; }
+
+/* ---------- The main button in Tiffany blue (navy text reads 9:1 on it) ---------- */
+.hero-simple .tap-btn { background: #81d8d0; color: var(--ink); --bubble: #5ccbc1; }
+.hero-simple .tap-btn:hover { background: #81d8d0; }
+.hero-simple .tap-btn .tap-btn-sub { color: #1e4d5c; }
