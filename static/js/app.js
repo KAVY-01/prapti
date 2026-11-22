@@ -413,4 +413,267 @@
       fgroups.forEach(function (g) { tio.observe(g); });
     }
   }
+
+  // ---------- Results: "What if?" sliders re-check the student's own details live (nothing is saved) ----------
+  var wi = document.querySelector("[data-whatif]");
+  if (wi && window.fetch) {
+    var wiFields = Array.prototype.slice.call(wi.querySelectorAll("[data-wi-field]"));
+    var wiList = wi.querySelector("[data-wi-list]");
+    var wiSummary = wi.querySelector("[data-wi-summary]");
+    var wiReset = wi.querySelector("[data-wi-reset]");
+    var inr = function (n) { return "\u20b9" + Math.round(n).toLocaleString("en-IN"); };
+    var fmt = function (f, v) { return f === "annual_income" ? inr(v) : Math.round(v) + "%"; };
+    var short = function (f, v) {
+      if (f !== "annual_income") return v + "%";
+      return v >= 100000 ? "\u20b9" + (v / 100000).toFixed(v % 100000 ? 1 : 0).replace(".0", "") + "L" : inr(v);
+    };
+    var baseline = null, timer = null, ctrl = null, shownValue = 0;
+    var state = {};
+
+    wiFields.forEach(function (box) {
+      var f = box.getAttribute("data-wi-field");
+      var range = box.querySelector("[data-wi-range]");
+      var start = box.getAttribute("data-start");
+      var told = start !== "";
+      state[f] = { box: box, range: range, told: told, start: told ? +start : null, touched: false };
+      range.value = told ? Math.min(+range.max, +start) : (f === "annual_income" ? 100000 : 60);
+      paint(f);
+      range.addEventListener("input", function () {
+        state[f].touched = true;
+        paint(f);
+        clearTimeout(timer);
+        timer = setTimeout(check, 90);
+      });
+    });
+
+    function paint(f) {
+      var st = state[f], r = st.range, v = +r.value;
+      r.style.setProperty("--fill", ((v - r.min) / (r.max - r.min)) * 100 + "%");
+      var untold = !st.told && !st.touched;
+      st.box.classList.toggle("is-untold", untold);
+      st.box.querySelector("[data-wi-out]").textContent = untold ? "\u2014" : fmt(f, v) + (f === "annual_income" && v >= +r.max ? "+" : "");
+      var note = st.box.querySelector("[data-wi-note]");
+      note.textContent = untold ? T("wi.not_told") : (st.told && st.touched && v !== st.start ? T("wi.yours", { v: fmt(f, st.start) }) : "");
+      st.box.querySelectorAll("[data-limit]").forEach(function (chip) {
+        var lim = +chip.getAttribute("data-limit");
+        chip.classList.toggle("is-crossed", !untold && (f === "annual_income" ? v > lim : v < lim));
+      });
+    }
+
+    function payload() {
+      var out = {};
+      Object.keys(state).forEach(function (f) { if (state[f].touched) out[f] = +state[f].range.value; });
+      return out;
+    }
+
+    function countTo(target) {
+      var from = shownValue, t0 = null;
+      shownValue = target;
+      if (reduceMotion || from === target) { setSummaryValue(target); return; }
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 450);
+        setSummaryValue(from + (target - from) * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    var lastCount = 0;
+    function setSummaryValue(v) { wiSummary.textContent = T("wi.summary", { n: lastCount, v: inr(v) }); }
+
+    function render(data) {
+      if (!baseline) {
+        baseline = {};
+        data.schemes.forEach(function (row) { baseline[row.id] = row.status; });
+        Object.keys(data.limits || {}).forEach(function (f) {
+          if (!state[f]) return;
+          var holder = state[f].box.querySelector("[data-wi-limits]");
+          holder.innerHTML = "";
+          (data.limits[f] || []).forEach(function (l) {
+            var chip = document.createElement("span");
+            chip.className = "wi-limit";
+            chip.setAttribute("data-limit", l.value);
+            chip.textContent = (f === "annual_income" ? "\u2264 " : "\u2265 ") + short(f, l.value);
+            holder.appendChild(chip);
+          });
+          paint(f);
+        });
+      }
+      lastCount = data.summary.likely_count;
+      countTo(data.summary.likely_value_inr);
+      wiList.innerHTML = "";
+      var hiddenNo = 0;
+      data.schemes.forEach(function (row) {
+        var was = baseline[row.id];
+        // Keep the box short: what you'd get, what needs one check, and anything that just changed.
+        if (row.status === "no" && (!was || was === "no")) { hiddenNo++; return; }
+        var li = document.createElement("li");
+        li.className = "wi-item is-" + row.status;
+        if (was && was !== row.status && (row.status === "likely" || was === "likely")) li.className += row.status === "likely" ? " is-gain" : " is-loss";
+        var name = document.createElement("span"); name.className = "wi-name"; name.textContent = row.name;
+        var pill = document.createElement("span"); pill.className = "wi-pill is-" + row.status; pill.textContent = T("grp." + row.status);
+        li.appendChild(name); li.appendChild(pill);
+        if (/is-gain|is-loss/.test(li.className)) {
+          var ch = document.createElement("span"); ch.className = "wi-change";
+          ch.textContent = li.className.indexOf("is-gain") > -1 ? "\u2191 " + T("wi.gain") : "\u2193 " + T("wi.loss");
+          li.appendChild(ch);
+        }
+        if (row.status !== "likely" && row.why) {
+          var why = document.createElement("span"); why.className = "wi-why"; why.textContent = row.why;
+          li.appendChild(why);
+        }
+        wiList.appendChild(li);
+      });
+      if (hiddenNo) {
+        var more = document.createElement("li");
+        more.className = "wi-more";
+        more.textContent = T("wi.others", { n: hiddenNo });
+        wiList.appendChild(more);
+      }
+      wiReset.hidden = !Object.keys(payload()).length;
+    }
+
+    function check() {
+      if (ctrl && ctrl.abort) ctrl.abort();
+      ctrl = window.AbortController ? new AbortController() : null;
+      fetch("/api/whatif", {
+        method: "POST", headers: { "Content-Type": "application/json" }, credentials: "same-origin",
+        body: JSON.stringify(payload()), signal: ctrl ? ctrl.signal : undefined
+      }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(render)
+        .catch(function (e) { if (!e || e.name !== "AbortError") { if (!baseline) wi.hidden = true; else toast(T("wi.error")); } });
+    }
+
+    wiReset.addEventListener("click", function () {
+      Object.keys(state).forEach(function (f) {
+        var st = state[f];
+        st.touched = false;
+        st.range.value = st.told ? Math.min(+st.range.max, st.start) : (f === "annual_income" ? 100000 : 60);
+        paint(f);
+      });
+      check();
+    });
+
+    wi.hidden = false;
+    check();
+  }
+
+  // ---------- 90-second guided tour (/demo): a guide card that spotlights each feature on the real pages ----------
+  (function () {
+    var KEY = "prapti:tour";
+    var STEPS = [
+      { page: "/results", sel: ".summary-card", text: "tour.s1" },
+      { page: "/results", sel: ".understood", text: "tour.s2" },
+      { page: "/results", sel: "[data-whatif]", text: "tour.s3" },
+      { page: "/results", sel: ".result-group", text: "tour.s4" },
+      { page: "scheme", sel: ".rule-list", text: "tour.s5" },
+      { page: "/documents", sel: ".trip-group", text: "tour.s6" },
+      { page: "/documents", sel: null, text: "tour.s7" }
+    ];
+    function session(k, v) {
+      try {
+        if (v === undefined) return sessionStorage.getItem(k);
+        if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v);
+      } catch (e) { return null; }
+    }
+    if (/[?&]tour=1\b/.test(location.search)) {
+      session(KEY, "0");
+      if (history.replaceState) history.replaceState(null, "", location.pathname + location.hash);
+    }
+    var at = session(KEY);
+    if (at === null) return;
+    var i = parseInt(at, 10) || 0;
+    if (location.pathname === "/results") {
+      var firstLikely = document.querySelector(".result-group .scheme-card");
+      if (firstLikely) session(KEY + "-scheme", firstLikely.getAttribute("href"));
+    }
+    function pathFor(step) { return step.page === "scheme" ? (session(KEY + "-scheme") || "/results") : step.page; }
+    function here(step) { return step.page === "scheme" ? location.pathname.indexOf("/scheme/") === 0 : location.pathname === step.page; }
+    if (!STEPS[i] || !here(STEPS[i])) { session(KEY, null); return; } // left the tour route: end it quietly
+
+    var card = document.createElement("div");
+    card.className = "tour-card";
+    card.setAttribute("role", "dialog");
+    card.setAttribute("aria-label", T("tour.start"));
+    card.innerHTML = '<div class="tour-top"><span class="tour-count"></span><button type="button" class="tour-x" aria-label=""></button></div>' +
+      '<div class="tour-bar"><span></span></div><p class="tour-text" aria-live="polite"></p>' +
+      '<div class="tour-actions"><button type="button" class="btn btn-secondary btn-small tour-back"></button>' +
+      '<button type="button" class="btn btn-primary btn-small tour-next"></button></div>';
+    document.body.appendChild(card);
+    document.body.classList.add("tour-on");
+    var focused = null;
+
+    function end(goHome) {
+      session(KEY, null);
+      if (focused) focused.classList.remove("tour-focus");
+      document.body.classList.remove("tour-on");
+      card.remove();
+      if (goHome) location.href = "/";
+    }
+    function show() {
+      var step = STEPS[i];
+      if (focused) focused.classList.remove("tour-focus");
+      focused = step.sel ? document.querySelector(step.sel) : null;
+      if (focused) {
+        focused.classList.add("tour-focus");
+        var tall = focused.offsetHeight > window.innerHeight * 0.55;
+        focused.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: tall ? "start" : "center" });
+      }
+      card.classList.toggle("is-final", !step.sel);
+      card.querySelector(".tour-count").textContent = T("tour.step", { i: i + 1, n: STEPS.length });
+      card.querySelector(".tour-bar span").style.width = ((i + 1) / STEPS.length) * 100 + "%";
+      card.querySelector(".tour-text").textContent = T(step.text);
+      var x = card.querySelector(".tour-x"); x.textContent = "\u00d7"; x.setAttribute("aria-label", T("tour.close"));
+      var back = card.querySelector(".tour-back");
+      back.textContent = T("tour.back"); back.hidden = i === 0;
+      card.querySelector(".tour-next").textContent = i === STEPS.length - 1 ? T("tour.try") : T("tour.next");
+      session(KEY, String(i));
+    }
+    function go(to) {
+      if (to < 0) return;
+      if (to >= STEPS.length) { end(true); return; }
+      i = to;
+      if (!here(STEPS[i])) { session(KEY, String(i)); location.href = pathFor(STEPS[i]); return; }
+      show();
+    }
+    card.querySelector(".tour-next").addEventListener("click", function () { go(i + 1); });
+    card.querySelector(".tour-back").addEventListener("click", function () { go(i - 1); });
+    card.querySelector(".tour-x").addEventListener("click", function () { end(false); });
+    document.addEventListener("keydown", function (ev) {
+      if (!document.body.classList.contains("tour-on")) return;
+      if (ev.key === "Escape") end(false);
+      if (ev.key === "ArrowRight" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) go(i + 1);
+      if (ev.key === "ArrowLeft" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) go(i - 1);
+    });
+    // wait a beat so the page's own entrances and the What-if box are in place first
+    setTimeout(show, 350);
+  })();
+
+  // ---------- Home: proof numbers count up once when they come into view ----------
+  var nums = document.querySelectorAll(".proof-num[data-count]");
+  if (nums.length && "IntersectionObserver" in window && !reduceMotion) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        var el = e.target, to = +el.getAttribute("data-count"), suf = el.getAttribute("data-suffix") || "", t0 = null;
+        if (!to) return;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          var k = Math.min(1, (ts - t0) / 900);
+          el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))) + suf;
+          if (k < 1) requestAnimationFrame(step);
+        }
+        el.textContent = "0" + suf;
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.6 });
+    nums.forEach(function (n) { cio.observe(n); });
+  }
+
+  // A hello for anyone who opens the developer console (judges included)
+  try {
+    console.log("%cPrapti %c\u0c2a\u0c4d\u0c30\u0c3e\u0c2a\u0c4d\u0c24\u0c3f", "font:700 20px system-ui;color:#1f3b70", "font:400 16px system-ui;color:#2f4a68");
+    console.log("Rules live in data/schemes.json, the reader in engine/extract.py. No AI decides eligibility, and no ID number is ever stored. github.com/KAVY-01/prapti");
+  } catch (e) {}
 })();

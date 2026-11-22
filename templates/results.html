@@ -103,6 +103,27 @@
   </div>
 </section>
 
+<section class="slip whatif" aria-labelledby="wi-title" data-whatif hidden>
+  <div class="next-body">
+    <h2 id="wi-title" class="next-title">{{ icon('sliders', 20) }} {{ t('wi.title') }}</h2>
+    <p class="next-text">{{ t('wi.lead') }}</p>
+    {% for f, min_v, max_v, step in [('annual_income', 0, 1000000, 5000), ('marks_percent', 0, 100, 1)] %}
+    <div class="wi-field" data-wi-field="{{ f }}" data-start="{{ profile.get(f) if profile.get(f) is not none else '' }}">
+      <div class="wi-row">
+        <label class="wi-label" for="wi-{{ f }}">{{ t('wi.income' if f == 'annual_income' else 'wi.marks') }}</label>
+        <output class="wi-out" for="wi-{{ f }}" data-wi-out></output>
+      </div>
+      <input id="wi-{{ f }}" class="wi-range" type="range" min="{{ min_v }}" max="{{ max_v }}" step="{{ step }}" data-wi-range>
+      <p class="wi-note" data-wi-note></p>
+      <div class="wi-limits" data-wi-limits></div>
+    </div>
+    {% endfor %}
+    <p class="wi-summary" data-wi-summary aria-live="polite"></p>
+    <ul class="wi-list" data-wi-list></ul>
+    <button type="button" class="link-btn wi-reset" data-wi-reset hidden>{{ icon('rotate-ccw', 16) }}{{ t('wi.reset') }}</button>
+  </div>
+</section>
+
 <section class="slip share-card" aria-labelledby="share-title">
   <div class="next-body">
     <h2 id="share-title" class="next-title">{{ icon('message-circle', 20) }} {{ t('share.title') }}</h2>

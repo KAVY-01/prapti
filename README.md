@@ -10,6 +10,8 @@ A student from a low-income family in Telangana describes their life in plain wo
 
 **https://prapti-telangana.vercel.app** · open it on a phone, nothing to install.
 
+**In a hurry? https://prapti-telangana.vercel.app/demo** is a 90-second guided tour of a real result: press Next, it spotlights each feature.
+
 Paste any of these into the box on the home page:
 
 | Style | Message |
@@ -34,6 +36,7 @@ Or tap **Answer simple questions** for a no-typing path. The scheme editor (`/ad
 | Plain-language input, typed or spoken, regional language | One text box, or voice with a language pill (English, Telugu, Hindi). Reads English, Telugu, Hindi, and Telugu or Hindi typed in English letters ("aadayam nelaku 8 velu" = ₹96,000 a year); Telugu and Hindi digits too. The reader needs no internet, and pages you have opened keep working offline (service worker). |
 | Help for people who don't know which details matter | Asks only the questions whose answer would change a result, one tap each, with "why we ask". A tap-only path for people who find typing hard, and read-aloud. |
 | Matching that shows its reasoning | A plain rules engine. Every scheme lists each rule as a sentence with the student's own answer. If only income or marks stands in the way, it says so: "Nearly a match · ₹20,000 over the income limit". |
+| *(beyond the brief)* "What if?" | On every result, sliders for family income and marks re-check all schemes live and show the exact limit that decides each one ("≤ ₹2L" crossed out), so a student sees what stands between them and the money. Nothing is saved. |
 | Personalised document checklist and step-by-step guide | Each scheme's checklist shows only the documents this student needs. **One trip to Mee Seva**: all documents for all their schemes, listed once and grouped by where to get them ("5 schemes ask for 30 documents, but only 8 are different"). Portal steps and what happens after applying. |
 | Deadline reminders and tracking | Tracker with status, days left, documents ready and the next step; reminders 14/7/3/1 days before; calendar file. Warns when a certificate takes longer than the days left ("caste certificate can take 15 days, Pragati closes in 8: apply today"). |
 | Every scheme linked to its official source, with the date it was last verified | Shown on every scheme. **How we keep the rules right** (`/changes`): a button re-reads the official pages and compares them with the copies saved when we last checked, so a changed page is flagged for re-checking. |

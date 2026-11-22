@@ -28,6 +28,7 @@
           {{ icon('arrow-right', 28) }}
         </button>
       </form>
+      <a class="tour-link" href="/demo">{{ icon('play', 14) }}<span>{{ t('tour.start') }}</span></a>
       </div>
 
       <p class="or-line" aria-hidden="true"><span>{{ t('home.or') }}</span></p>
@@ -77,6 +78,12 @@
       </div>
     </div>
   </div>
+  <ul class="proof-strip" aria-label="Prapti in numbers">
+    <li><span class="proof-num" data-count="{{ schemes | length }}">{{ schemes | length }}</span><span class="proof-label">{{ t('home.stat1') }}</span></li>
+    <li><span class="proof-num" data-count="3">3</span><span class="proof-label">{{ t('home.stat2') }}</span></li>
+    <li><span class="proof-num" data-count="0">0</span><span class="proof-label">{{ t('home.stat3') }}</span></li>
+    <li><span class="proof-num" data-count="100" data-suffix="%">100%</span><span class="proof-label">{{ t('home.stat4') }}</span></li>
+  </ul>
 </section>
 
 <section class="moments" aria-labelledby="moments-title">

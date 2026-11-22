@@ -312,7 +312,7 @@ def inject_helpers():
         return nice(date.fromisoformat(iso))
 
     js_keys = {k: (v.get(lang) if v.get(lang) is not None else v.get("en")) for k, v in I18N.items()
-               if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop", "share")}
+               if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop", "share", "wi", "grp", "tour")}
     return {"nice_date": nice_date, "lang": lang, "t": lambda key, **kw: tr(key, lang, **kw),
             "opt": lambda label: opt(label, lang), "js_text": js_keys, "sandbox": SANDBOX}
 
@@ -343,20 +343,34 @@ def index():
                            text=session.get("text", ""))
 
 
+def use_sample(sample_id):
+    """Load a sample student into this visitor's session. Returns False if there is no such sample."""
+    sample = next((s for s in load_samples() if s["id"] == sample_id), None)
+    if not sample:
+        return False
+    session["profile"] = dict(sample["profile"])
+    session["text"] = sample["text"]
+    session["removed_id"] = False
+    session["sample_name"] = sample["id"]
+    session["skipped"] = []
+    session["asked"] = {}
+    session["history"] = []
+    return True
+
+
+@app.route("/demo")
+def demo_tour():
+    """The 90-second guided tour for judges and partners: Lakshmi's results, with a guide on each screen."""
+    use_sample("lakshmi")
+    return redirect(url_for("results", tour=1))
+
+
 @app.route("/find", methods=["POST"])
 def find():
     sample_id = request.form.get("sample")
     if sample_id:
-        sample = next((s for s in load_samples() if s["id"] == sample_id), None)
-        if not sample:
+        if not use_sample(sample_id):
             abort(404)
-        session["profile"] = dict(sample["profile"])
-        session["text"] = sample["text"]
-        session["removed_id"] = False
-        session["sample_name"] = sample["id"]
-        session["skipped"] = []
-        session["asked"] = {}
-        session["history"] = []
     else:
         text = (request.form.get("text") or "").strip()[:MAX_TEXT]
         if not text:
@@ -873,6 +887,52 @@ def api_match():
     profile = {k: (_coerce(k, raw.get(k)) if k in FIELD_OPTIONS else raw.get(k)) for k in PROFILE_KEYS}
     lang = data.get("lang") if data.get("lang") in LANGS else "en"
     return jsonify(match_all(profile, load_schemes(), lang=lang))
+
+
+WHATIF_FIELDS = ("annual_income", "marks_percent")
+
+
+def whatif_limits(profile, schemes):
+    """The income and marks limits that apply to this student (the points where a scheme switches on or off)."""
+    from engine.match import evaluate_condition
+    out = {f: {} for f in WHATIF_FIELDS}
+    for sch in schemes:
+        for rule in sch["rules"]:
+            f = rule["field"]
+            if f not in out or not isinstance(rule.get("value"), (int, float)):
+                continue
+            if any(evaluate_condition(c, profile) is False for c in rule.get("only_if") or []):
+                continue
+            out[f].setdefault(rule["value"], []).append(sch["id"])
+    return {f: [{"value": v, "schemes": ids} for v, ids in sorted(vals.items())] for f, vals in out.items()}
+
+
+@app.route("/api/whatif", methods=["POST"])
+def api_whatif():
+    """Re-check this visitor's own saved details with income or marks changed. Read-only: nothing is saved."""
+    profile = dict(current_profile())
+    if not profile:
+        return jsonify({"error": "no profile"}), 400
+    data = request.get_json(silent=True) or {}
+    bands = dict(profile.get("_bands") or {})
+    for f in WHATIF_FIELDS:
+        if f in data:
+            profile[f] = _coerce(f, data.get(f))
+            bands.pop(f, None)  # an exact number now, not the range they tapped
+    profile["_bands"] = bands
+    lang = get_lang()
+    schemes = load_schemes()
+    result = match_all(for_matching(profile, lang), schemes, lang=lang)
+    rows = []
+    for status in ("likely", "maybe", "no"):
+        for m in result[status]:
+            fail = m["failed"][0] if m["failed"] else None
+            why = (fail["text"].split(" \u2014 ")[0] if fail["field"] in data else fail["text"]) if fail else (
+                tr("card.check_one", lang) + " " + ", ".join(tr("field." + f, lang) for f in m["missing_fields"])
+                if m["missing_fields"] else tr("card.rules", lang, a=m["passed_count"], b=m["rule_count"]))
+            rows.append({"id": m["id"], "name": m["name"], "status": status, "why": why,
+                         "amount": m["benefit_max_inr"] or 0, "loan": m["category"] == "loan"})
+    return jsonify({"summary": result["summary"], "schemes": rows, "limits": whatif_limits(profile, schemes)})
 
 
 @app.route("/api/scheme/<scheme_id>")

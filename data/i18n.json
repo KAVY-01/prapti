@@ -105,6 +105,26 @@
     "te": "వాయిస్ టైపింగ్‌కు ఇంటర్నెట్ కావాలి. టైప్ చేయవచ్చు.",
     "hi": "आवाज़ से लिखने के लिए इंटरनेट चाहिए। आप टाइप कर सकते हैं।"
   },
+  "home.stat1": {
+    "en": "schemes checked, state and central",
+    "te": "పథకాలు, రాష్ట్ర మరియు కేంద్ర",
+    "hi": "योजनाएँ, राज्य और केंद्र"
+  },
+  "home.stat2": {
+    "en": "languages, typed or spoken",
+    "te": "భాషలు, టైప్ లేదా మాట",
+    "hi": "भाषाएँ, लिखकर या बोलकर"
+  },
+  "home.stat3": {
+    "en": "ID numbers asked, ever",
+    "te": "ID నంబర్లు అడగము",
+    "hi": "ID नंबर कभी नहीं माँगते"
+  },
+  "home.stat4": {
+    "en": "of details read right in 72 test messages",
+    "te": "72 పరీక్ష సందేశాల్లో వివరాలు సరిగ్గా",
+    "hi": "72 टेस्ट संदेशों में सही पढ़े गए विवरण"
+  },
   "home.samples": {
     "en": "Or try a sample student",
     "te": "లేదా ఒక నమూనా విద్యార్థిని చూడండి",
@@ -1389,5 +1409,135 @@
     "en": "Save and update results",
     "te": "సేవ్ చేసి ఫలితాలు చూపించండి",
     "hi": "सेव करें और नतीजे देखें"
+  },
+  "wi.title": {
+    "en": "What if things change?",
+    "te": "పరిస్థితి మారితే?",
+    "hi": "अगर हालात बदलें तो?"
+  },
+  "wi.lead": {
+    "en": "Slide to see which schemes you would get. Nothing is saved.",
+    "te": "జరిపి చూడండి, ఏ పథకాలు వస్తాయో తెలుస్తుంది. ఏదీ సేవ్ అవ్వదు.",
+    "hi": "खिसकाकर देखिए कि कौन-सी योजनाएँ मिलेंगी। कुछ सेव नहीं होता।"
+  },
+  "wi.income": {
+    "en": "Family income a year",
+    "te": "కుటుంబ వార్షిక ఆదాయం",
+    "hi": "परिवार की सालाना आय"
+  },
+  "wi.marks": {
+    "en": "Marks in your last exam",
+    "te": "చివరి పరీక్షలో మార్కులు",
+    "hi": "पिछली परीक्षा के अंक"
+  },
+  "wi.not_told": {
+    "en": "You didn't say. Slide to try.",
+    "te": "మీరు చెప్పలేదు. జరిపి చూడండి.",
+    "hi": "आपने नहीं बताया। खिसकाकर देखिए।"
+  },
+  "wi.yours": {
+    "en": "Your answer: {v}",
+    "te": "మీ జవాబు: {v}",
+    "hi": "आपका जवाब: {v}"
+  },
+  "wi.limits": {
+    "en": "Limits that matter for you",
+    "te": "మీకు వర్తించే పరిమితులు",
+    "hi": "आप पर लागू सीमाएँ"
+  },
+  "wi.summary": {
+    "en": "{n} likely · {v} a year",
+    "te": "{n} అర్హత అవకాశం · సంవత్సరానికి {v}",
+    "hi": "{n} संभवतः पात्र · {v} सालाना"
+  },
+  "wi.gain": {
+    "en": "Now likely",
+    "te": "ఇప్పుడు అవకాశం",
+    "hi": "अब संभव"
+  },
+  "wi.loss": {
+    "en": "Drops out",
+    "te": "వదిలిపోతుంది",
+    "hi": "छूट जाती है"
+  },
+  "wi.reset": {
+    "en": "Back to my answers",
+    "te": "నా జవాబులకు తిరిగి",
+    "hi": "मेरे जवाबों पर वापस"
+  },
+  "wi.error": {
+    "en": "Could not check right now. Try again.",
+    "te": "ఇప్పుడు చూడలేకపోయాం. మళ్ళీ ప్రయత్నించండి.",
+    "hi": "अभी जाँच नहीं हो सकी। फिर कोशिश करें।"
+  },
+  "wi.others": {
+    "en": "+ {n} more not a match",
+    "te": "+ ఇంకా {n} సరిపోలేదు",
+    "hi": "+ {n} और मेल नहीं"
+  },
+  "tour.start": {
+    "en": "See Prapti in 90 seconds",
+    "te": "90 సెకన్లలో ప్రాప్తిని చూడండి",
+    "hi": "90 सेकंड में प्राप्ति देखिए"
+  },
+  "tour.step": {
+    "en": "{i} of {n}",
+    "te": "{n}లో {i}",
+    "hi": "{n} में से {i}"
+  },
+  "tour.next": {
+    "en": "Next",
+    "te": "తరువాత",
+    "hi": "आगे"
+  },
+  "tour.back": {
+    "en": "Back",
+    "te": "వెనక్కి",
+    "hi": "पीछे"
+  },
+  "tour.close": {
+    "en": "Close tour",
+    "te": "టూర్ మూసివేయండి",
+    "hi": "टूर बंद करें"
+  },
+  "tour.try": {
+    "en": "Try with your own words",
+    "te": "మీ మాటల్లో ప్రయత్నించండి",
+    "hi": "अपने शब्दों में आज़माइए"
+  },
+  "tour.s1": {
+    "en": "Lakshmi described her life in one sentence. Prapti found the scholarships she can likely claim, and how much a year.",
+    "te": "లక్ష్మి తన పరిస్థితిని ఒక్క వాక్యంలో చెప్పింది. ఆమెకు వచ్చే అవకాశం ఉన్న స్కాలర్‌షిప్‌లు, సంవత్సరానికి ఎంతో ప్రాప్తి చూపించింది.",
+    "hi": "लक्ष्मी ने एक वाक्य में अपनी बात बताई। प्राप्ति ने बताया कि उसे कौन-सी छात्रवृत्तियाँ मिल सकती हैं और सालाना कितना।"
+  },
+  "tour.s2": {
+    "en": "This is what Prapti read from her words. No ID numbers, nothing guessed. If something is wrong, she taps to fix it.",
+    "te": "ఆమె మాటల నుంచి ప్రాప్తి అర్థం చేసుకున్నది ఇదే. ID నంబర్లు లేవు, ఊహించింది ఏమీ లేదు. తప్పుంటే నొక్కి సరిచేయొచ్చు.",
+    "hi": "उसकी बातों से प्राप्ति ने यह समझा। कोई ID नंबर नहीं, कुछ भी अंदाज़े से नहीं। गलत हो तो दबाकर ठीक कर सकती है।"
+  },
+  "tour.s3": {
+    "en": "What if her family earned a little more? Slide it: schemes switch on and off live, with the exact limit that decides it.",
+    "te": "కుటుంబ ఆదాయం కొంచెం పెరిగితే? జరిపి చూడండి: ఏ పరిమితి వల్ల పథకాలు వస్తాయో, పోతాయో వెంటనే కనిపిస్తుంది.",
+    "hi": "अगर परिवार की आय थोड़ी ज़्यादा हो तो? खिसकाइए: किस सीमा से योजना मिलती या छूटती है, तुरंत दिखता है।"
+  },
+  "tour.s4": {
+    "en": "Every scheme says where she stands: likely, check one thing, or not a match, with how close she came.",
+    "te": "ప్రతి పథకం ఆమె ఎక్కడ ఉందో చెబుతుంది: అర్హత అవకాశం, ఒకటి సరిచూడాలి, లేదా సరిపోలేదు, ఎంత దగ్గరగా వచ్చిందో కూడా.",
+    "hi": "हर योजना बताती है कि वह कहाँ है: संभवतः पात्र, एक बात जाँचें, या मेल नहीं, और वह कितने करीब थी।"
+  },
+  "tour.s5": {
+    "en": "Every rule is shown with her own answer beside it. No black box. Below: documents, steps on the official portal and the last date.",
+    "te": "ప్రతి నియమం పక్కనే ఆమె జవాబు ఉంటుంది. దాచింది ఏమీ లేదు. కింద: పత్రాలు, అధికారిక పోర్టల్‌లో దశలు, చివరి తేదీ.",
+    "hi": "हर नियम के साथ उसका अपना जवाब दिखता है। कुछ छिपा नहीं। नीचे: दस्तावेज़, आधिकारिक पोर्टल के कदम और आख़िरी तारीख।"
+  },
+  "tour.s6": {
+    "en": "All documents for all her schemes in one list, grouped by place, so one trip to Mee Seva is enough.",
+    "te": "ఆమె అన్ని పథకాలకు కావలసిన పత్రాలన్నీ ఒకే జాబితాలో, ఎక్కడ తీసుకోవాలో దాని ప్రకారం. మీ సేవకు ఒక్కసారి వెళ్తే చాలు.",
+    "hi": "उसकी सभी योजनाओं के सारे दस्तावेज़ एक ही सूची में, जगह के हिसाब से। मी सेवा का एक ही चक्कर काफ़ी।"
+  },
+  "tour.s7": {
+    "en": "Also inside: a tracker with reminders before each last date, Helper mode for Mee Seva centres and NGOs, offline use, and a checker that flags when official rules change. Free, in English, Telugu and Hindi.",
+    "te": "ఇంకా: ప్రతి చివరి తేదీకి ముందు గుర్తుచేసే ట్రాకర్, మీ సేవ కేంద్రాలు, NGOల కోసం హెల్పర్ మోడ్, ఇంటర్నెట్ లేకపోయినా పని చేస్తుంది, అధికారిక నియమాలు మారితే గుర్తించే చెకర్. ఉచితం, ఇంగ్లీష్, తెలుగు, హిందీలో.",
+    "hi": "साथ में: हर आख़िरी तारीख से पहले याद दिलाने वाला ट्रैकर, मी सेवा केंद्रों और NGO के लिए हेल्पर मोड, बिना इंटरनेट भी काम, और आधिकारिक नियम बदलने पर बताने वाला चेकर। मुफ़्त, अंग्रेज़ी, तेलुगु और हिंदी में।"
   }
 }
