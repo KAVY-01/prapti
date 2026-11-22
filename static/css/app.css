@@ -3247,7 +3247,7 @@ h1, h2, h3,
   color: #8a3b12; font-weight: 600; font-size: 0.92em; line-height: 1.35;
 }
 .trip-rush .icon { flex: none; margin-top: 2px; }
-.trip-mee_seva .section-title::before { content: "1 · "; opacity: 0.55; }
+.check-item.is-done .trip-rush { display: none; }  /* got it already: no need to hurry */
 
 @media print {
   .topbar, .bottom-nav, .tabbar, .noprint, .skip-link, footer, .site-footer { display: none !important; }
