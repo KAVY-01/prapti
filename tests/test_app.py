@@ -98,6 +98,35 @@ class TestFlow(unittest.TestCase):
         self.assertNotIn("68%", page)
         self.assertNotIn("₹1,25,000", page)
 
+    def test_share_link_reopens_same_results(self):
+        import base64, json, re
+        import app as app_module
+        self.c.post("/start")
+        for f, v in [("education_level", "professional"), ("year", "1"), ("community", "SC"), ("annual_income", "90000"),
+                     ("gender", "female"), ("area", "rural"), ("disability", "false"), ("marks_percent", "88"),
+                     ("college_type", "government")]:
+            self.c.post("/questions", data={"field": f, "value": v})
+        page = self.c.get("/results").get_data(as_text=True)
+        link = re.search(r'data-copy="(http[^"]+/r/[^"]+)"', page).group(1)
+        self.assertIn("https://wa.me/?text=", page)
+        self.assertIn("Prapti%3A%20likely%20eligible%20for", page)
+        token = link.rsplit("/", 1)[1]
+        other = app.test_client()
+        r = other.get("/r/" + token)
+        self.assertEqual(r.status_code, 302)
+        shared = other.get("/results").get_data(as_text=True)
+        self.assertIn("Opened from a shared link", shared)
+        strip = lambda h: re.findall(r'class="scheme-name">([^<]+)<', h)
+        self.assertEqual(strip(shared), strip(page))          # same schemes, same order
+        self.assertIn("Under ₹1L", shared)                      # tapped ranges survive the link
+        # a hand-made link cannot inject anything
+        bad = base64.urlsafe_b64encode(json.dumps({"c": "<script>", "i": "lots", "z": "Paris", "e": "phd"}).encode()).decode()
+        r = other.get("/r/" + bad.rstrip("="))
+        self.assertEqual(r.status_code, 302)
+        self.assertTrue(r.location.endswith("/"))              # nothing valid in it: back to home
+        self.assertEqual(other.get("/r/not-base64!!").status_code, 302)
+        self.assertIsNone(app_module.profile_from_token("e30")["community"])  # {} decodes to an empty profile
+
     def test_security_headers_and_limits(self):
         r = self.c.get("/")
         self.assertIn("frame-ancestors 'none'", r.headers["Content-Security-Policy"])

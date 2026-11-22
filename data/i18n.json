@@ -1279,5 +1279,50 @@
     "en": "{n} nearly a match",
     "te": "{n} దాదాపు సరిపోతాయి",
     "hi": "{n} लगभग पात्र"
+  },
+  "share.title": {
+    "en": "Send these results",
+    "te": "ఈ ఫలితాలను పంపండి",
+    "hi": "ये नतीजे भेजें"
+  },
+  "share.lead": {
+    "en": "To a parent, teacher or Mee Seva operator. The link holds only the answers above, never a name or ID number.",
+    "te": "తల్లిదండ్రులు, టీచర్ లేదా మీ సేవ ఆపరేటర్‌కు. ఈ లింక్‌లో పైన ఉన్న సమాధానాలు మాత్రమే ఉంటాయి, పేరు లేదా ID నంబర్ ఎప్పుడూ ఉండవు.",
+    "hi": "माता-पिता, शिक्षक या मी सेवा ऑपरेटर को। इस लिंक में सिर्फ़ ऊपर के जवाब हैं, कभी कोई नाम या ID नंबर नहीं।"
+  },
+  "share.whatsapp": {
+    "en": "Send on WhatsApp",
+    "te": "వాట్సాప్‌లో పంపండి",
+    "hi": "व्हाट्सऐप पर भेजें"
+  },
+  "share.copy": {
+    "en": "Copy link",
+    "te": "లింక్ కాపీ చేయండి",
+    "hi": "लिंक कॉपी करें"
+  },
+  "share.copied": {
+    "en": "Link copied",
+    "te": "లింక్ కాపీ అయింది",
+    "hi": "लिंक कॉपी हो गया"
+  },
+  "share.msg": {
+    "en": "Prapti: likely eligible for {n} scholarships, worth up to {v} a year: {names}.{first} See why, and the documents needed: {link}",
+    "te": "ప్రాప్తి: {n} స్కాలర్‌షిప్‌లకు అర్హత ఉండే అవకాశం ఉంది, సంవత్సరానికి గరిష్ఠంగా {v}: {names}.{first} ఎందుకో, కావలసిన పత్రాలు ఇక్కడ చూడండి: {link}",
+    "hi": "प्राप्ति: {n} छात्रवृत्तियों के लिए संभवतः पात्र, सालाना अधिकतम {v}: {names}.{first} क्यों, और ज़रूरी दस्तावेज़ यहाँ देखें: {link}"
+  },
+  "share.first": {
+    "en": " First step: apply for {name} before {d}.",
+    "te": " మొదటి అడుగు: {d} లోపు {name} కి దరఖాస్తు చేయండి.",
+    "hi": " पहला कदम: {d} से पहले {name} के लिए आवेदन करें।"
+  },
+  "share.msg_none": {
+    "en": "Prapti: see which scholarships fit, and why: {link}",
+    "te": "ప్రాప్తి: ఏ స్కాలర్‌షిప్‌లు సరిపోతాయో, ఎందుకో చూడండి: {link}",
+    "hi": "प्राप्ति: कौन-सी छात्रवृत्तियाँ मेल खाती हैं, और क्यों, देखें: {link}"
+  },
+  "share.opened": {
+    "en": "Opened from a shared link. If anything is different for you, tap Edit my details.",
+    "te": "షేర్ చేసిన లింక్ నుండి తెరిచారు. మీ వివరాల్లో ఏదైనా వేరేగా ఉంటే, నా వివరాలు మార్చండి నొక్కండి.",
+    "hi": "शेयर किए गए लिंक से खोला गया। आपके लिए कुछ अलग हो, तो 'मेरी जानकारी बदलें' दबाएँ।"
   }
 }

@@ -167,6 +167,19 @@
     update();
   }
 
+  // ---------- Copy a share link ----------
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var link = btn.dataset.copy;
+      var done = function () { toast(T("share.copied")); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(done, function () { window.prompt("", link); });
+      } else {
+        window.prompt("", link);
+      }
+    });
+  });
+
   // ---------- One-trip list: one tick covers the same document in every scheme ----------
   var trip = document.querySelectorAll("[data-trip] input[type=checkbox]");
   if (trip.length) {

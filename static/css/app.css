@@ -3272,3 +3272,9 @@ h1, h2, h3,
 .src-ok { color: #2f6b2a; }
 .src-changed { color: #8a3b12; }
 .src-unknown { color: #6b6457; }
+
+/* ---------- Share results ---------- */
+.share-card { margin-top: 12px; }
+.share-card .next-title { display: flex; align-items: center; gap: 8px; }
+.share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.share-actions .btn { flex: 1 1 180px; justify-content: center; }

@@ -5,6 +5,10 @@
 {% block content %}
 <a class="back-link" href="/">{{ icon('arrow-left', 20) }}{{ t('res.new') }}</a>
 
+{% if opened_shared %}
+<div class="notice notice-info" role="status">{{ icon('info', 20) }}<p>{{ t('share.opened') }}</p></div>
+{% endif %}
+
 {% if removed_id %}
 <div class="notice notice-info" role="status">
   {{ icon('eraser', 20) }}
@@ -89,6 +93,17 @@
     {% endfor %}
     <button type="submit" class="btn btn-primary btn-block">{{ t('res.update') }}</button>
   </form>
+</section>
+
+<section class="slip share-card" aria-labelledby="share-title">
+  <div class="next-body">
+    <h2 id="share-title" class="next-title">{{ icon('message-circle', 20) }} {{ t('share.title') }}</h2>
+    <p class="next-text">{{ t('share.lead') }}</p>
+    <div class="share-actions">
+      <a class="btn btn-primary" href="https://wa.me/?text={{ wa_text }}" target="_blank" rel="noopener">{{ icon('message-circle', 20) }}{{ t('share.whatsapp') }}</a>
+      <button type="button" class="btn btn-secondary" data-copy="{{ share_url }}">{{ icon('check-square', 18) }}{{ t('share.copy') }}</button>
+    </div>
+  </div>
 </section>
 
 {% set n = namespace(i=0) %}

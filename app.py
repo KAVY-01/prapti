@@ -1,14 +1,15 @@
 import hmac
 import json
 import os
+import base64
 import secrets
-from urllib.parse import parse_qsl, urlencode
+from urllib.parse import parse_qsl, quote, urlencode
 from datetime import date, datetime, timedelta, timezone
 
 from flask import (Flask, Response, abort, has_request_context, jsonify, redirect,
                    render_template, request, session, url_for)
 
-from engine.extract import PROFILE_KEYS, extract
+from engine.extract import PROFILE_KEYS, TELANGANA_DISTRICTS, extract
 from engine.ics import build_ics
 from engine.sources import check_all as check_sources, load_index as snapshot_index
 from engine.match import (FIELD_LABEL, LEVEL_LABEL, DATA_DIR, SCHEMES_PATH, fields_that_matter,
@@ -295,7 +296,7 @@ def inject_helpers():
         return nice(date.fromisoformat(iso))
 
     js_keys = {k: (v.get(lang) if v.get(lang) is not None else v.get("en")) for k, v in I18N.items()
-               if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop")}
+               if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop", "share")}
     return {"nice_date": nice_date, "lang": lang, "t": lambda key, **kw: tr(key, lang, **kw),
             "opt": lambda label: opt(label, lang), "js_text": js_keys, "sandbox": SANDBOX}
 
@@ -436,6 +437,68 @@ def update_profile():
     return redirect(url_for("results"))
 
 
+# ---------- Share: a link that reopens the same results (answers only, never a name or ID) ----------
+SHARE_KEYS = {"education_level": "e", "year": "y", "community": "c", "annual_income": "i", "gender": "g",
+              "area": "a", "disability": "d", "marks_percent": "m", "college_type": "t", "district": "z"}
+
+
+def share_token(profile):
+    data = {short: profile[f] for f, short in SHARE_KEYS.items() if profile.get(f) is not None}
+    bands = [f for f in (profile.get("_bands") or {}) if f in BANDED]
+    if bands:
+        data["b"] = [SHARE_KEYS[f] for f in bands]
+    raw = json.dumps(data, separators=(",", ":"), ensure_ascii=True).encode()
+    return base64.urlsafe_b64encode(raw).decode().rstrip("=")
+
+
+def profile_from_token(token):
+    """Decode a share link; every value is checked like a tapped answer, so a hand-made link cannot do harm."""
+    try:
+        data = json.loads(base64.urlsafe_b64decode(token + "=" * (-len(token) % 4)))
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    profile = {k: None for k in PROFILE_KEYS}
+    for f, short in SHARE_KEYS.items():
+        if f == "district":
+            z = data.get(short)
+            profile[f] = z if z in TELANGANA_DISTRICTS else None
+        elif f in FIELD_OPTIONS:
+            profile[f] = _coerce(f, data.get(short))
+    for short in data.get("b") or []:
+        f = next((f for f, s in SHARE_KEYS.items() if s == short), None)
+        if f in BANDED and profile.get(f) is not None:
+            set_band(profile, f, profile[f])
+    return profile
+
+
+def share_link(profile):
+    scheme = "https" if ON_HTTPS else request.scheme
+    return f"{scheme}://{request.host}/r/{share_token(profile)}"
+
+
+def share_message(result, first, link, lang):
+    likely = [m for m in result["likely"] if m["days_left"] is None or m["days_left"] >= 0]
+    if not likely:
+        return tr("share.msg_none", lang, link=link)
+    names = ", ".join(m["name"] for m in likely[:4]) + ("…" if len(likely) > 4 else "")
+    step = (tr("share.first", lang, name=first["name"], d=nice(date.fromisoformat(first["deadline"])))
+            if first and first.get("deadline") else "")
+    return tr("share.msg", lang, n=len(likely), v=result["summary"]["likely_value_text"], names=names,
+              first=step, link=link)
+
+
+@app.route("/r/<token>")
+def shared(token):
+    profile = profile_from_token(token)
+    if not profile or not any(v is not None for k, v in profile.items() if k != "_bands"):
+        return redirect(url_for("index"))
+    session.update(profile=profile, text="", removed_id=False, skipped=[], asked={}, history=[], shared=True)
+    session.pop("sample_name", None)
+    return redirect(url_for("results"))
+
+
 # ---------- One trip: every document the student's schemes need, collected once ----------
 TRIP_WHERE = ["mee_seva", "hospital", "college", "home"]  # the slow certificates first
 
@@ -494,8 +557,10 @@ def results():
     result = match_all(for_matching(profile, lang), load_schemes(), lang=lang)
     missing = [f for f in CHIP_FIELDS if profile.get(f) is None]
     first = next((m for m in result["likely"] if m["category"] != "loan" and (m["days_left"] is None or m["days_left"] >= 0)), None)
+    link = share_link(profile)
     return render_template("results.html", first=first, page="find", r=result, profile=profile,
-                           trip=one_trip(result, lang),
+                           trip=one_trip(result, lang), share_url=link, opened_shared=session.pop("shared", False),
+                           wa_text=quote(share_message(result, first, link, lang)),
                            chips=understood_chips(profile, lang), options=FIELD_OPTIONS,
                            field_label=FIELD_LABEL, chip_fields=CHIP_FIELDS, missing=missing,
                            selected=selected_options(profile),
