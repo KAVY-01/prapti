@@ -10,7 +10,7 @@ A student in Telangana describes their life in plain words, even Telugu or Hindi
 **Description (about 150 words):**
 Every year, eligible students in Telangana miss scholarships because the rules are scattered, the document list is unclear, and middlemen charge for help that should be free. Prapti asks only for plain words, never an ID number. Its offline reader understands English, Telugu, Hindi, and Telugu or Hindi typed in English letters (100% of details read correctly on 72 test messages, nothing invented), then asks only the questions that would change a result. A plain rules engine checks 10 Telangana and central schemes and shows every rule with the student's own answer, including "nearly a match: ₹20,000 over the limit". All documents for all their schemes come as one list grouped by place, with a warning when a certificate takes longer than the days left. A tracker, reminders and WhatsApp sharing follow. Rules are editable data; a page checker flags official pages that changed. Free for students; NGOs, CSR funds and Mee Seva centres use Helper mode.
 
-**Team:** (fill in your names / solo)
+**Team:** KAVY · Vedangi Karthik and Siddharth Kaithi
 
 **Live demo (works on any phone, nothing to install):** https://prapti-telangana.vercel.app
 
