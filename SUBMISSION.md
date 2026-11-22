@@ -12,6 +12,8 @@ Every year, eligible students in Telangana miss scholarships because the rules a
 
 **Team:** (fill in your names / solo)
 
+**Live demo (works on any phone, nothing to install):** https://prapti-telangana.vercel.app
+
 **GitHub repository:** https://github.com/KAVY-01/prapti
 
 **How to run:** see README.md (`pip install -r requirements.txt`, then `python app.py`, open http://127.0.0.1:5050).

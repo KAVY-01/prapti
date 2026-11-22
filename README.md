@@ -2,6 +2,8 @@
 
 **ACE Builders Hackathon 2026 · Problem Statement 5: Claim What's Yours**
 
+**Live demo:** https://prapti-telangana.vercel.app (open it on a phone; the scheme editor password is `prapti-demo`, and changes there only affect your own visit)
+
 *Prapti* (ప్రాప్తి in Telugu, प्राप्ति in Hindi) means "receiving what is due to you". A student from a low-income family in Telangana describes their life in plain words (typed or spoken, in English, Telugu or Hindi). Prapti shows which government scholarships they are **likely eligible** for, the exact rule behind every match, a personal document checklist, the steps on the official portal, and reminders before each last date.
 
 ## Who it is for
