@@ -141,6 +141,7 @@
   {% set faq_groups = [('safety', 'faq.g1', [1, 5]), ('results', 'faq.g2', [2, 4]), ('prapti', 'faq.g3', [3])] %}
   <nav class="faq-tabs" aria-label="{{ t('faq.title') }}">
     <div class="faq-tabs-track">
+      <span class="faq-tab-ind" aria-hidden="true"></span>
       {% for gid, gkey, qs in faq_groups %}
       <a class="faq-tab{% if loop.first %} is-active{% endif %}" href="#faq-{{ gid }}" data-faq-tab>{{ t(gkey) }}</a>
       {% endfor %}

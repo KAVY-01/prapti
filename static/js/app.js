@@ -28,6 +28,7 @@
     groups.forEach(function (g) {
       var parts = g.querySelectorAll("h2, h3, p, img, li, details, .chip-row, .sheet-item, .btn, .moment-pic");
       if (!parts.length) { g.setAttribute("data-reveal", ""); }
+      parts = Array.prototype.filter.call(parts, function (el) { return !el.closest(".faq-body"); });
       parts.forEach(function (el, i) {
         el.setAttribute("data-reveal", "");
         el.style.setProperty("--d", Math.min(i, 6) * 45 + "ms");
@@ -408,53 +409,76 @@
   });
   if (dot && soon) dot.classList.add("is-visible");
 
-  // ---------- Home FAQ (payard.io pattern): one open at a time, slide then fade; pill tabs follow the scroll ----------
+  // ---------- Home FAQ (payard.io pattern): one open at a time; the height is set in vw like Payard ----------
   var faq = document.querySelector("[data-faq]");
   if (faq) {
     var items = Array.prototype.slice.call(faq.querySelectorAll(".faq-item"));
     faq.classList.add("faq-js");
+    var vw = function (px) { return (px / window.innerWidth) * 100 + "vw"; };
+    function setOpen(item, open) {
+      var body = item.querySelector(".faq-body");
+      item.classList.toggle("is-open", open);
+      item.querySelector("summary").setAttribute("aria-expanded", open ? "true" : "false");
+      body.style.height = open ? vw(body.scrollHeight) : "0vw";
+    }
     items.forEach(function (item) {
       var head = item.querySelector("summary");
-      var body = item.querySelector(".faq-body");
-      item.open = true; // keep answers in the page; height does the hiding
-      head.setAttribute("aria-expanded", "false");
-      function close(it) {
-        var b = it.querySelector(".faq-body");
-        b.style.height = b.scrollHeight + "px";
-        void b.offsetHeight; // start from the real height
-        it.classList.remove("is-open");
-        it.querySelector("summary").setAttribute("aria-expanded", "false");
-        b.style.height = "0px";
-      }
+      item.open = true; // keep answers in the page for search and screen readers; height does the hiding
+      setOpen(item, false);
       head.addEventListener("click", function (ev) {
         ev.preventDefault();
-        if (item.classList.contains("is-open")) { close(item); return; }
-        items.forEach(function (other) { if (other !== item && other.classList.contains("is-open")) close(other); });
-        item.classList.add("is-open");
-        head.setAttribute("aria-expanded", "true");
-        body.style.height = reduceMotion ? "auto" : body.scrollHeight + "px";
-        setTimeout(settle, 800); // in case transitionend never fires
+        var opening = !item.classList.contains("is-open");
+        items.forEach(function (other) { if (other !== item && other.classList.contains("is-open")) setOpen(other, false); });
+        setOpen(item, opening);
       });
-      function settle() { if (item.classList.contains("is-open")) body.style.height = "auto"; }
-      body.addEventListener("transitionend", function (ev) { if (ev.propertyName === "height") settle(); });
+    });
+    // Text wraps differently at a new width: re-measure open answers
+    var faqResize = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(faqResize);
+      faqResize = setTimeout(function () {
+        items.forEach(function (item) { if (item.classList.contains("is-open")) setOpen(item, true); });
+      }, 120);
     });
 
     var tabs = Array.prototype.slice.call(faq.querySelectorAll("[data-faq-tab]"));
     var fgroups = Array.prototype.slice.call(faq.querySelectorAll("[data-faq-group]"));
+    var tabLock = 0;
+    window.addEventListener("scrollend", function () { tabLock = 0; });
+    var track = faq.querySelector(".faq-tabs-track");
+    var ind = faq.querySelector(".faq-tab-ind");
+    function moveInd(instant) {
+      var on = faq.querySelector(".faq-tab.is-active");
+      if (!ind || !on) return;
+      if (instant) ind.style.transition = "none";
+      ind.style.width = on.offsetWidth + "px";
+      ind.style.transform = "translateX(" + on.offsetLeft + "px)";
+      if (instant) { void ind.offsetWidth; ind.style.transition = ""; }
+      track.classList.add("has-ind");
+      // keep the active pill in view when the bar scrolls sideways on a phone
+      var l = on.offsetLeft - track.scrollLeft, r = l + on.offsetWidth;
+      if (l < 0 || r > track.clientWidth) track.scrollTo({ left: on.offsetLeft - 16, behavior: reduceMotion ? "auto" : "smooth" });
+    }
     function setTab(id) {
       tabs.forEach(function (tb) { tb.classList.toggle("is-active", tb.getAttribute("href") === "#" + id); });
+      moveInd(false);
     }
+    moveInd(true);
+    window.addEventListener("resize", function () { moveInd(true); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveInd(true); });
     tabs.forEach(function (tb) {
       tb.addEventListener("click", function (ev) {
         var target = document.querySelector(tb.getAttribute("href"));
         if (!target) return;
         ev.preventDefault();
         setTab(target.id);
+        tabLock = Date.now() + 1200; // don't let groups we scroll past steal the highlight
         target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
       });
     });
     if ("IntersectionObserver" in window) {
       var tio = new IntersectionObserver(function (entries) {
+        if (Date.now() < tabLock) return;
         entries.forEach(function (e) { if (e.isIntersecting) setTab(e.target.id); });
       }, { rootMargin: "-40% 0px -55% 0px" });
       fgroups.forEach(function (g) { tio.observe(g); });
