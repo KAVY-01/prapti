@@ -34,3 +34,4 @@ package-lock.json
 postcss.config.mjs
 tailwind.config.ts
 tsconfig.json
+.secret_key

@@ -1,6 +1,7 @@
 import hmac
 import json
 import os
+import secrets
 from datetime import date, datetime
 
 from flask import (Flask, Response, abort, jsonify, redirect, render_template,
@@ -14,7 +15,29 @@ from engine.match import (FIELD_LABEL, LEVEL_LABEL, DATA_DIR, SCHEMES_PATH, fiel
 app = Flask(__name__)
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 180  # remember language and answers for 6 months
 # The session only holds the student's answers (never ID numbers) on their own device.
-app.secret_key = os.environ.get("SECRET_KEY", "prapti-dev-only-change-me")
+# Without SECRET_KEY a random key is made once and kept in .secret_key (git-ignored), so nobody can
+# forge a session (for example the admin login) from a key published in the repo.
+def _secret_key():
+    if os.environ.get("SECRET_KEY"):
+        return os.environ["SECRET_KEY"]
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".secret_key")
+    try:
+        with open(path, encoding="utf-8") as f:
+            key = f.read().strip()
+        if key:
+            return key
+    except OSError:
+        pass
+    key = secrets.token_hex(32)
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(key)
+    except OSError:
+        pass
+    return key
+
+
+app.secret_key = _secret_key()
 
 # Options for the "Edit my details" form (value, label).
 FIELD_OPTIONS = {
@@ -102,23 +125,40 @@ def current_profile():
 
 
 def _coerce(field, raw):
+    """Turn a form value into the profile value. Anything not one of the offered answers becomes None."""
     if raw in (None, "", "unknown"):
         return None
-    if field in ("year", "annual_income"):
-        return int(raw)
-    if field == "marks_percent":
-        return float(raw)
+    try:
+        if field in ("year", "annual_income"):
+            value = int(raw)
+            return value if value > 0 else None
+        if field == "marks_percent":
+            value = float(raw)
+            return value if 0 < value <= 100 else None
+    except (TypeError, ValueError):
+        return None
     if field == "disability":
-        return raw in (True, "true", "True", "1", "yes")
+        if isinstance(raw, bool):
+            return raw
+        return str(raw).lower() in ("true", "1", "yes")
+    allowed = {v for v, _ in FIELD_OPTIONS.get(field, [])}
+    if allowed and raw not in allowed:
+        return None
     return raw
+
+
+def nice(d):
+    """'5 Dec 2026' (works on Windows too, unlike strftime('%-d'))."""
+    return f"{d.day} {d.strftime('%b %Y')}"
 
 
 BAND_EDGES = {
     # option value -> upper edge of that band; a typed value is shown as the band it falls in
     "annual_income": [(90000, 100000), (125000, 150000), (175000, 200000), (225000, 250000),
                       (300000, 350000), (500000, 800000), (900000, float("inf"))],
-    "marks_percent": [(45, 49.99), (52, 54.99), (68, 79.99), (88, float("inf"))],
+    "marks_percent": [(45, 50), (52, 55), (68, 80), (88, float("inf"))],
 }
+EXCLUSIVE_EDGE = {"marks_percent"}  # 50% belongs to "50–55%", and 49.5% to "Under 50%"
 
 
 def selected_options(profile):
@@ -129,7 +169,8 @@ def selected_options(profile):
         if v is None:
             out[f] = None
         elif f in BAND_EDGES:
-            out[f] = next(opt for opt, edge in BAND_EDGES[f] if v <= edge)
+            strict = f in EXCLUSIVE_EDGE
+            out[f] = next(o for o, edge in BAND_EDGES[f] if (v < edge if strict else v <= edge))
         elif f == "year":
             out[f] = min(int(v), 4)
         else:
@@ -166,7 +207,7 @@ def inject_helpers():
     def nice_date(iso):
         if not iso:
             return ""
-        return date.fromisoformat(iso).strftime("%-d %b %Y")
+        return nice(date.fromisoformat(iso))
 
     js_keys = {k: (v.get(lang) if v.get(lang) is not None else v.get("en")) for k, v in I18N.items()
                if k.split(".")[0] in ("home", "soon", "det", "tr", "st", "adv", "nx", "dl", "listen", "listen_stop")}
@@ -201,6 +242,9 @@ def find():
         session["text"] = sample["text"]
         session["removed_id"] = False
         session["sample_name"] = sample["id"]
+        session["skipped"] = []
+        session["asked"] = {}
+        session["history"] = []
     else:
         text = (request.form.get("text") or "").strip()
         if not text:
@@ -382,7 +426,7 @@ def api_helper_check():
         "likely": [{"id": m["id"], "name": m["name_en"]} for m in result["likely"]],
         "maybe": len(result["maybe"]),
         "value": result["summary"]["likely_value_inr"],
-        "next_deadline": date.fromisoformat(upcoming[0]["deadline"]).strftime("%-d %b %Y") if upcoming else None,
+        "next_deadline": nice(date.fromisoformat(upcoming[0]["deadline"])) if upcoming else None,
         "removed_id": extracted["removed_id"],
     })
 
@@ -393,7 +437,7 @@ def helper_print():
     nick = (request.args.get("nick") or "Student")[:40]
     schemes = [sch for sch in load_schemes() if sch["id"] in ids]
     return render_template("print.html", nick=nick, schemes=schemes,
-                           today=date.today().strftime("%-d %b %Y"))
+                           today=nice(date.today()))
 
 
 # ---------- Scheme editor ----------
@@ -529,7 +573,8 @@ def api_extract():
 @app.route("/api/match", methods=["POST"])
 def api_match():
     data = request.get_json(silent=True) or {}
-    profile = {k: data.get("profile", {}).get(k) for k in PROFILE_KEYS}
+    raw = data.get("profile") if isinstance(data.get("profile"), dict) else {}
+    profile = {k: (_coerce(k, raw.get(k)) if k in FIELD_OPTIONS else raw.get(k)) for k in PROFILE_KEYS}
     return jsonify(match_all(profile, lang=data.get("lang", "en")))
 
 

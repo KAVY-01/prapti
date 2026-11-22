@@ -45,46 +45,62 @@ def _num(s: str) -> float:
     return float(s.replace(",", ""))
 
 
+_MONTHLY = re.compile(r"^\s*(?:rupees|rs\.?|₹)?\s*(?:per|a|every|each|/)\s*month|^\s*monthly|^\s*(?:నెలకు|ప్రతి నెల)|^\s*(?:महीना|महीने|प्रति माह|हर महीने)", re.I)
+
+_MONTH_BEFORE = re.compile(r"month|నెల|महीन|माह", re.I)
+
+
 def _income(t: str):
+    value = _income_once(t)
+    if value is None:
+        return None
+    amount, start, end = value
+    monthly = _MONTHLY.search(t[end:end + 25]) or _MONTH_BEFORE.search(t[max(0, start - 25):start])
+    return amount * 12 if monthly else amount
+
+
+def _income_once(t: str):
     m = re.search(r"(\d+(?:\.\d+)?)\s*(?:lakhs?|lacs?|lac|l\b|లక్షలు|లక్ష|लाख)", t, re.I)
     if m:
-        return int(_num(m.group(1)) * 100000)
+        return int(_num(m.group(1)) * 100000), m.start(), m.end()
     m = re.search(r"(\d+(?:\.\d+)?)\s*(?:thousand|k\b|వేలు|వేల|हज़ार|हजार)", t, re.I)
     if m:
-        return int(_num(m.group(1)) * 1000)
+        return int(_num(m.group(1)) * 1000), m.start(), m.end()
     # plain number near an income word, e.g. "income is 80,000"
     m = re.search(r"(?:income|earn\w*|salary|ఆదాయం|आय|आमदनी)\D{0,30}?(\d{1,3}(?:,\d{2,3})+|\d{4,7})", t, re.I)
     if m:
-        return int(_num(m.group(1)))
+        return int(_num(m.group(1))), m.start(), m.end()
     m = re.search(r"(\d{1,3}(?:,\d{2,3})+|\d{5,7})\s*(?:a year|per year|per annum|yearly|/year)", t, re.I)
     if m:
-        return int(_num(m.group(1)))
+        return int(_num(m.group(1))), m.start(), m.end()
     return None
 
 
 def _community(t: str):
-    if re.search(r"\bEBC\b", t, re.I):
+    # Short codes (SC, ST, BC, OC) are matched in capitals and standing alone, so that
+    # "B.Sc", "BCA" or "St. Ann's" are not read as a community.
+    if re.search(r"(?<![\w.])EBC(?!\w)", t) or re.search(r"\bebc\b", t, re.I):
         return "EBC"
-    if re.search(r"\bS\.?C\.?\b|scheduled caste|దళిత", t, re.I):
+    if re.search(r"(?<![\w.])S\.?C\b\.?", t) or re.search(r"scheduled caste|దళిత|दलित", t, re.I):
         return "SC"
-    if re.search(r"\bS\.?T\.?\b|scheduled tribe|tribal|గిరిజన|आदिवासी", t, re.I):
+    if re.search(r"(?<![\w.])S\.?T\b\.?(?!\s*[A-Z][a-z])", t) or re.search(r"scheduled tribe|tribal|గిరిజన|आदिवासी", t, re.I):
         return "ST"
-    if re.search(r"\bBC(?:[\s-]?[A-E])?\b|backward|\bOBC\b|బీసీ", t, re.I):
+    if re.search(r"(?<![\w.])O?BC(?:[\s-][A-E])?(?!\w)", t) or re.search(r"backward|బీసీ", t, re.I):
         return "BC"
     if re.search(r"minorit|muslim|christian|sikh|మైనారిటీ|ముస్లిం|अल्पसंख्यक|मुस्लिम", t, re.I):
         return "Minority"
-    if re.search(r"\bOC\b|\bgeneral\b|forward caste", t, re.I):
+    if re.search(r"(?<![\w.])OC(?!\w)", t) or re.search(r"general (?:category|caste)|forward caste", t, re.I):
         return "OC"
     return None
 
 
 def _education(t: str):
     checks = [
-        ("pg", r"\b(?:m\.?\s?tech|mba|mca|m\.?\s?sc|m\.?\s?com|m\.?\s?a\b|post\s?grad\w*|\bpg\b|masters?)"),
-        ("professional", r"b\.?\s?tech|\bbe\b|engineering|mbbs|b\.?\s?pharm|pharmacy|medical|bds|nursing|b\.?\s?arch|ఇంజనీరింగ్|इंजीनियरिंग"),
+        ("pg", r"\b(?:m\.?\s?tech|mba|mca|m\.?\s?sc\b|m\.\s?com\b|mcom\b|(?-i:M\.?A\b)|post\s?grad\w*|pg\b|masters?\b)"),
+        ("professional", r"b\.?\s?tech|(?-i:\bB\.?E\b)|engineering|mbbs|b\.?\s?pharm|pharmacy|medicine|medical (?:college|course|student)|\bbds\b|nursing|b\.?\s?arch|ఇంజనీరింగ్|इंजीनियरिंग"),
         ("iti_polytechnic", r"polytechnic|diploma|\biti\b|పాలిటెక్నిక్|पॉलिटेक्निक"),
         ("degree", r"\bdegree\b|b\.?\s?com|b\.?\s?sc|b\.?\s?a\b|\bbba\b|\bbca\b|graduat|డిగ్రీ|डिग्री"),
-        ("inter", r"\binter\b|intermediate|junior college|\b1[12](?:th)?\s*(?:class|std)?\b|class\s*1[12]|ఇంటర్|इंटर"),
+        ("inter", r"\binter\b|intermediate|junior college|\b1[12]th\b|\b1[12]\s*(?:class|std)|class\s*1[12]|ఇంటర్|इंटर"),
         ("class_10", r"class\s*10|10th\s*(?:class|std|standard)|\bin\s*10th|\bssc\b|పదవ తరగతి|दसवीं"),
         ("class_9", r"class\s*9|9th\s*(?:class|std|standard)|\bin\s*9th|తొమ్మిదవ తరగతి|नौवीं"),
     ]

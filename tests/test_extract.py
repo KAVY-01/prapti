@@ -43,5 +43,28 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(r["profile"]["community"], "BC")
 
 
+class TestMisreadings(unittest.TestCase):
+    """Words that used to be read as the wrong detail."""
+
+    def p(self, text):
+        return extract(text, use_ai=False)["profile"]
+
+    def test_course_names_are_not_communities(self):
+        self.assertEqual(self.p("I am doing B.Sc first year, BC, income 1 lakh")["community"], "BC")
+        self.assertIsNone(self.p("I study BCA 2nd year")["community"])
+        self.assertIsNone(self.p("studying at St. Ann's college, BCom")["community"])
+
+    def test_everyday_words_are_not_courses(self):
+        self.assertEqual(self.p("I'm a BC girl in inter")["education_level"], "inter")
+        self.assertEqual(self.p("I want to be a teacher, doing degree")["education_level"], "degree")
+        self.assertEqual(self.p("I am in class 9 and have 11 siblings")["education_level"], "class_9")
+        self.assertEqual(self.p("I am in 10th class, income 12,000")["education_level"], "class_10")
+
+    def test_monthly_income_becomes_yearly(self):
+        self.assertEqual(self.p("income 12,000 per month")["annual_income"], 144000)
+        self.assertEqual(self.p("మా ఆదాయం నెలకు 8 వేలు")["annual_income"], 96000)
+        self.assertEqual(self.p("family income 1.5 lakh")["annual_income"], 150000)
+
+
 if __name__ == "__main__":
     unittest.main()

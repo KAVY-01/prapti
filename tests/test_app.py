@@ -17,6 +17,17 @@ class TestFlow(unittest.TestCase):
         app.config["TESTING"] = True
         self.c = app.test_client()
 
+
+    def test_bad_form_values_do_not_crash(self):
+        self.c.post("/start")
+        r = self.c.post("/questions", data={"field": "annual_income", "value": "lots"})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.post("/profile", data={"year": "abc", "community": "<b>x</b>", "marks_percent": "999"})
+        self.assertEqual(r.status_code, 302)
+        r = self.c.post("/api/match", json={"profile": {"annual_income": "100000", "year": "x"}})
+        self.assertEqual(r.status_code, 200)
+        r = self.c.post("/api/match", json={"profile": "oops"})
+        self.assertEqual(r.status_code, 200)
     def test_sample_goes_straight_to_results(self):
         r = self.c.post("/find", data={"sample": "lakshmi"})
         self.assertTrue(r.headers["Location"].endswith("/results"))
