@@ -39,10 +39,10 @@
     <div class="slip-body">
       <h2 id="ask-title" class="type-title">{{ t('home.type_title') }}</h2>
 
-      <form class="ask" action="/find" method="post" data-ask>
+      <form class="ask" action="/find" method="post" data-ask novalidate>
         <label class="visually-hidden" for="ask-text">{{ t('home.describe') }}</label>
         <div class="ask-box">
-          <textarea id="ask-text" name="text" rows="4" required
+          <textarea id="ask-text" name="text" rows="4" required aria-describedby="ask-hint-text"
           data-examples='["I&#39;m in Inter 2nd year in Warangal, my father is a daily wage worker, we are BC, income around 1 lakh.", "నేను డిగ్రీ మొదటి సంవత్సరం, మా ఊరు నల్గొండ, మేము SC, మా ఆదాయం 80 వేలు.", "मैं हैदराबाद में B.Tech कर रही हूँ, हम minority हैं, family income 1.5 लाख है।"]'
           placeholder="{{ t('home.example') }} I'm in Inter 2nd year in Warangal, my father is a daily wage worker, we are BC, income around 1 lakh.">{{ text }}</textarea>
           <div class="mic-row" data-mic-row hidden>
@@ -56,7 +56,8 @@
             <button type="button" class="mic" data-mic aria-pressed="false" aria-label="{{ t('home.speak') }}">{{ icon('mic', 18) }}</button>
           </div>
         </div>
-        <p class="ask-hint">{{ t('home.hint') }}</p>
+        <p class="ask-error" data-ask-error role="alert" hidden>{{ t('home.empty') }}</p>
+        <p class="ask-hint" id="ask-hint-text">{{ t('home.hint') }}</p>
         <div class="ask-actions">
           <button type="submit" class="btn btn-primary">{{ t('home.find') }} {{ icon('arrow-right', 20) }}</button>
         </div>
@@ -104,6 +105,15 @@
       <img class="moment-pic" src="{{ url_for('static', filename='img/art/track.svg') }}" width="800" height="800" alt="A certificate and a calendar with the last date ticked, and a reminder bell" loading="lazy" decoding="async" style="--rise: 56px">
     </article>
   </div>
+</section>
+
+<section class="place-band" aria-label="Telangana">
+  <p class="place-statement">{{ t('home.place') }}</p>
+  <div class="place-photos">
+    <img class="place-img place-img-dome" src="{{ url_for('static', filename='img/photos/osmania-dome.jpg') }}" width="1600" height="1187" alt="Looking up into the white carved dome of the Arts College at Osmania University, Hyderabad" loading="lazy" decoding="async">
+    <img class="place-img place-img-arch" src="{{ url_for('static', filename='img/photos/kakatiya-arch.jpg') }}" width="900" height="1600" alt="The Kakatiya Kala Thoranam, the carved stone arch at Warangal Fort" loading="lazy" decoding="async">
+  </div>
+  <p class="place-credit">Arts College dome, Osmania University, Hyderabad: <a href="https://commons.wikimedia.org/w/index.php?curid=46299151" rel="noopener" target="_blank">Achalamunigal</a>. Kakatiya Kala Thoranam, Warangal: <a href="https://commons.wikimedia.org/w/index.php?curid=81762698" rel="noopener" target="_blank">Bharat Kumar Jonnalagadda</a>. Both <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">CC BY-SA 4.0</a>, Wikimedia Commons.</p>
 </section>
 
 <section class="sheet-band" aria-labelledby="sheet-title">

@@ -371,7 +371,7 @@
   // ---------- Every button that sends a form shows it is working, and can't be pressed twice ----------
   document.addEventListener("submit", function (ev) {
     var b = ev.submitter;
-    if (!b) return;
+    if (!b || ev.defaultPrevented) return;
     if (b.getAttribute("aria-busy") === "true") { ev.preventDefault(); return; }
     if (b.matches(".btn, .tap-btn, .sample-card, .q-skip, .q-pill")) {
       b.classList.add("is-busy");
@@ -794,6 +794,33 @@
     document.addEventListener("pointerout", function (ev) {
       var el = ev.target.closest && ev.target.closest(BUBBLE);
       if (el && !el.contains(ev.relatedTarget)) aim(el, ev);
+    });
+  }
+
+  // ---------- Home: a kind message for an empty box (instead of the browser's bubble); "say it" lands in the box ----------
+  var askForm = document.querySelector("form[data-ask]");
+  if (askForm) {
+    var askText = askForm.querySelector("textarea");
+    var askErr = askForm.querySelector("[data-ask-error]");
+    askForm.addEventListener("submit", function (ev) {
+      if (askText.value.trim()) return;
+      ev.preventDefault();
+      var b = ev.submitter;
+      if (b) { b.classList.remove("is-busy"); b.removeAttribute("aria-busy"); }
+      askErr.hidden = false;
+      askText.setAttribute("aria-invalid", "true");
+      askText.focus();
+    }, true);
+    askText.addEventListener("input", function () {
+      if (!askErr.hidden && askText.value.trim()) { askErr.hidden = true; askText.removeAttribute("aria-invalid"); }
+    });
+    document.querySelectorAll('a[href="#ask"]').forEach(function (a) {
+      a.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        document.getElementById("ask").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        setTimeout(function () { askText.focus({ preventScroll: true }); }, reduceMotion ? 0 : 450);
+        if (history.replaceState) history.replaceState(null, "", "#ask");
+      });
     });
   }
 })();

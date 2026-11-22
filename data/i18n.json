@@ -1564,5 +1564,15 @@
     "en": "Also inside: a tracker with reminders before each last date, Helper mode for Mee Seva centres and NGOs, offline use, and a checker that flags when official rules change. Free, in English, Telugu and Hindi.",
     "te": "ఇంకా: ప్రతి చివరి తేదీకి ముందు గుర్తుచేసే ట్రాకర్, మీ సేవ కేంద్రాలు, NGOల కోసం హెల్పర్ మోడ్, ఇంటర్నెట్ లేకపోయినా పని చేస్తుంది, అధికారిక నియమాలు మారితే గుర్తించే చెకర్. ఉచితం, ఇంగ్లీష్, తెలుగు, హిందీలో.",
     "hi": "साथ में: हर आख़िरी तारीख से पहले याद दिलाने वाला ट्रैकर, मी सेवा केंद्रों और NGO के लिए हेल्पर मोड, बिना इंटरनेट भी काम, और आधिकारिक नियम बदलने पर बताने वाला चेकर। मुफ़्त, अंग्रेज़ी, तेलुगु और हिंदी में।"
+  },
+  "home.place": {
+    "en": "Made for Telangana's students: in Inter near Warangal, at a polytechnic in Nizamabad, under this dome at Osmania.",
+    "te": "తెలంగాణ విద్యార్థుల కోసం: వరంగల్ దగ్గర ఇంటర్ చదివేవారు, నిజామాబాద్ పాలిటెక్నిక్‌లో ఉన్నవారు, ఉస్మానియాలో ఈ గోపురం కింద చదివేవారు.",
+    "hi": "तेलंगाना के छात्रों के लिए: वरंगल के पास इंटर वाले, निज़ामाबाद के पॉलिटेक्निक वाले, उस्मानिया के इस गुंबद के नीचे पढ़ने वाले।"
+  },
+  "home.empty": {
+    "en": "Write one line about yourself first, or tap the mic and say it.",
+    "te": "ముందు మీ గురించి ఒక్క లైన్ రాయండి, లేదా మైక్ నొక్కి చెప్పండి.",
+    "hi": "पहले अपने बारे में एक लाइन लिखिए, या माइक दबाकर बोलिए।"
   }
 }

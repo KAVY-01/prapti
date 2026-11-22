@@ -39,3 +39,7 @@ tsconfig.json
 # Codebenders IDE screenshots
 preview/
 tsconfig.tsbuildinfo
+
+# design tooling output and raw photo downloads (optimised copies live in static/img/photos)
+.taste-skill/
+assets/*.jpg

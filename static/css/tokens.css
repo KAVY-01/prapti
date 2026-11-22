@@ -34,8 +34,8 @@
   --font-display: "Anek Latin", "Anek Telugu", "Anek Devanagari", system-ui, sans-serif;
   --font-text: "Anek Latin", "Anek Telugu", "Anek Devanagari", system-ui, sans-serif;
   --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);   /* 13–14px */
-  --step-body: clamp(1.0625rem, 1.02rem + 0.25vw, 1.1875rem);   /* 17–19px */
-  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);         /* 20–26px */
+  --step-body: 1.125rem;                                       /* 18px everywhere */
+  --step-lead: clamp(1.25rem, 0.9rem + 1vw, 1.75rem);          /* 20–28px */
   --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);                /* 32–64px */
   --step-hero: clamp(2.25rem, 1.2rem + 5.4vw, 6rem);             /* 44–96px */
 
