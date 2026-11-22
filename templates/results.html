@@ -114,6 +114,7 @@
 <details class="result-group result-no">
   <summary class="group-title">
     {{ t('grp.no') }} <span class="count">{{ r.no|length }}</span>
+    {% set close = r.no | selectattr('near_miss') | list %}{% if close %}<span class="near-count">{{ t('near.count', n=close | length) }}</span>{% endif %}
     {{ icon('chevron-down', 20, 'summary-chevron') }}
   </summary>
   <div class="card-list">

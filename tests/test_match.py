@@ -129,3 +129,32 @@ class TestClosedSchemes(unittest.TestCase):
         r = match_all({"community": "SC"}, [s], today=_date(2026, 11, 22))
         self.assertEqual(len(r["likely"]), 1)                  # still shown, marked closed
         self.assertEqual(r["summary"]["likely_value_inr"], 0)  # but not promised as money
+
+
+class TestNearMiss(unittest.TestCase):
+    def scheme(self, field, op, value):
+        return {"id": "x", "name_en": "X", "category": "scholarship", "benefit_max_inr": 1000,
+                "rules": [{"field": "community", "op": "eq", "value": "SC", "text_en": "SC ({user_value})"},
+                          {"field": field, "op": op, "value": value, "text_en": "rule ({user_value})"}]}
+
+    def test_income_just_over_is_a_near_miss_with_gap(self):
+        r = match_scheme(self.scheme("annual_income", "lte", 200000), {"community": "SC", "annual_income": 220000})
+        self.assertEqual(r["status"], "no")
+        self.assertTrue(r["near_miss"])
+        self.assertEqual(r["gap"], {"kind": "over_income", "n": "₹20,000"})
+
+    def test_marks_short_gives_target(self):
+        r = match_scheme(self.scheme("marks_percent", "gte", 55), {"community": "SC", "marks_percent": 52})
+        self.assertEqual(r["gap"], {"kind": "short_marks", "n": "3", "need": "55"})
+
+    def test_fixed_rules_are_never_near_misses(self):
+        r = match_scheme(self.scheme("gender", "eq", "female"), {"community": "SC", "gender": "male"})
+        self.assertFalse(r["near_miss"])
+        r = match_scheme(self.scheme("annual_income", "lte", 200000), {"community": "ST", "annual_income": 220000})
+        self.assertFalse(r["near_miss"])  # two rules fail
+
+    def test_near_misses_listed_first(self):
+        a = dict(self.scheme("gender", "eq", "female"), id="a")
+        b = dict(self.scheme("annual_income", "lte", 200000), id="b")
+        r = match_all({"community": "SC", "gender": "male", "annual_income": 220000}, [a, b])
+        self.assertEqual([m["id"] for m in r["no"]], ["b", "a"])

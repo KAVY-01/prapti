@@ -3254,3 +3254,13 @@ h1, h2, h3,
   body { background: #fff !important; }
   .check-item label { break-inside: avoid; }
 }
+
+/* ---------- Near misses: only one rule stands in the way ---------- */
+.scheme-near {
+  display: inline-block; margin: 4px 0 2px; padding: 3px 10px; border-radius: 999px;
+  background: #f3e6cf; color: #7a4a0c; font-size: 0.85em; font-weight: 600;
+}
+.near-count {
+  margin-left: 8px; padding: 2px 9px; border-radius: 999px;
+  background: #f3e6cf; color: #7a4a0c; font-size: 0.75em; font-weight: 600; vertical-align: middle;
+}

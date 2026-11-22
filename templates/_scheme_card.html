@@ -19,7 +19,7 @@
 {%- endmacro %}
 
 {% macro scheme_card(m, i=0) -%}
-<a class="slip scheme-card scheme-{{ m.status }}" href="/scheme/{{ m.id }}" style="--i: {{ i }}">
+<a class="slip scheme-card scheme-{{ m.status }}{{ ' scheme-near-miss' if m.near_miss }}" href="/scheme/{{ m.id }}" style="--i: {{ i }}">
   <div class="scheme-main">
     <div class="scheme-card-top">
       {{ badge(m.status) }}
@@ -29,7 +29,10 @@
     <h3 class="scheme-name">{{ m.name }}</h3>
     {% if lang != 'en' %}<p class="scheme-name-en" lang="en">{{ m.name_en }}</p>{% endif %}
     <p class="scheme-summary">{{ m.benefit_text }}</p>
-    {% if m.status == 'no' and m.failed %}
+    {% if m.status == 'no' and m.near_miss %}
+      <p class="scheme-near">{{ t('near.label') }}</p>
+      <p class="scheme-why">{{ rule_icon('fail') }}<span>{{ m.failed[0].text }}{% if m.gap %} · <strong>{{ t('near.' ~ m.gap.kind, n=m.gap.n, need=m.gap.need) }}</strong>{% endif %}</span></p>
+    {% elif m.status == 'no' and m.failed %}
       <p class="scheme-why">{{ rule_icon('fail') }}<span>{{ m.failed[0].text }}</span></p>
     {% elif m.status == 'maybe' %}
       <p class="scheme-why">{{ rule_icon('unknown') }}<span>{{ t('card.check_one') }} {% for f in m.missing_fields %}{{ t('field.' ~ f) }}{{ ', ' if not loop.last }}{% endfor %}</span></p>

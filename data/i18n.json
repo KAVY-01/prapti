@@ -1259,5 +1259,25 @@
     "en": "Needed for all {n} of your schemes",
     "te": "మీ {n} పథకాలన్నింటికీ అవసరం",
     "hi": "आपकी सभी {n} योजनाओं के लिए ज़रूरी"
+  },
+  "near.label": {
+    "en": "Nearly a match: only this rule doesn't fit",
+    "te": "దాదాపు సరిపోతుంది: ఈ ఒక్క నియమం మాత్రమే సరిపోలేదు",
+    "hi": "लगभग पात्र: सिर्फ़ यह एक नियम मेल नहीं खाता"
+  },
+  "near.over_income": {
+    "en": "{n} over the income limit",
+    "te": "ఆదాయ పరిమితి కంటే {n} ఎక్కువ",
+    "hi": "आय सीमा से {n} ज़्यादा"
+  },
+  "near.short_marks": {
+    "en": "{n}% short of the {need}% needed",
+    "te": "కావలసిన {need}% కంటే {n}% తక్కువ",
+    "hi": "ज़रूरी {need}% से {n}% कम"
+  },
+  "near.count": {
+    "en": "{n} nearly a match",
+    "te": "{n} దాదాపు సరిపోతాయి",
+    "hi": "{n} लगभग पात्र"
   }
 }

@@ -129,7 +129,20 @@ def evaluate_rule(rule: dict, profile: dict, lang: str = "en"):
         return {"status": "unknown", "field": field, "missing": missing, "text": text}
 
     passed = check(rule["op"], actual, rule["value"])
-    return {"status": "pass" if passed else "fail", "field": field, "missing": [], "text": text}
+    return {"status": "pass" if passed else "fail", "field": field, "missing": [], "text": text,
+            "op": rule["op"], "value": rule["value"], "actual": actual}
+
+
+def gap(reason: dict):
+    """How far a failed number rule is from passing, e.g. ₹20,000 over an income limit or 3% short on marks."""
+    op, want, have = reason.get("op"), reason.get("value"), reason.get("actual")
+    if not isinstance(want, (int, float)) or isinstance(want, bool) or not isinstance(have, (int, float)):
+        return None
+    if reason["field"] == "annual_income" and op in ("lte", "lt") and have > want:
+        return {"kind": "over_income", "n": format_inr(have - want)}
+    if reason["field"] == "marks_percent" and op in ("gte", "gt") and have < want:
+        return {"kind": "short_marks", "n": f"{want - have:g}", "need": f"{want:g}"}
+    return None
 
 
 def applies(cond: dict | None, profile: dict) -> bool:
@@ -144,6 +157,9 @@ def match_scheme(scheme: dict, profile: dict, lang: str = "en", today: date | No
     failed = [r for r in reasons if r["status"] == "fail"]
     unknown = [r for r in reasons if r["status"] == "unknown"]
 
+    # Nearly a match: every other rule passes and the one that fails is a number that can be close
+    # (income, marks). A girls-only or SC-only rule is never "nearly" met, so it is not counted.
+    near_miss = len(failed) == 1 and not unknown and failed[0]["field"] in ("annual_income", "marks_percent")
     if failed:
         status = "no"
     elif unknown:
@@ -172,6 +188,8 @@ def match_scheme(scheme: dict, profile: dict, lang: str = "en", today: date | No
         "passed_count": sum(1 for r in reasons if r["status"] == "pass"),
         "rule_count": len(reasons),
         "failed": failed,
+        "near_miss": near_miss,
+        "gap": gap(failed[0]) if near_miss else None,
         "missing_fields": missing_fields,
         "missing_labels": [FIELD_LABEL.get(f, f) for f in missing_fields],
         "documents": [d for d in scheme.get("documents", []) if applies(d.get("needed_if"), profile)],
@@ -197,6 +215,7 @@ def match_all(profile: dict, schemes: list[dict] | None = None, lang: str = "en"
     schemes = schemes if schemes is not None else load_schemes()
     results = [match_scheme(s, profile, lang, today) for s in schemes]
     groups = {k: sorted([r for r in results if r["status"] == k], key=_sort_key) for k in ("likely", "maybe", "no")}
+    groups["no"].sort(key=lambda r: not r["near_miss"])  # near misses first (stable: keeps date order)
     # The headline amount counts only schemes you can still apply for this year (no loans, nothing closed).
     likely_value = sum(r["benefit_max_inr"] or 0 for r in groups["likely"]
                        if r["category"] != "loan" and (r["days_left"] is None or r["days_left"] >= 0))

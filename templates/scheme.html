@@ -35,6 +35,9 @@
     <li class="rule-row">{{ rule_icon(r.status) }}<span>{{ r.text }}</span></li>
     {% endfor %}
   </ul>
+  {% if m.status == 'no' and m.near_miss %}
+  <p class="scheme-near">{{ t('near.label') }}{% if m.gap %}: {{ t('near.' ~ m.gap.kind, n=m.gap.n, need=m.gap.need) }}{% endif %}</p>
+  {% endif %}
   {% if m.status == 'maybe' %}
   <a class="btn btn-secondary btn-block" href="/results#edit-panel">{% set what %}{% for f in m.missing_fields %}{{ t('field.' ~ f) | lower }}{{ ', ' if not loop.last }}{% endfor %}{% endset %}{{ t('det.add_missing', what=what | trim) }}</a>
   {% endif %}
