@@ -3278,3 +3278,4 @@ h1, h2, h3,
 .share-card .next-title { display: flex; align-items: center; gap: 8px; }
 .share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .share-actions .btn { flex: 1 1 180px; justify-content: center; }
+.copy-box { width: 100%; margin-top: 10px; font-size: 14px; }

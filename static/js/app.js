@@ -171,11 +171,22 @@
   document.querySelectorAll("[data-copy]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var link = btn.dataset.copy;
-      var done = function () { toast(T("share.copied")); };
+      var box = document.querySelector("[data-copy-box]");
+      function done() { toast(T("share.copied")); }
+      function fallback() {
+        // Older way to copy; if the browser blocks that too, show the link to copy by hand.
+        box.hidden = false;
+        box.value = link;
+        box.focus();
+        box.select();
+        var ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        if (ok) done(); else toast(T("share.manual"));
+      }
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(link).then(done, function () { window.prompt("", link); });
+        navigator.clipboard.writeText(link).then(done, fallback);
       } else {
-        window.prompt("", link);
+        fallback();
       }
     });
   });
