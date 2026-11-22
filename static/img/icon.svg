@@ -1,1 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1f3b70"/><text x="256" y="352" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-size="300" font-weight="700" letter-spacing="-10" fill="#ffffff">P</text><circle cx="384" cy="352" r="26" fill="#bcd6ef"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="256" cy="256" r="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#163d66"/>
+      <stop offset="1" stop-color="#0a1d33"/>
+    </radialGradient>
+    <clipPath id="circleClip">
+      <circle cx="256" cy="256" r="256"/>
+    </clipPath>
+  </defs>
+
+  <!-- Base dark blue circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+
+  <!-- Cracked drought ground, clipped to the circle -->
+  <g clip-path="url(#circleClip)">
+    <!-- Near-black plates -->
+    <polygon fill="#05080d" points="40,300 150,262 210,290 180,360 70,372"/>
+    <polygon fill="#05080d" points="205,298 300,276 338,318 315,372 232,380 190,350"/>
+    <polygon fill="#05080d" points="320,262 430,240 478,300 452,352 352,344 330,306"/>
+    <polygon fill="#05080d" points="180,392 292,386 300,452 214,478 170,440"/>
+    <polygon fill="#05080d" points="312,392 408,372 446,430 392,486 318,470"/>
+    <polygon fill="#05080d" points="30,430 120,420 132,470 60,512 20,500"/>
+    <polygon fill="#05080d" points="470,410 512,396 512,512 440,512 452,466"/>
+
+    <!-- Dark slate plates -->
+    <polygon fill="#1b2635" points="60,392 165,400 150,470 80,450"/>
+    <polygon fill="#1b2635" points="90,240 150,205 175,236 130,268"/>
+    <polygon fill="#1b2635" points="380,190 430,200 412,236 370,226"/>
+    <polygon fill="#1b2635" points="255,430 300,420 318,448 280,470 248,458"/>
+
+    <!-- Thin dried-out streaks across the lower half -->
+    <path d="M 30 420 Q 150 410 260 422 T 490 418" fill="none" stroke="#05080d" stroke-width="3" opacity="0.7"/>
+    <path d="M 0 455 Q 120 448 240 458 T 512 452" fill="none" stroke="#05080d" stroke-width="2.5" opacity="0.6"/>
+    <path d="M 10 492 Q 150 486 280 496 T 512 488" fill="none" stroke="#05080d" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- Cream letter, above the cracked ground -->
+  <text x="256" y="352" text-anchor="middle" font-family="Georgia, serif" font-size="300" font-weight="700" fill="#f4efe4">P</text>
+
+  <!-- Subtle inner hairline -->
+  <circle cx="256" cy="256" r="238" fill="none" stroke="#f4efe4" stroke-opacity="0.35" stroke-width="4"/>
+</svg>

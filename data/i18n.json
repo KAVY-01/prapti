@@ -1130,6 +1130,16 @@
     "te": "మీ మాటల్లో చెప్పండి",
     "hi": "अपने शब्दों में बताइए"
   },
+  "home.or_type": {
+    "en": "Or say it in your own words",
+    "te": "లేదా మీ మాటల్లో చెప్పండి",
+    "hi": "या अपने शब्दों में बताइए"
+  },
+  "home.example": {
+    "en": "Example:",
+    "te": "ఉదాహరణ:",
+    "hi": "उदाहरण:"
+  },
   "lang.pick": {
     "en": "Choose your language",
     "te": "మీ భాష ఎంచుకోండి",

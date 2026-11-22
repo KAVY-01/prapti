@@ -13,7 +13,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if ("IntersectionObserver" in window && !reduceMotion) {
     document.documentElement.classList.add("js");
-    var groups = document.querySelectorAll(".moments, .sheet, .sheet-page, .faq, .detail-section, .source-box, .footer-card, .about-block, .helper-list-wrap, .admin-log");
+    var groups = document.querySelectorAll(".moments, .sheet, .sheet-page, .faq, .detail-section, .source-box, .footer-card, .footer-name, .about-block, .helper-list-wrap, .admin-log");
     var ioWorks = false;
     var io = new IntersectionObserver(function (entries) {
       ioWorks = true;
@@ -91,6 +91,8 @@
     var examples = [];
     try { examples = JSON.parse(textarea.dataset.examples); } catch (e) {}
     var idx = { te: 1, hi: 2 }[document.documentElement.lang] || 0;
+    var exLabel = T("home.example") + " ";
+    examples = examples.map(function (x) { return exLabel + x; });
     if (examples[idx]) textarea.placeholder = examples[idx];
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (examples.length > 1 && !reduce) {
@@ -747,4 +749,33 @@
     console.log("%cPrapti %c\u0c2a\u0c4d\u0c30\u0c3e\u0c2a\u0c4d\u0c24\u0c3f", "font:700 20px system-ui;color:#1f3b70", "font:400 16px system-ui;color:#2f4a68");
     console.log("Rules live in data/schemes.json, the reader in engine/extract.py. No AI decides eligibility, and no ID number is ever stored. github.com/KAVY-01/prapti");
   } catch (e) {}
+
+  // ---------- Custom cursor: a dark blue ball that eases after the mouse (desktop mouse only) ----------
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var ball = document.createElement("div");
+    ball.className = "cursor-ball";
+    ball.setAttribute("aria-hidden", "true");
+    document.body.appendChild(ball);
+    document.documentElement.classList.add("has-ball");
+    var mx = -100, my = -100, bx = -100, by = -100, raf = null;
+    var ease = reduceMotion ? 1 : 0.28;
+    function loop() {
+      bx += (mx - bx) * ease;
+      by += (my - by) * ease;
+      ball.style.transform = "translate3d(" + bx + "px," + by + "px,0)";
+      raf = (Math.abs(mx - bx) > 0.2 || Math.abs(my - by) > 0.2) ? requestAnimationFrame(loop) : null;
+    }
+    document.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType !== "mouse") return;
+      mx = ev.clientX; my = ev.clientY;
+      if (!ball.classList.contains("is-on")) { bx = mx; by = my; ball.classList.add("is-on"); }
+      var t = ev.target;
+      ball.classList.toggle("is-hover", !!(t.closest && t.closest("a, button, summary, label, [role=button], .q-tile, .sample-card")));
+      ball.classList.toggle("is-text", !!(t.closest && t.closest("input, textarea, select, [contenteditable]")));
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
+    document.addEventListener("pointerdown", function () { ball.classList.add("is-down"); });
+    document.addEventListener("pointerup", function () { ball.classList.remove("is-down"); });
+    document.documentElement.addEventListener("mouseleave", function () { ball.classList.remove("is-on"); });
+  }
 })();

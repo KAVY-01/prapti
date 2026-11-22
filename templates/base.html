@@ -31,7 +31,7 @@
     {"not": {"selector_matches": "[target=_blank], [download], [data-no-prefetch]"}}]}, "eagerness": "moderate"}]}
   </script>
 </head>
-<body class="page-{{ page|default('') }}">
+<body class="on-{{ page|default('') }}">
   <a class="skip-link" href="#main">{{ t('skip_link') }}</a>
   <header class="topbar">
     <div class="topbar-inner">
@@ -67,7 +67,7 @@
       <div class="footer-meaning">
         <p>{{ t('footer.meaning') }}</p>
       </div>
-      <p class="footer-name" aria-hidden="true">Prapti</p>
+      <div class="footer-name" aria-hidden="true">{% include "_drought.svg" %}</div>
     </div>
   </footer>
 
