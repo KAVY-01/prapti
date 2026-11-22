@@ -40,7 +40,11 @@ def _secret_key():
         with open(path, "w", encoding="utf-8") as f:
             f.write(key)
     except OSError:
-        pass
+        # Read-only serverless host (Vercel) without SECRET_KEY: every server copy needs the same key,
+        # or sessions break between requests. That is safe only in sandbox mode, where nothing a
+        # session holds can change shared data (editor edits stay with the visitor).
+        if os.environ.get("PRAPTI_SANDBOX", "").lower() in ("1", "on", "true") or os.environ.get("VERCEL"):
+            return "prapti-public-sandbox-demo"
     return key
 
 
