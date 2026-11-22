@@ -121,7 +121,10 @@ def evaluate_rule(rule: dict, profile: dict, lang: str = "en"):
     field = rule["field"]
     actual = profile.get(field)
     template = rule.get(f"text_{lang}") or rule["text_en"]
-    text = template.replace("{user_value}", format_value(field, actual))
+    # A tapped answer like "55–80%" is stored as a number inside the range so rules work,
+    # but the student is shown the range they chose, not that number.
+    band = (profile.get("_bands") or {}).get(field)
+    text = template.replace("{user_value}", band if band and actual is not None else format_value(field, actual))
 
     if not _known(actual):
         missing.append(field)
@@ -130,13 +133,14 @@ def evaluate_rule(rule: dict, profile: dict, lang: str = "en"):
 
     passed = check(rule["op"], actual, rule["value"])
     return {"status": "pass" if passed else "fail", "field": field, "missing": [], "text": text,
-            "op": rule["op"], "value": rule["value"], "actual": actual}
+            "op": rule["op"], "value": rule["value"], "actual": actual, "banded": bool(band)}
 
 
 def gap(reason: dict):
     """How far a failed number rule is from passing, e.g. ₹20,000 over an income limit or 3% short on marks."""
     op, want, have = reason.get("op"), reason.get("value"), reason.get("actual")
-    if not isinstance(want, (int, float)) or isinstance(want, bool) or not isinstance(have, (int, float)):
+    if reason.get("banded") or not isinstance(want, (int, float)) or isinstance(want, bool) \
+            or not isinstance(have, (int, float)):  # a tapped range has no exact gap
         return None
     if reason["field"] == "annual_income" and op in ("lte", "lt") and have > want:
         return {"kind": "over_income", "n": format_inr(have - want)}

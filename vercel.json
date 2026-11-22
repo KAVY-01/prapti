@@ -1,9 +1,17 @@
 {
+  "regions": [
+    "bom1"
+  ],
   "functions": {
     "api/index.py": {
       "includeFiles": "{app.py,engine/**,data/**,templates/**,static/**}",
       "maxDuration": 20
     }
   },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index?__p=$1" }]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index?__p=$1"
+    }
+  ]
 }

@@ -65,6 +65,7 @@
 <section class="about-block" aria-labelledby="sources-title">
   <h2 id="sources-title" class="section-title">Where the rules come from</h2>
   <p class="about-text">Only public scheme information, stored as data with the date it was last checked. When a government order changes a limit, one number changes and every result follows.</p>
+  <p class="about-text"><a href="/changes">See when each scheme was last checked, and whether its official page has changed {{ icon('arrow-right', 16) }}</a></p>
   <ul class="source-list">
     {% for name, url in sources %}
     <li><a href="{{ url }}" target="_blank" rel="noopener">{{ name }} {{ icon('external-link', 14) }}</a></li>

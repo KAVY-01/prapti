@@ -3,13 +3,14 @@ import json
 import os
 import secrets
 from urllib.parse import parse_qsl, urlencode
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 
 from flask import (Flask, Response, abort, has_request_context, jsonify, redirect,
                    render_template, request, session, url_for)
 
 from engine.extract import PROFILE_KEYS, extract
 from engine.ics import build_ics
+from engine.sources import check_all as check_sources, load_index as snapshot_index
 from engine.match import (FIELD_LABEL, LEVEL_LABEL, DATA_DIR, SCHEMES_PATH, fields_that_matter,
                           applies, format_value, match_all, match_scheme)
 from engine.match import load_schemes as load_file_schemes
@@ -238,13 +239,37 @@ def selected_options(profile):
     return out
 
 
+BANDED = ("annual_income", "marks_percent")  # answered by tapping a range, e.g. "₹1–1.5L", "55–80%"
+
+
+def set_band(profile, field, value):
+    """Remember that this answer was a tapped range (or forget it when the answer is cleared)."""
+    bands = dict(profile.get("_bands") or {})
+    label = dict(FIELD_OPTIONS.get(field, [])).get(value) if field in BANDED else None
+    if label and value is not None:
+        bands[field] = label
+    else:
+        bands.pop(field, None)
+    profile["_bands"] = bands
+
+
+def for_matching(profile, lang):
+    """The profile with tapped ranges in the student's language, for the rule sentences."""
+    p = dict(profile)
+    p["_bands"] = {f: opt(label, lang) for f, label in (profile.get("_bands") or {}).items()}
+    return p
+
+
 def understood_chips(profile, lang=None):
     chips = []
+    bands = profile.get("_bands") or {}
     for f in CHIP_FIELDS:
         v = profile.get(f)
         if v is None:
             continue
-        if f == "year":
+        if f in bands:
+            label = tr("chip.income" if f == "annual_income" else "chip.marks", lang, v=opt(bands[f], lang))
+        elif f == "year":
             label = tr("chip.year", lang, n=v)
         elif f == "annual_income":
             label = tr("chip.income", lang, v=format_value(f, v))
@@ -344,6 +369,7 @@ def questions_back():
     field = history.pop()
     profile = dict(current_profile())
     profile[field] = None
+    set_band(profile, field, None)
     skipped = [f for f in session.get("skipped", []) if f != field]
     asked = dict(session.get("asked", {}))
     # forget the question on screen now and the one we go back to, so the count stays right
@@ -374,6 +400,7 @@ def questions():
                 skipped.append(field)
             else:
                 profile[field] = _coerce(field, request.form.get("value"))
+                set_band(profile, field, profile[field])
                 if profile[field] is None:
                     skipped.append(field)
             session["profile"] = profile
@@ -404,6 +431,7 @@ def update_profile():
             new = _coerce(f, request.form.get(f))
             if new != shown[f]:  # only overwrite what the student actually changed
                 profile[f] = new
+                set_band(profile, f, new)
     session["profile"] = profile
     return redirect(url_for("results"))
 
@@ -453,7 +481,7 @@ def documents():
     if not session.get("profile"):
         return redirect(url_for("index"))
     lang = get_lang()
-    trip = one_trip(match_all(current_profile(), load_schemes(), lang=lang), lang)
+    trip = one_trip(match_all(for_matching(current_profile(), lang), load_schemes(), lang=lang), lang)
     return render_template("documents.html", page="find", trip=trip)
 
 
@@ -463,7 +491,7 @@ def results():
     if not session.get("profile"):
         return redirect(url_for("index"))
     lang = get_lang()
-    result = match_all(profile, load_schemes(), lang=lang)
+    result = match_all(for_matching(profile, lang), load_schemes(), lang=lang)
     missing = [f for f in CHIP_FIELDS if profile.get(f) is None]
     first = next((m for m in result["likely"] if m["category"] != "loan" and (m["days_left"] is None or m["days_left"] >= 0)), None)
     return render_template("results.html", first=first, page="find", r=result, profile=profile,
@@ -481,7 +509,7 @@ def scheme_detail(scheme_id):
     if not scheme:
         abort(404)
     profile = current_profile()
-    result = match_scheme(scheme, profile, get_lang())
+    result = match_scheme(scheme, for_matching(profile, get_lang()), get_lang())
     return render_template("scheme.html", page="find", s=scheme, m=result,
                            has_profile=bool(session.get("profile")))
 
@@ -521,6 +549,38 @@ def about():
             seen.add(sch["source_url"])
             sources.append((sch["source_name"], sch["source_url"]))
     return render_template("about.html", page="about", sources=sources)
+
+
+# ---------- How the rules stay right (public) ----------
+IST = timezone(timedelta(hours=5, minutes=30))
+_SOURCE_CHECK = {}  # the latest "check official pages" result on this server: {"at": ..., "results": {...}}
+
+
+def _run_source_check():
+    """Fetch the official pages and compare them with our snapshots; reuse a result under 10 minutes old."""
+    now = datetime.now(IST)
+    last = _SOURCE_CHECK.get("at")
+    if not last or (now - last).total_seconds() > 600:
+        _SOURCE_CHECK.update(at=now, results=check_sources(load_schemes()))
+    return _SOURCE_CHECK
+
+
+@app.route("/changes")
+def changes():
+    """Public: when each scheme was last checked against its official source, and what changed."""
+    schemes = sorted(load_schemes(), key=lambda s: s.get("last_verified") or "", reverse=True)
+    snaps = snapshot_index()
+    for s in schemes:
+        s["snapshot"] = snaps.get(s.get("source_url"), {}).get("taken")
+    return render_template("changes.html", page="about", schemes=schemes, log=_read_log()[:50],
+                           check=_SOURCE_CHECK.get("results"), checked_at=_SOURCE_CHECK.get("at"))
+
+
+@app.route("/changes/check", methods=["POST"])
+def changes_check():
+    """Anyone can ask for a fresh check; the result is shared for 10 minutes so the official sites are not hammered."""
+    _run_source_check()
+    return changes()  # shown straight away: on a serverless host the next request may reach another copy
 
 
 # ---------- Helper mode (NGO / Mee Seva operators) ----------

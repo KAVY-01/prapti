@@ -72,6 +72,32 @@ class TestFlow(unittest.TestCase):
         self.assertIn('value="income"', page)
         self.assertNotIn('type="checkbox" value="0"', page)
 
+    def test_changes_page_and_source_check(self):
+        from unittest import mock
+        import app as app_module
+        page = self.c.get("/changes").get_data(as_text=True)
+        self.assertIn("How we keep the rules right", page)
+        self.assertIn("scholarships.gov.in", page)
+        self.assertIn('href="/changes"', self.c.get("/about").get_data(as_text=True))
+        fake = {s["id"]: {"url": s["source_url"], "state": "changed" if s["id"] == "nmms" else "same",
+                          "since": "2026-11-22"} for s in app_module.load_file_schemes()}
+        app_module._SOURCE_CHECK.clear()
+        with mock.patch.object(app_module, "check_sources", return_value=fake):
+            page = self.c.post("/changes/check").get_data(as_text=True)
+        self.assertIn("Official page changed since 22 Nov 2026: re-check this scheme", page)
+        self.assertIn("Official page unchanged since", page)
+        app_module._SOURCE_CHECK.clear()
+
+    def test_tapped_ranges_shown_as_ranges(self):
+        self.c.post("/start")
+        for f, v in [("education_level", "degree"), ("community", "BC"), ("annual_income", "125000"),
+                     ("marks_percent", "68")]:
+            self.c.post("/questions", data={"field": f, "value": v})
+        page = self.c.get("/results").get_data(as_text=True)
+        self.assertIn("55–80%", page)
+        self.assertNotIn("68%", page)
+        self.assertNotIn("₹1,25,000", page)
+
     def test_security_headers_and_limits(self):
         r = self.c.get("/")
         self.assertIn("frame-ancestors 'none'", r.headers["Content-Security-Policy"])

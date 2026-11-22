@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}How we keep the rules right – Prapti{% endblock %}
+{% block content %}
+<a class="back-link" href="/about">{{ icon('arrow-left', 20) }}About</a>
+<h1 class="detail-title">How we keep the rules right</h1>
+<p class="helper-lead">Scheme rules change often. Every scheme links to its official page and shows the date we last checked it. The rules are stored as data, so a new limit is one number to change, with no code. Any scheme not checked for 90 days is flagged for re-checking.</p>
+
+<section class="detail-section" aria-labelledby="official-pages">
+  <h2 id="official-pages" class="section-title">Have the official pages changed?</h2>
+  <p class="helper-lead">When we check a scheme, we keep a copy of the text of its official page. This compares today's page with that copy, so we know which schemes need a fresh check.</p>
+  <form action="/changes/check" method="post" class="changes-check">
+    <button class="btn btn-secondary" type="submit">{{ icon('help-circle', 18) }}Check the official pages now</button>
+    {% if checked_at %}<span class="check-hint">Checked at {{ checked_at.strftime('%H:%M') }} IST</span>{% endif %}
+  </form>
+  <ul class="log-list source-list-check">
+    {% for s in schemes %}
+    {% set r = check[s.id] if check and s.id in check else none %}
+    <li>
+      <strong>{{ s.name_en }}</strong><br>
+      {% if s.last_verified %}Rules checked {{ nice_date(s.last_verified) }}{% else %}Rules not yet verified{% endif %}
+      · <a href="{{ s.source_url }}" target="_blank" rel="noopener">{{ s.source_name }} {{ icon('external-link', 14) }}</a>
+      {% if r %}<br>
+        {% if r.state == 'same' %}<span class="src-ok">{{ icon('check-circle', 16) }}Official page unchanged since {{ nice_date(r.since) }}</span>
+        {% elif r.state == 'changed' %}<span class="src-changed">{{ icon('alert-triangle', 16) }}Official page changed since {{ nice_date(r.since) }}: re-check this scheme</span>
+        {% elif r.state == 'unreachable' %}<span class="src-unknown">{{ icon('help-circle', 16) }}The official site did not answer: check it by hand</span>
+        {% else %}<span class="src-unknown">{{ icon('help-circle', 16) }}This site blocks automatic checks: we check it by hand</span>{% endif %}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="detail-section admin-log" aria-labelledby="log-title">
+  <h2 id="log-title" class="section-title">Change log</h2>
+  {% if log %}
+  <ul class="log-list">
+    {% for e in log %}<li><strong>{{ e.when }}</strong> · {{ e.scheme }}: {{ e.changes | join('; ') }}</li>{% endfor %}
+  </ul>
+  {% else %}
+  <p class="helper-lead">Last full check: 22 Nov 2026. Central Sector's last date was added (30 Nov), an unofficial ePASS date was removed, and NMMS was marked closed for this year.</p>
+  {% endif %}
+</section>
+{% endblock %}
