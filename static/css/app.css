@@ -737,16 +737,6 @@ h3 {
   }
   .sheet-spread .sheet-page {
     margin-top: 0;
-    padding: 0 clamp(24px, 3vw, 48px);
-  }
-  .sheet-spread .sheet-page:first-child {
-    padding-left: 0;
-    box-shadow: inset -1px 0 0 var(--surface-2);
-    background: linear-gradient(to left, rgba(15, 35, 64, 0.045), transparent 48px);
-  }
-  .sheet-spread .sheet-page:last-child {
-    padding-right: 0;
-    background: linear-gradient(to right, rgba(15, 35, 64, 0.045), transparent 48px);
   }
   .js .sheet-page {
     opacity: 0;
@@ -3906,4 +3896,41 @@ html { -webkit-tap-highlight-color: transparent; }
   .q-tile .q-glyph { transition: background-color 0.35s var(--ease), color 0.35s var(--ease); }
   .q-tile:hover .q-glyph { background: rgba(255, 255, 255, 0.16); color: var(--brand-ink); }
   .q-tile:hover .q-tick { background: rgba(255, 255, 255, 0.9); color: var(--brand); }
+}
+
+/* ---------- Desktop: the scheme list as a plain open book ----------
+   Two white pages meeting at a soft centre fold, a few page edges showing at the sides, page numbers.
+   The pages still swing open from the spine when the book scrolls into view. */
+@media (min-width: 1024px) {
+  .sheet { background: transparent; box-shadow: none; border-radius: 0; padding-inline: 0; }
+  .sheet-spread { gap: 0; margin-top: var(--space-6); filter: drop-shadow(0 22px 34px rgba(15, 35, 64, 0.12)); }
+  .sheet-spread .sheet-page {
+    position: relative;
+    padding: clamp(36px, 3.4vw, 56px) clamp(32px, 3.4vw, 56px) 64px;
+    background: #fff;
+  }
+  .sheet-spread .sheet-page:first-child {
+    border-radius: 10px 3px 3px 10px;
+    background: linear-gradient(to left, rgba(15, 35, 64, 0.07), rgba(15, 35, 64, 0) 56px), #fff;
+    /* a few page edges under the left page */
+    box-shadow: -4px 0 0 -1px #fff, -4px 0 0 0 rgba(15, 35, 64, 0.08), -8px 0 0 -2px #fff, -8px 0 0 -1px rgba(15, 35, 64, 0.07);
+  }
+  .sheet-spread .sheet-page:last-child {
+    border-radius: 3px 10px 10px 3px;
+    background: linear-gradient(to right, rgba(15, 35, 64, 0.07), rgba(15, 35, 64, 0) 56px), #fff;
+    box-shadow: 4px 0 0 -1px #fff, 4px 0 0 0 rgba(15, 35, 64, 0.08), 8px 0 0 -2px #fff, 8px 0 0 -1px rgba(15, 35, 64, 0.07);
+  }
+  /* the fold line */
+  .sheet-spread .sheet-page:first-child::before {
+    content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 1px; background: rgba(15, 35, 64, 0.1);
+  }
+  /* page numbers */
+  .sheet-spread .sheet-page::after {
+    position: absolute; bottom: 22px; left: 0; right: 0; text-align: center;
+    font-size: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; letter-spacing: 0.08em;
+  }
+  .sheet-spread .sheet-page:first-child::after { content: "1"; }
+  .sheet-spread .sheet-page:last-child::after { content: "2"; }
+  .sheet-title, .sheet-note { position: relative; }
+  .sheet-foot { margin-top: var(--space-6); }
 }
