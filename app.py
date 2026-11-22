@@ -2,6 +2,7 @@ import hmac
 import json
 import os
 import secrets
+from urllib.parse import parse_qsl, urlencode
 from datetime import date, datetime
 
 from flask import (Flask, Response, abort, has_request_context, jsonify, redirect,
@@ -657,12 +658,6 @@ def api_ics(scheme_id):
 
 @app.errorhandler(404)
 def not_found(_e):
-    if os.environ.get("VERCEL"):  # TEMP: hosting diagnosis
-        app.logger.warning("404 path=%r script=%r qs=%r uri=%r", request.environ.get("PATH_INFO"),
-                           request.environ.get("SCRIPT_NAME"), request.environ.get("QUERY_STRING"),
-                           request.environ.get("RAW_URI") or request.environ.get("REQUEST_URI"))
-        return Response(f"debug path={request.environ.get('PATH_INFO')!r} script={request.environ.get('SCRIPT_NAME')!r} "
-                        f"qs={request.environ.get('QUERY_STRING')!r}", status=404, mimetype="text/plain")
     return render_template("error.html", page="", title="Page not found",
                            text="This page does not exist. Your saved schemes and tracker are safe."), 404
 
@@ -671,6 +666,21 @@ def not_found(_e):
 def server_error(_e):
     return render_template("error.html", page="", title="Something went wrong",
                            text="Please try again in a moment. Nothing you typed was stored."), 500
+
+
+def _restore_vercel_path(wsgi_app):
+    """vercel.json sends every request as /api/index?__p=<original path>; put the original path back."""
+    def wrapped(environ, start_response):
+        pairs = parse_qsl(environ.get("QUERY_STRING", ""), keep_blank_values=True)
+        path = next((v for k, v in pairs if k == "__p"), None)
+        if path is not None:
+            environ["PATH_INFO"] = "/" + path.lstrip("/")
+            environ["QUERY_STRING"] = urlencode([(k, v) for k, v in pairs if k != "__p"])
+        return wsgi_app(environ, start_response)
+    return wrapped
+
+
+app.wsgi_app = _restore_vercel_path(app.wsgi_app)
 
 
 if __name__ == "__main__":
