@@ -197,9 +197,12 @@ def _disability(t: str):
 
 def _marks(t: str):
     for m in re.finditer(r"(\d{2,3}(?:\.\d+)?)\s*(?:%|percent|per cent|శాతం|प्रतिशत)", t, re.I):
-        near = t[max(0, m.start() - 30):m.end() + 15]
-        if re.search(_DISABILITY, near, re.I):
-            continue  # "60% handicapped" is a disability certificate, not exam marks
+        # "60% handicapped", "40% disability", "hearing disability (50%)" describe a disability
+        # certificate, not exam marks. "85%, no disability" is still marks.
+        before, after = t[max(0, m.start() - 30):m.start()], t[m.end():m.end() + 25]
+        if (re.match(r"\W{0,3}(?:physically\s+)?(?:" + _DISABILITY + ")", after, re.I)
+                or re.search(r"(?:" + _DISABILITY + r")\w*(?:\s+(?:certificate|cert|of|is|percentage))*\W{0,15}$", before, re.I)):
+            continue
         v = _num(m.group(1))
         if 0 < v <= 100:
             return v

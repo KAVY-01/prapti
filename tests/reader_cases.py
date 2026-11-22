@@ -169,4 +169,9 @@ TRAPS_AND_SCRIPTS = [
           annual_income=90000)),
     ("मेरा बेटा दसवीं में है, हम मुस्लिम हैं, गाँव में रहते हैं, महीने की कमाई 7000",
      dict(gender="male", education_level="class_10", community="Minority", area="rural", annual_income=84000)),
+    ("I am a girl, B.Tech 1st year, SC, income 1.5 lakh, village in Nalgonda, govt college, 85%, no disability",
+     dict(gender="female", education_level="professional", year=1, community="SC", annual_income=150000,
+          area="rural", district="Nalgonda", college_type="government", marks_percent=85, disability=False)),
+    ("Disability certificate 45%, I got 72% in inter, now degree 1st year, BC",
+     dict(disability=True, marks_percent=72, education_level="degree", year=1, community="BC")),
 ]
