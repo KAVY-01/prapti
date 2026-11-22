@@ -283,11 +283,14 @@ class TestFlow(unittest.TestCase):
         self.assertIn("data-speak", page)
         self.assertIn('id="how"', self.c.get("/scheme/ts-rtf").get_data(as_text=True))
 
-    def test_first_visit_language_choice(self):
+    def test_language_switch_without_first_visit_picker(self):
+        # The first screen stays clean: language is chosen in the top bar, not a big picker
         fresh = app.test_client()
-        self.assertIn('class="lang-pick"', fresh.get("/").get_data(as_text=True))
+        page = fresh.get("/").get_data(as_text=True)
+        self.assertNotIn('class="lang-pick"', page)
+        self.assertIn('href="/lang/te"', page)
         fresh.get("/lang/te")
-        self.assertNotIn('class="lang-pick"', fresh.get("/").get_data(as_text=True))
+        self.assertIn('<html lang="te">', fresh.get("/").get_data(as_text=True))
 
     def test_calendar_file(self):
         r = self.c.get("/api/ics/aicte-pragati")

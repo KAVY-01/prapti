@@ -55,13 +55,15 @@ class TestMissingDetails(unittest.TestCase):
         self.schemes = load_schemes()
         self.lakshmi = copy.deepcopy(load_samples()[0]["profile"])
 
-    def test_missing_area_gives_maybe(self):
+    def test_missing_area_does_not_block_bc_ebc(self):
+        # BC/EBC scheme has no area rule in data/schemes.json (flat ₹2,00,000 limit),
+        # so a missing area must not stop it being "likely" for a matching student.
         self.lakshmi["area"] = None
         result = match_all(self.lakshmi, self.schemes)
+        likely_ids = [r["id"] for r in result["likely"]]
         maybe_ids = [r["id"] for r in result["maybe"]]
-        self.assertIn("ts-postmatric-bc-ebc", maybe_ids)
-        bc = next(r for r in result["maybe"] if r["id"] == "ts-postmatric-bc-ebc")
-        self.assertIn("area", bc["missing_fields"])
+        self.assertIn("ts-postmatric-bc-ebc", likely_ids)
+        self.assertNotIn("ts-postmatric-bc-ebc", maybe_ids)
 
     def test_missing_income_gives_maybe_not_no(self):
         self.lakshmi.pop("annual_income")

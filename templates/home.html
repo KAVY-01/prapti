@@ -3,16 +3,6 @@
 {% block page_class %}page-home{% endblock %}
 {% block content %}
 <section class="hero-field">
-  {% if first_visit %}
-  <nav class="lang-pick" aria-label="{{ t('lang.pick') }}">
-    <p class="lang-pick-title">Choose your language · మీ భాష ఎంచుకోండి · अपनी भाषा चुनिए</p>
-    <div class="lang-pick-row">
-      <a class="lang-pick-btn" href="/lang/te" lang="te">తెలుగు</a>
-      <a class="lang-pick-btn" href="/lang/hi" lang="hi">हिंदी</a>
-      <a class="lang-pick-btn" href="/lang/en" lang="en">English</a>
-    </div>
-  </nav>
-  {% endif %}
   {# First screen: one clear job. Everything else is one scroll away. #}
   <div class="hero-simple">
     {% set title_parts = t('home.title').split('{') %}

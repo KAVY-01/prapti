@@ -235,32 +235,10 @@
         {
           "field": "annual_income",
           "op": "lte",
-          "value": 150000,
-          "text_en": "Family income up to ₹1,50,000 a year (rural) — you said about {user_value}.",
-          "text_te": "కుటుంబ ఆదాయం సంవత్సరానికి ₹1,50,000 లోపు (rural) — మీరు చెప్పింది సుమారు {user_value}.",
-          "text_hi": "पारिवारिक आय सालाना ₹1,50,000 तक (rural) — आपने बताया लगभग {user_value}।",
-          "only_if": [
-            {
-              "field": "area",
-              "op": "eq",
-              "value": "rural"
-            }
-          ]
-        },
-        {
-          "field": "annual_income",
-          "op": "lte",
           "value": 200000,
-          "text_en": "Family income up to ₹2,00,000 a year (urban) — you said about {user_value}.",
-          "text_te": "కుటుంబ ఆదాయం సంవత్సరానికి ₹2,00,000 లోపు (urban) — మీరు చెప్పింది సుమారు {user_value}.",
-          "text_hi": "पारिवारिक आय सालाना ₹2,00,000 तक (urban) — आपने बताया लगभग {user_value}।",
-          "only_if": [
-            {
-              "field": "area",
-              "op": "eq",
-              "value": "urban"
-            }
-          ]
+          "text_en": "Family income up to ₹2,00,000 a year — you said about {user_value}.",
+          "text_te": "కుటుంబ ఆదాయం సంవత్సరానికి ₹2,00,000 లోపు — మీరు చెప్పింది సుమారు {user_value}.",
+          "text_hi": "पारिवारिक आय सालाना ₹2,00,000 तक — आपने बताया लगभग {user_value}।"
         }
       ],
       "documents": [

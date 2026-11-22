@@ -77,6 +77,15 @@
   }
   window.praptiToast = toast;
 
+  // Indian digit grouping (1,10,000) by hand: the browser's locale formatter costs ~30ms on a slow phone the first time
+  function groupIN(n) {
+    var str = String(Math.round(Math.abs(n)));
+    var last = str.slice(-3), rest = str.slice(0, -3);
+    if (rest) last = "," + last;
+    rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    return (n < 0 ? "-" : "") + rest + last;
+  }
+
   // ---------- Little gold sparkles: a reward when something good happens ----------
   var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg>';
   function sparkle(x, y, n) {
@@ -107,7 +116,7 @@
     var reduceM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (target > 0 && !reduceM) {
       var c0 = null, dur = 1400;
-      var fmtInr = function (n) { return "\u20b9" + Math.round(n).toLocaleString("en-IN"); };
+      var fmtInr = function (n) { return "\u20b9" + groupIN(n); };
       amt.textContent = fmtInr(0);
       var countTick = function (ts) {
         if (!c0) c0 = ts;
@@ -213,7 +222,7 @@
         } catch (e) { stopUI(); toast(T("home.mic_error")); return; }
         mic.setAttribute("aria-pressed", "true");
         micLabel.textContent = T("home.listening");
-        try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+        try { if (navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) navigator.vibrate(12); } catch (e) {}
       }
       mic.addEventListener("click", function () {
         if (rec) { try { rec.stop(); } catch (e) { stopUI(); } return; }
@@ -400,7 +409,7 @@
   }
 
   // ---------- Questions: show the choice instantly before the next screen loads ----------
-  function buzz() { try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {} } // a tiny tick on Android
+  function buzz() { try { if (navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) navigator.vibrate(8); } catch (e) {} } // a tiny tick on Android
   var tiles = Array.prototype.slice.call(document.querySelectorAll("[data-q-form] .q-tile"));
   tiles.forEach(function (tile) {
     tile.addEventListener("click", function () {
@@ -549,7 +558,7 @@
     var wiList = wi.querySelector("[data-wi-list]");
     var wiSummary = wi.querySelector("[data-wi-summary]");
     var wiReset = wi.querySelector("[data-wi-reset]");
-    var inr = function (n) { return "\u20b9" + Math.round(n).toLocaleString("en-IN"); };
+    var inr = function (n) { return "\u20b9" + groupIN(n); };
     var fmt = function (f, v) { return f === "annual_income" ? inr(v) : Math.round(v) + "%"; };
     var short = function (f, v) {
       if (f !== "annual_income") return v + "%";
@@ -689,7 +698,9 @@
     });
 
     wi.hidden = false;
-    check();
+    // Let the page arrive (transition, entrances) before the first check runs
+    var whenIdle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 450); };
+    whenIdle(function () { check(); }, { timeout: 900 });
   }
 
   // ---------- 90-second guided tour (/demo): a guide card that spotlights each feature on the real pages ----------
