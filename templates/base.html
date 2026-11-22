@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#d4e7f8">
+  <meta name="theme-color" content="#f3f6fb">
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/icon.svg') }}">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="description" content="Prapti (ప్రాప్తి, 'receiving what is due'): tell us about yourself in your own words and see which Telangana and central government scholarships you can likely claim, and why.">
-  <title>{% block title %}Prapti – the scholarships you can claim{% endblock %}</title>
+  <title>{% block title %}Prapti – your scholarships are waiting{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='img/icon.svg') }}" type="image/svg+xml">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Prapti – the scholarships you can claim">
+  <meta property="og:title" content="Prapti – your scholarships are waiting">
   <meta property="og:description" content="Say your situation in plain words, in English, Telugu or Hindi. See which Telangana and central scholarships you can likely claim, why, and exactly how to apply. Free. No ID numbers.">
   <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +29,27 @@
   {"prefetch": [{"where": {"and": [{"href_matches": "/*"}, {"not": {"href_matches": "/lang/*"}}, {"not": {"href_matches": "/demo"}},
     {"not": {"href_matches": "/admin/*"}}, {"not": {"href_matches": "/r/*"}}, {"not": {"href_matches": "/api/*"}},
     {"not": {"selector_matches": "[target=_blank], [download], [data-no-prefetch]"}}]}, "eagerness": "moderate"}]}
+  </script>
+  {# Page-to-page motion: slide the way you are going (Find -> My tracker -> About). Must run before first paint. #}
+  <script>
+  (function () {
+    function rank(u) {
+      var p = (u && new URL(u, location.href).pathname) || "/";
+      if (/^\/tracker/.test(p)) return 1;
+      if (/^\/(about|changes)/.test(p)) return 2;
+      if (/^\/helper/.test(p)) return 3;
+      return 0;
+    }
+    function dir(from, to) { var a = rank(from), b = rank(to); return b > a ? "forward" : b < a ? "back" : "same"; }
+    window.addEventListener("pagereveal", function (e) {
+      if (!e.viewTransition || !window.navigation || !navigation.activation || !navigation.activation.from) return;
+      try { e.viewTransition.types.add(dir(navigation.activation.from.url, location.href)); } catch (err) {}
+    });
+    window.addEventListener("pageswap", function (e) {
+      if (!e.viewTransition || !e.activation || !e.activation.entry) return;
+      try { e.viewTransition.types.add(dir(location.href, e.activation.entry.url)); } catch (err) {}
+    });
+  })();
   </script>
 </head>
 <body class="on-{{ page|default('') }}">

@@ -778,4 +778,23 @@
     document.addEventListener("pointerup", function () { ball.classList.remove("is-down"); });
     document.documentElement.addEventListener("mouseleave", function () { ball.classList.remove("is-on"); });
   }
+
+  // ---------- Hover bubble: start the circle where the cursor comes in, shrink it toward where it leaves ----------
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var BUBBLE = ".tap-btn, .btn, .sample-card, .q-tile";
+    function aim(el, ev) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty("--bx", (ev.clientX - r.left) + "px");
+      el.style.setProperty("--by", (ev.clientY - r.top) + "px");
+      el.style.setProperty("--bd", Math.ceil(Math.hypot(r.width, r.height) * 2.1) + "px");
+    }
+    document.addEventListener("pointerover", function (ev) {
+      var el = ev.target.closest && ev.target.closest(BUBBLE);
+      if (el && !el.contains(ev.relatedTarget)) aim(el, ev);
+    });
+    document.addEventListener("pointerout", function (ev) {
+      var el = ev.target.closest && ev.target.closest(BUBBLE);
+      if (el && !el.contains(ev.relatedTarget)) aim(el, ev);
+    });
+  }
 })();

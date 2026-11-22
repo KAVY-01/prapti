@@ -325,7 +325,7 @@ h3 {
 }
 
 .slip[data-ground="field"] {
-  --ground: #c8dff4; /* matches the sky behind the home slip */
+  --ground: var(--bg);
 }
 
 .perforation {
@@ -363,12 +363,12 @@ h3 {
   right: 0;
   top: -1px;
   height: 9px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9'%3E%3Ccircle cx='12' cy='0' r='8' fill='%23d4e7f8'/%3E%3C/svg%3E") repeat-x left top;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9'%3E%3Ccircle cx='12' cy='0' r='8' fill='%23f3f6fb'/%3E%3C/svg%3E") repeat-x left top;
 }
 
 /* ---------- Home: hero field + the slip ---------- */
 .hero-field {
-  background: linear-gradient(180deg, #bcd8f2 0%, #d4e7f8 100%); /* soft sky */
+  background: var(--bg);
   padding: clamp(12px, 2.5vw, 28px) var(--gutter) clamp(48px, 8vw, 120px);
 }
 
@@ -431,7 +431,7 @@ h3 {
 
 .ask textarea:focus {
   outline: none;
-  background: #e6f1fc;
+  background: #ffffff;
   outline: 3px solid var(--brand);
   outline-offset: -3px;
 }
@@ -703,7 +703,7 @@ h3 {
   margin-top: clamp(96px, 12vw, 180px);
   padding: clamp(48px, 8vw, 120px) var(--gutter);
   overflow: hidden;
-  background: var(--ink);
+  background: var(--surface-2);
 }
 
 .sheet-ground {
@@ -941,12 +941,12 @@ h3 {
   font-weight: 600;
   letter-spacing: 0;
   color: var(--ink);
-  background: #bcd6ef;
+  background: var(--surface-2);
   box-shadow: -8px 8px 40px 10px rgba(15, 35, 64, 0.08);
 }
 
-.faq-group:nth-of-type(2) .faq-sticker { background: #cfe3f7; }
-.faq-group:nth-of-type(3) .faq-sticker { background: #a9c8e6; }
+.faq-group:nth-of-type(2) .faq-sticker { background: var(--surface-2); }
+.faq-group:nth-of-type(3) .faq-sticker { background: var(--surface-2); }
 
 .faq-list {
   width: min(100%, 860px);
@@ -1313,7 +1313,7 @@ h3 {
 
 .scheme-card:hover {
   transform: translateY(-2px);
-  background: #f8fbff;
+  background: #f6f9fd;
 }
 
 .scheme-card:active {
@@ -1438,7 +1438,7 @@ h3 {
 }
 
 .scheme-no {
-  background: #e2eefa;
+  background: var(--surface-2);
 }
 
 /* Badges: sentence case, readable */
@@ -1648,7 +1648,7 @@ h3 {
 }
 
 .check-item label:hover {
-  background: #f8fbff;
+  background: #f6f9fd;
 }
 
 .check-item input {
@@ -1849,7 +1849,7 @@ h3 {
 .footer-meaning p {
   max-width: 34em;
   font-size: 16px;
-  color: #e3edf7;
+  color: var(--surface-2);
 }
 
 .footer-meaning {
@@ -2668,7 +2668,7 @@ h3 {
 }
 
 .admin-item:hover {
-  background: #f8fbff;
+  background: #f6f9fd;
 }
 
 .admin-name {
@@ -2755,7 +2755,7 @@ h3 {
   margin: var(--space-4) 0 0;
   padding: var(--space-4);
   border: 0;
-  background: #dcebf9;
+  background: var(--surface-2);
 }
 
 .admin-rule legend {
@@ -3390,7 +3390,7 @@ h1, h2, h3,
 }
 
 .q-tile:hover {
-  background: #c2dbf1;
+  background: var(--surface-2);
   transform: translateY(-2px);
 }
 
@@ -3483,7 +3483,7 @@ h1, h2, h3,
 }
 
 .q-skip:hover {
-  background: #bcd6ef;
+  background: var(--surface-2);
 }
 
 .q-skip:active {
@@ -3568,7 +3568,7 @@ h1, h2, h3,
   padding: var(--space-3) var(--space-5); cursor: pointer; list-style: none;
 }
 .edit-row summary::-webkit-details-marker { display: none; }
-.edit-row summary:hover { background: #f8fbff; }
+.edit-row summary:hover { background: #f6f9fd; }
 .edit-row summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
 .edit-label { grid-area: label; font-size: var(--step-small); color: var(--ink-2); }
 .edit-value { grid-area: value; font-weight: 600; color: var(--ink); }
@@ -3732,11 +3732,37 @@ html { -webkit-tap-highlight-color: transparent; }
   @view-transition { navigation: auto; }
   .topbar { view-transition-name: topbar; }
   .bottom-nav { view-transition-name: bottombar; }
-  ::view-transition-old(root) { animation: vt-out 140ms ease-in both; }
-  ::view-transition-new(root) { animation: vt-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  main#main { view-transition-name: page; }
+  .top-links a[aria-current="page"] { view-transition-name: navpill; }
+  .bottom-nav a[aria-current="page"] { view-transition-name: tabpill; }
+
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; }
+  /* same section (e.g. results -> a scheme): the page fades up */
+  ::view-transition-old(page) { animation: vt-out 140ms ease-in both; }
+  ::view-transition-new(page) { animation: vt-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  /* moving right in the menu: the page slides in from the right; moving left: from the left */
+  html:active-view-transition-type(forward)::view-transition-old(page) { animation: vt-out-left 220ms cubic-bezier(0.4, 0, 1, 1) both; }
+  html:active-view-transition-type(forward)::view-transition-new(page) { animation: vt-in-right 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  html:active-view-transition-type(back)::view-transition-old(page) { animation: vt-out-right 220ms cubic-bezier(0.4, 0, 1, 1) both; }
+  html:active-view-transition-type(back)::view-transition-new(page) { animation: vt-in-left 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  /* the active menu pill glides to its new place */
+  ::view-transition-group(navpill), ::view-transition-group(tabpill) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
 }
 @keyframes vt-out { to { opacity: 0; } }
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes vt-out-left { to { opacity: 0; transform: translateX(-36px); } }
+@keyframes vt-in-right { from { opacity: 0; transform: translateX(48px); } }
+@keyframes vt-out-right { to { opacity: 0; transform: translateX(36px); } }
+@keyframes vt-in-left { from { opacity: 0; transform: translateX(-48px); } }
+
+/* Active menu item: a soft pill (it glides between pages) */
+.top-links a { border-radius: 999px; }
+.top-links a[aria-current="page"] { background: var(--surface-2); }
+.bottom-nav a[aria-current="page"]::before {
+  content: ""; position: absolute; top: 6px; left: 50%; width: 56px; height: 30px; margin-left: -28px;
+  border-radius: 999px; background: var(--surface-2); z-index: -1;
+}
+.bottom-nav a { isolation: isolate; }
 
 /* A button that is sending shows a small spinner and can't be pressed again */
 .is-busy { position: relative; cursor: progress; }
@@ -3839,3 +3865,45 @@ html { -webkit-tap-highlight-color: transparent; }
 /* With script, the word starts whole and the cracks open as it comes into view, spreading from the left */
 .js .drought-plates path { stroke-width: 0; transition: stroke-width 1.3s cubic-bezier(0.22, 1, 0.36, 1); transition-delay: var(--d, 0ms); }
 .js .footer-name.is-seen .drought-plates path { stroke-width: var(--w, 3px); }
+
+.sheet-ground { display: none; }
+.sheet { box-shadow: 0 1px 0 rgba(15, 35, 64, 0.04), 0 24px 60px -30px rgba(15, 35, 64, 0.25); }
+
+/* ---------- Hover bubble: a soft circle grows from where the cursor enters and fills the button ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .tap-btn, .btn, .sample-card, .q-tile {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .tap-btn::before, .btn::before, .sample-card::before, .q-tile::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: var(--bx, 0px);
+    top: var(--by, 50%);
+    width: var(--bd, 640px);
+    height: var(--bd, 640px);
+    margin: calc(var(--bd, 640px) / -2) 0 0 calc(var(--bd, 640px) / -2);
+    border-radius: 50%;
+    background: var(--bubble, var(--brand));
+    transform: scale(0);
+    transition: transform 0.75s cubic-bezier(0.33, 1, 0.68, 1);
+    pointer-events: none;
+  }
+  .tap-btn:hover::before, .btn:hover::before, .sample-card:hover::before, .q-tile:hover::before { transform: scale(1); }
+
+  /* navy buttons: the bubble is a brighter navy */
+  .tap-btn, .btn-primary { --bubble: #2c5196; }
+  .tap-btn:hover, .btn-primary:hover { background: var(--brand); }
+
+  /* light buttons and cards: the bubble is navy and the text turns white */
+  .btn-secondary, .sample-card, .q-tile { --bubble: var(--brand); transition: color 0.35s var(--ease), transform var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease); }
+  .btn-secondary:hover, .sample-card:hover, .q-tile:hover { color: var(--brand-ink); background: var(--surface-2); }
+  .sample-card .sample-blurb, .sample-card .sample-arrow { transition: color 0.35s var(--ease), transform var(--dur-fast) var(--ease); }
+  .sample-card:hover .sample-blurb { color: var(--field-ink-2); }
+  .sample-card:hover .sample-arrow { color: var(--brand-ink); }
+  .q-tile .q-glyph { transition: background-color 0.35s var(--ease), color 0.35s var(--ease); }
+  .q-tile:hover .q-glyph { background: rgba(255, 255, 255, 0.16); color: var(--brand-ink); }
+  .q-tile:hover .q-tick { background: rgba(255, 255, 255, 0.9); color: var(--brand); }
+}

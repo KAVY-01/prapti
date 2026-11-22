@@ -2,30 +2,30 @@
    Direction: "the page is the object" — every result is the paper slip a student
    carries to the Mee Seva counter. Light sky-blue ground, pale cards, navy actions. */
 :root {
-  /* Colour: soothing blues. Every text/background pair is 4.5:1 or better. */
-  --bg: #d4e7f8;          /* light sky-blue ground */
-  --paper: #f2f8fe;       /* the slip: palest sky, not stark white */
-  --surface: #f2f8fe;     /* alias kept for older rules */
-  --surface-2: #c2dbf1;   /* tone step: chips, inset panels */
-  --surface-3: #a9c8e6;   /* deeper step: pressed, tracks */
+  /* Colour: one calm system. Off-white ground, white cards, one soft tint, navy. 4.5:1 or better. */
+  --bg: #f3f6fb;          /* calm off-white ground */
+  --paper: #ffffff;       /* cards */
+  --surface: #ffffff;     /* alias kept for older rules */
+  --surface-2: #e8eff8;   /* the one soft tint: chips, fields, tiles */
+  --surface-3: #d3dfee;   /* pressed, tracks, lines */
   --ink: #0f2340;         /* deep navy */
   --ink-2: #2f4a68;       /* soft ink, secondary text */
   --ink-3: #3e5877;       /* hints */
   --brand: #1f3b70;       /* navy: buttons and actions */
   --brand-hover: #162c56;
   --brand-ink: #ffffff;
-  --brand-soft: #bcd6ef;  /* sky: secondary buttons, selected chips */
-  --field: #24467e;       /* the one large field (results summary, footer) */
+  --brand-soft: #e8eff8;  /* same tint: secondary buttons, selected chips */
+  --field: #1f3b70;       /* the one large field = brand navy (results summary) */
   --field-ink: #ffffff;
-  --field-ink-2: #cfe0f3;
+  --field-ink-2: #cdd9ea;
 
   /* Status */
   --likely: #1f3b70;
-  --likely-bg: #d0e4f7;
+  --likely-bg: #e8eff8;
   --maybe: #553a8a;       /* soft violet: "check one thing" stands out without yellow */
-  --maybe-bg: #e3dbf3;
+  --maybe-bg: #ece7f6;
   --no: #38506b;
-  --no-bg: #d8e3ee;
+  --no-bg: #eef1f5;
   --urgent: #a3261b;
   --urgent-bg: #f1d9d2;
   --focus: #0b63c9;       /* focus ring only: bright blue, no yellow */
