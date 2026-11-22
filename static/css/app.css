@@ -4002,3 +4002,11 @@ html { -webkit-tap-highlight-color: transparent; }
   88% { transform: rotate(90deg) scale(0.55); opacity: 0.7; }
   94% { transform: rotate(135deg) scale(1.12); opacity: 1; }
 }
+
+/* Tiffany echoed in two small places so the main button reads as part of the system */
+.wi-range { --fill-color: var(--tiffany); }
+.wi-range::-webkit-slider-runnable-track { background: linear-gradient(to right, var(--tiffany) var(--fill), var(--surface-2) var(--fill)); } /* taste-skill-ignore: a form field's own fill */
+.wi-range::-moz-range-progress { background: var(--tiffany); }
+.tour-bar span { background: var(--tiffany); }
+.hero-simple .tap-btn { background: var(--tiffany); }
+.hero-simple .tap-btn:hover { background: var(--tiffany); }

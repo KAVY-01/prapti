@@ -29,6 +29,7 @@
   --urgent: #a3261b;
   --urgent-bg: #f1d9d2;
   --focus: #0b63c9;       /* focus ring only: bright blue, no yellow */
+  --tiffany: #81d8d0;     /* the one fresh accent: main button, What-if fill, tour progress */
 
   /* Type */
   --font-display: "Anek Latin", "Anek Telugu", "Anek Devanagari", system-ui, sans-serif;
