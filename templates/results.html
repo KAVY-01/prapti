@@ -20,7 +20,7 @@
   {% if r.summary.likely_count %}
   {% if r.summary.likely_value_inr %}
   <p class="summary-who">{% if sample_name %}{{ t('res.who_name', name=sample_name, n=r.summary.likely_count) }}{% else %}{{ t('res.who_you', n=r.summary.likely_count) }}{% endif %}</p>
-  <h1 class="summary-title">{{ r.summary.likely_value_text }} {% if t('res.unit') %}<span class="summary-unit">{{ t('res.unit') }}</span>{% endif %}</h1>
+  <h1 class="summary-title"><span data-count-inr="{{ r.summary.likely_value_inr }}">{{ r.summary.likely_value_text }}</span> {% if t('res.unit') %}<span class="summary-unit">{{ t('res.unit') }}</span>{% endif %}</h1>
   {% else %}
   <p class="summary-who">{{ t('res.who_you_novalue') }}</p>
   <h1 class="summary-title">{{ t('res.schemes_n', n=r.summary.likely_count) }}</h1>

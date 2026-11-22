@@ -77,6 +77,52 @@
   }
   window.praptiToast = toast;
 
+  // ---------- Little gold sparkles: a reward when something good happens ----------
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg>';
+  function sparkle(x, y, n) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    for (var k = 0; k < (n || 10); k++) {
+      var el = document.createElement("span");
+      el.className = "sparkle";
+      el.innerHTML = STAR;
+      var a = (Math.PI * 2 * k) / (n || 10) + Math.random() * 0.5;
+      var d = 46 + Math.random() * 56;
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+      el.style.setProperty("--dx", Math.cos(a) * d + "px");
+      el.style.setProperty("--dy", Math.sin(a) * d + "px");
+      el.style.setProperty("--s", (0.55 + Math.random() * 0.7).toFixed(2));
+      el.style.setProperty("--r", Math.round(Math.random() * 180 - 90) + "deg");
+      el.style.animationDelay = Math.round(Math.random() * 90) + "ms";
+      document.body.appendChild(el);
+      setTimeout(function (e) { e.remove(); }.bind(null, el), 1300);
+    }
+  }
+  window.praptiSparkle = sparkle;
+
+  // ---------- Results: the rupee amount counts up, then a few gold sparkles ----------
+  var amt = document.querySelector("[data-count-inr]");
+  if (amt) {
+    var target = +amt.getAttribute("data-count-inr") || 0;
+    var reduceM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (target > 0 && !reduceM) {
+      var c0 = null, dur = 1400;
+      var fmtInr = function (n) { return "\u20b9" + Math.round(n).toLocaleString("en-IN"); };
+      amt.textContent = fmtInr(0);
+      var countTick = function (ts) {
+        if (!c0) c0 = ts;
+        var k = Math.min(1, (ts - c0) / dur);
+        amt.textContent = fmtInr(target * (1 - Math.pow(1 - k, 4)));
+        if (k < 1) { requestAnimationFrame(countTick); return; }
+        amt.textContent = fmtInr(target);
+        amt.classList.add("is-landed");
+        var r = amt.getBoundingClientRect();
+        sparkle(r.right - 8, r.top + r.height * 0.35, 12);
+      };
+      setTimeout(function () { requestAnimationFrame(countTick); }, 380);
+    }
+  }
+
   // Links for screens that arrive in later steps.
   document.querySelectorAll("[data-soon]").forEach(function (a) {
     a.addEventListener("click", function (e) {
@@ -240,7 +286,10 @@
     btn.addEventListener("click", function () {
       var link = btn.dataset.copy;
       var box = document.querySelector("[data-copy-box]");
-      function done() { toast(T("share.copied")); }
+      function done() {
+        toast(T("share.copied"));
+        btn.classList.remove("is-done"); void btn.offsetWidth; btn.classList.add("is-done");
+      }
       function fallback() {
         // Older way to copy; if the browser blocks that too, show the link to copy by hand.
         box.hidden = false;
@@ -307,6 +356,12 @@
         store("prapti:tracker", tracked);
       }
       setTracked(true);
+      trackBtn.classList.remove("is-done"); void trackBtn.offsetWidth; trackBtn.classList.add("is-done");
+      var rb = trackBtn.getBoundingClientRect();
+      sparkle(rb.left + rb.width / 2, rb.top + rb.height / 2, 9);
+      document.querySelectorAll('a[href="/tracker"]').forEach(function (a) {
+        a.classList.remove("is-bump"); void a.offsetWidth; a.classList.add("is-bump");
+      });
       toast(T("det.added"));
     });
   }
@@ -500,7 +555,7 @@
       if (f !== "annual_income") return v + "%";
       return v >= 100000 ? "\u20b9" + (v / 100000).toFixed(v % 100000 ? 1 : 0).replace(".0", "") + "L" : inr(v);
     };
-    var baseline = null, timer = null, ctrl = null, shownValue = 0;
+    var baseline = null, timer = null, ctrl = null, shownValue = 0, prevStatus = {};
     var state = {};
 
     wiFields.forEach(function (box) {
@@ -576,6 +631,9 @@
       countTo(data.summary.likely_value_inr);
       wiList.innerHTML = "";
       var hiddenNo = 0;
+      var lastSeen = prevStatus;
+      prevStatus = {};
+      data.schemes.forEach(function (row) { prevStatus[row.id] = row.status; });
       data.schemes.forEach(function (row) {
         var was = baseline[row.id];
         // Keep the box short: what you'd get, what needs one check, and anything that just changed.
@@ -586,6 +644,9 @@
         var name = document.createElement("span"); name.className = "wi-name"; name.textContent = row.name;
         var pill = document.createElement("span"); pill.className = "wi-pill is-" + row.status; pill.textContent = T("grp." + row.status);
         li.appendChild(name); li.appendChild(pill);
+        if (/is-gain/.test(li.className) && lastSeen[row.id] && lastSeen[row.id] !== "likely") {
+          setTimeout(function (node) { var r = node.getBoundingClientRect(); if (window.praptiSparkle) window.praptiSparkle(r.right - 60, r.top + r.height / 2, 6); }.bind(null, li), 60);
+        }
         if (/is-gain|is-loss/.test(li.className)) {
           var ch = document.createElement("span"); ch.className = "wi-change";
           ch.textContent = li.className.indexOf("is-gain") > -1 ? "\u2191 " + T("wi.gain") : "\u2193 " + T("wi.loss");
@@ -688,6 +749,7 @@
       if (focused) focused.classList.remove("tour-focus");
       focused = step.sel ? document.querySelector(step.sel) : null;
       if (focused) {
+        void focused.offsetWidth; // restart the iris on each step
         focused.classList.add("tour-focus");
         var tall = focused.offsetHeight > window.innerHeight * 0.55;
         focused.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: tall ? "start" : "center" });
@@ -695,7 +757,9 @@
       card.classList.toggle("is-final", !step.sel);
       card.querySelector(".tour-count").textContent = T("tour.step", { i: i + 1, n: STEPS.length });
       card.querySelector(".tour-bar span").style.width = ((i + 1) / STEPS.length) * 100 + "%";
-      card.querySelector(".tour-text").textContent = T(step.text);
+      var tt = card.querySelector(".tour-text");
+      tt.textContent = T(step.text);
+      tt.classList.remove("is-new"); void tt.offsetWidth; tt.classList.add("is-new");
       var x = card.querySelector(".tour-x"); x.textContent = "\u00d7"; x.setAttribute("aria-label", T("tour.close"));
       var back = card.querySelector(".tour-back");
       back.textContent = T("tour.back"); back.hidden = i === 0;

@@ -1,0 +1,19 @@
+{
+  "name": "Prapti",
+  "short_name": "Prapti",
+  "description": "Find government scholarships you are likely eligible for.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1e3a5f",
+  "background_color": "#f3f6fb",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

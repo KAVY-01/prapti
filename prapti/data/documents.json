@@ -1,0 +1,112 @@
+{
+  "caste-certificate": {
+    "name": {"en": "Caste certificate", "te": "కుల ధృవీకరణ పత్రం", "hi": "जाति प्रमाण पत्र"},
+    "where": "mee_seva",
+    "days_min": null,
+    "days_max": 15,
+    "note": {
+      "en": "Issued through Mee Seva. The 15-day figure is from the product spec and has not been checked against the portal.",
+      "te": "మీ సేవ ద్వారా ఇస్తారు. 15 రోజుల గణాంకం ఉత్పత్తి వివరణ నుండి; పోర్టల్‌తో ఇంకా సరిచూడలేదు.",
+      "hi": "मी सेवा के ज़रिए मिलता है। 15 दिन का आँकड़ा उत्पाद विवरण से है, पोर्टल से अभी सत्यापित नहीं।"
+    }
+  },
+  "income-certificate": {
+    "name": {"en": "Income certificate", "te": "ఆదాయ ధృవీకరణ పత్రం", "hi": "आय प्रमाण पत्र"},
+    "where": "mee_seva",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "Family income for the year. Issued by Mee Seva or the MRO office; days not verified.",
+      "te": "సంవత్సర కుటుంబ ఆదాయం. మీ సేవ లేదా MRO కార్యాలయం ఇస్తుంది; రోజులు ధృవీకరించలేదు.",
+      "hi": "उस वर्ष की पारिवारिक आय। मी सेवा या MRO कार्यालय से मिलता है; दिन सत्यापित नहीं।"
+    }
+  },
+  "bonafide-certificate": {
+    "name": {"en": "Bonafide certificate", "te": "బోనాఫైడ్ సర్టిఫికెట్", "hi": "बोनाफाइड प्रमाण पत्र"},
+    "where": "school_college",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "Proof that you study at this school or college this year. Get it from the principal's office.",
+      "te": "ఈ సంవత్సరం ఈ పాఠశాల లేదా కళాశాలలో చదువుతున్నారని రుజువు. ప్రిన్సిపాల్ కార్యాలయం నుండి తీసుకోండి.",
+      "hi": "इस साल आप इस स्कूल या कॉलेज में पढ़ते हैं, यह प्रमाण। प्राचार्य कार्यालय से लें।"
+    }
+  },
+  "previous-marksheet": {
+    "name": {"en": "Previous year marksheet", "te": "గత సంవత్సరం మార్కుల మెమో", "hi": "पिछले साल की मार्कशीट"},
+    "where": "school_college",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "From your last exam. Keep a photocopy.",
+      "te": "మీ గత పరీక్ష నుండి. ఫోటోకాపీ ఉంచుకోండి.",
+      "hi": "आपकी पिछली परीक्षा की। फोटोकॉपी रखें।"
+    }
+  },
+  "bank-passbook": {
+    "name": {"en": "Bank passbook (first page)", "te": "బ్యాంకు పాస్‌బుక్ (మొదటి పేజీ)", "hi": "बैंक पासबुक (पहला पेज)"},
+    "where": "bank",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "The account must be in the student's name. Scholarship money is sent here.",
+      "te": "ఖాతా విద్యార్థి పేరు మీద ఉండాలి. స్కాలర్‌షిప్ డబ్బు ఇక్కడికి వస్తుంది.",
+      "hi": "खाता छात्र के नाम पर होना चाहिए। छात्रवृत्ति की राशि इसी खाते में आती है।"
+    }
+  },
+  "fee-receipt": {
+    "name": {"en": "Fee receipt", "te": "ఫీజు రసీదు", "hi": "फीस रसीद"},
+    "where": "school_college",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "Receipt for this year's fee from the college.",
+      "te": "కళాశాల ఇచ్చిన ఈ సంవత్సరం ఫీజు రసీదు.",
+      "hi": "कॉलेज से मिली इस साल की फीस की रसीद।"
+    }
+  },
+  "disability-certificate": {
+    "name": {"en": "Disability certificate", "te": "వైకల్య ధృవీకరణ పత్రం", "hi": "दिव्यांगता प्रमाण पत्र"},
+    "where": "gazette_or_mro",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "Issued by a government medical board (UDID card also works in many cases). Days not verified.",
+      "te": "ప్రభుత్వ వైద్య బోర్డు ఇస్తుంది (చాలా సందర్భాల్లో UDID కార్డు కూడా పనిచేస్తుంది). రోజులు ధృవీకరించలేదు.",
+      "hi": "सरकारी मेडिकल बोर्ड से मिलता है (कई मामलों में UDID कार्ड भी चलता है)। दिन सत्यापित नहीं।"
+    }
+  },
+  "ration-card": {
+    "name": {"en": "Ration card copy", "te": "రేషన్ కార్డు నకలు", "hi": "राशन कार्ड की प्रति"},
+    "where": "own",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "Copy of the family ration card. Some schemes use it as proof of family.",
+      "te": "కుటుంబ రేషన్ కార్డు నకలు. కొన్ని పథకాలు దీనిని కుటుంబ రుజువుగా వాడతాయి.",
+      "hi": "परिवार के राशन कार्ड की प्रति। कुछ योजनाएँ इसे परिवार का प्रमाण मानती हैं।"
+    }
+  },
+  "passport-photo": {
+    "name": {"en": "Passport-size photo", "te": "పాస్‌పోర్ట్ సైజు ఫోటో", "hi": "पासपोर्ट साइज़ फोटो"},
+    "where": "own",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "A recent photo, usually 2 copies.",
+      "te": "ఇటీవలి ఫోటో, సాధారణంగా 2 కాపీలు.",
+      "hi": "हाल की फोटो, आमतौर पर 2 प्रतियाँ।"
+    }
+  },
+  "self-declaration": {
+    "name": {"en": "Self-declaration", "te": "స్వీయ ధృవీకరణ ప్రకటన", "hi": "स्व-घोषणा पत्र"},
+    "where": "own",
+    "days_min": null,
+    "days_max": null,
+    "note": {
+      "en": "A statement signed by the student. The format depends on the scheme.",
+      "te": "విద్యార్థి సంతకంతో ఇచ్చే ప్రకటన. ఫార్మాట్ పథకాన్ని బట్టి ఉంటుంది.",
+      "hi": "छात्र द्वारा हस्ताक्षरित बयान। प्रारूप योजना पर निर्भर है।"
+    }
+  }
+}

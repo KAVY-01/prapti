@@ -1,0 +1,26 @@
+[
+  {
+    "id": "telangana-epass-postmatric-scst",
+    "name": {"en": "Telangana ePASS Post-Matric Scholarship (SC/ST)", "te": "తెలంగాణ ఈ-పాస్ పోస్ట్ మెట్రిక్ స్కాలర్‌షిప్ (ఎస్సీ/ఎస్టీ)", "hi": "तेलंगाना ई-पास पोस्ट-मैट्रिक छात्रवृत्ति (SC/ST)"},
+    "kind": "scholarship",
+    "closed": false,
+    "benefit_max_inr": null,
+    "benefit": {"en": "Reimbursement of course fees for post-matric study. The amount depends on the course and college; not verified here.", "te": "పోస్ట్ మెట్రిక్ చదువుకు కోర్సు ఫీజు తిరిగి చెల్లింపు. మొత్తం కోర్సు, కళాశాలను బట్టి ఉంటుంది; ఇక్కడ ధృవీకరించలేదు.", "hi": "पोस्ट-मैट्रिक पढ़ाई की कोर्स फीस की प्रतिपूर्ति। राशि कोर्स और कॉलेज पर निर्भर है; यहाँ सत्यापित नहीं।"},
+    "deadline": {"date": null, "note": {"en": "The deadline is set each year on the portal. Check it there before applying.", "te": "గడువు ప్రతి సంవత్సరం పోర్టల్‌లో నిర్ణయిస్తారు. దరఖాస్తుకు ముందు అక్కడ చూడండి.", "hi": "समय-सीमा हर साल पोर్టल पर तय होती है। आवेदन से पहले वहाँ जाँचें।"}},
+    "verified": {"date": null, "note": {"en": "Not yet checked against the official notice. Figures in this file are a first draft.", "te": "ఇంకా అధికారిక నోటీసుతో సరిచూడలేదు. ఈ ఫైల్‌లోని వివరాలు మొదటి డ్రాఫ్ట్.", "hi": "अभी आधिकारिक सूचना से नहीं मिलाया गया। इस फ़ाइल के आँकड़े पहला मसौदा हैं।"}},
+    "source_url": "https://telanganaepass.cgg.gov.in",
+    "rules": [
+      {"id": "scst-community", "field": "community", "op": "in", "value": ["SC", "ST"], "limit_label": {"en": "Community: SC or ST", "te": "సామాజిక వర్గం: ఎస్సీ లేదా ఎస్టీ", "hi": "सामुदायिक वर्ग: SC या ST"}, "sentence": {"en": "Your community is {answer}; this scheme is for SC or ST students", "te": "మీ సామాజిక వర్గం {answer}; ఈ పథకం ఎస్సీ లేదా ఎస్టీ విద్యార్థులకు", "hi": "आपका वर्ग {answer} है; यह योजना SC या ST छात्रों के लिए है"}},
+      {"id": "scst-income", "field": "income_inr", "op": "lte", "value": 250000, "limit_label": {"en": "Family income ₹2,50,000 a year or less", "te": "కుటుంబ ఆదాయం సంవత్సరానికి ₹2,50,000 లేదా తక్కువ", "hi": "पारिवारिक आय ₹2,50,000 सालाना या कम"}, "sentence": {"en": "Family income ₹{answer} a year; limit is ₹2,50,000 or less", "te": "కుటుంబ ఆదాయం సంవత్సరానికి ₹{answer}; పరిమితి ₹2,50,000 లేదా తక్కువ", "hi": "पारिवारिक आय ₹{answer} सालाना; सीमा ₹2,50,000 या कम है"}},
+      {"id": "scst-level", "field": "education_level", "op": "in", "value": ["inter", "iti_poly", "degree", "professional", "pg"], "limit_label": {"en": "Studying after class 10", "te": "పదో తరగతి తర్వాత చదువు", "hi": "दसवीं के बाद की पढ़ाई"}, "sentence": {"en": "You are in {answer}; this scheme is for students after class 10", "te": "మీ చదువు స్థాయి {answer}; ఈ పథకం పదో తరగతి తర్వాత చదివే విద్యార్థులకు", "hi": "आपकी पढ़ाई का स्तर {answer} है; यह योजना दसवीं के बाद पढ़ने वाले छात्रों के लिए है"}}
+    ],
+    "documents": ["caste-certificate", "income-certificate", "previous-marksheet", "bonafide-certificate", "bank-passbook", "passport-photo"],
+    "steps": {
+      "en": ["Open the ePASS portal and register as a new student.", "Fill the application form with your details and your college name.", "Upload the documents, submit, and note the application number.", "Ask your college to verify the application online."],
+      "te": ["ఈ-పాస్ పోర్టల్ తెరిచి కొత్త విద్యార్థిగా నమోదు చేసుకోండి.", "మీ వివరాలు, కళాశాల పేరుతో దరఖాస్తు ఫారం నింపండి.", "పత్రాలు అప్‌లోడ్ చేసి, సమర్పించి, దరఖాస్తు నంబర్ రాసుకోండి.", "కళాశాలతో ఆన్‌లైన్‌లో దరఖాస్తును ధృవీకరింపజేయండి."],
+      "hi": ["ई-पास पोर्टल खोलें और नए छात्र के रूप में पंजीकरण करें।", "अपने विवरण और कॉलेज के नाम के साथ आवेदन फ़ॉर्म भरें।", "दस्तावेज़ अपलोड करें, जमा करें और आवेदन संख्या नोट कर लें।", "कॉलेज से ऑनलाइन आवेदन का सत्यापन कराएँ।"]
+    },
+    "after_applying": {"en": "Track the status on the portal. The college verifies first, then the money goes to your bank account.", "te": "పోర్టల్‌లో స్థితి చూడండి. ముందు కళాశాల ధృవీకరిస్తుంది; తర్వాత డబ్బు మీ బ్యాంకు ఖాతాలోకి వస్తుంది.", "hi": "पोर्टल पर स्थिति देखें। पहले कॉलेज सत्यापित करता है, फिर राशि आपके बैंक खाते में आती है।"},
+    "verification_notes": {"en": "The rules use the ₹2,50,000 family income limit from the product spec and the community list. The amount and deadline are not verified. Check the portal.", "te": "ఇక్కడి నియమాలు ఉత్పత్తి వివరణలోని ₹2,50,000 ఆదాయ పరిమితి, వర్గాల జాబితా నుండి. మొత్తం, గడువు ధృవీకరించలేదు.", "hi": "यहाँ के नियम उत్పाद विवरण की ₹2,50,000 आय सीमा और वर्ग सूची से हैं। राशि और समय-सीमा सत्यापित नहीं हैं।"}
+  }
+]

@@ -3659,7 +3659,7 @@ h1, h2, h3,
   z-index: 70;
   border-radius: var(--radius-card);
   box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--brand), 0 0 0 100vmax rgba(15, 35, 64, 0.5); /* taste-skill-ignore: tour overlay */
-  transition: box-shadow 400ms var(--ease);
+  animation: tour-iris 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .tour-on .bottom-nav { z-index: 40; }
 .tour-card {
@@ -4010,3 +4010,82 @@ html { -webkit-tap-highlight-color: transparent; }
 .tour-bar span { background: var(--tiffany); }
 .hero-simple .tap-btn { background: var(--tiffany); }
 .hero-simple .tap-btn:hover { background: var(--tiffany); }
+
+
+/* ================= Motion pass: smooth, springy, rewarding ================= */
+
+/* Tour: the spotlight closes in from the edges (an iris), the card springs up, the words slide in */
+@keyframes tour-iris {
+  0% { box-shadow: 0 0 0 64px rgba(255, 255, 255, 0), 0 0 0 96px rgba(31, 59, 112, 0), 0 0 0 100vmax rgba(15, 35, 64, 0); } /* taste-skill-ignore: tour overlay */
+  45% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.9), 0 0 0 16px rgba(31, 59, 112, 0.9), 0 0 0 100vmax rgba(15, 35, 64, 0.4); } /* taste-skill-ignore: tour overlay */
+  100% { box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--brand), 0 0 0 100vmax rgba(15, 35, 64, 0.5); } /* taste-skill-ignore: tour overlay */
+}
+.tour-card { animation: tour-in 700ms var(--spring) both; }
+@keyframes tour-in { from { opacity: 0; translate: 0 28px; scale: 0.94; } to { opacity: 1; translate: 0 0; scale: 1; } }
+.tour-text.is-new { animation: tour-words 520ms var(--ease) both; }
+@keyframes tour-words { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+.tour-bar span { transition: width 700ms var(--ease); }
+.tour-actions .btn { transition: transform 450ms var(--spring), background-color 200ms var(--ease); }
+
+/* Page to page: longer and softer. Same section: the new page settles in from slightly larger, out of a light blur */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(page) { animation: vt-out 280ms cubic-bezier(0.4, 0, 0.2, 1) both; }
+  ::view-transition-new(page) { animation: vt-in 720ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both; }
+  html:active-view-transition-type(forward)::view-transition-old(page) { animation: vt-out-left 320ms cubic-bezier(0.4, 0, 0.2, 1) both; }
+  html:active-view-transition-type(forward)::view-transition-new(page) { animation: vt-in-right 680ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both; }
+  html:active-view-transition-type(back)::view-transition-old(page) { animation: vt-out-right 320ms cubic-bezier(0.4, 0, 0.2, 1) both; }
+  html:active-view-transition-type(back)::view-transition-new(page) { animation: vt-in-left 680ms cubic-bezier(0.16, 1, 0.3, 1) 40ms both; }
+  ::view-transition-group(navpill), ::view-transition-group(tabpill) { animation-duration: 620ms; animation-timing-function: var(--spring); }
+}
+@keyframes vt-out { to { opacity: 0; transform: scale(0.985); } }
+@keyframes vt-in { from { opacity: 0; transform: scale(1.025); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes vt-out-left { to { opacity: 0; transform: translateX(-40px); } }
+@keyframes vt-in-right { from { opacity: 0; transform: translateX(56px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes vt-out-right { to { opacity: 0; transform: translateX(40px); } }
+@keyframes vt-in-left { from { opacity: 0; transform: translateX(-56px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* Sections arrive a little further and settle softly */
+.js [data-reveal] { transform: translateY(22px); transition: opacity 700ms var(--ease), transform 800ms var(--ease); }
+
+/* Every press: a quick squeeze, then a springy release */
+.btn, .tap-btn, .sample-card, .q-tile, .q-pill, .q-skip, .chip, .faq-tab, .lang-switch a, .mic, .link-btn {
+  transition-property: transform, background-color, color, opacity;
+  transition-duration: 450ms, 250ms, 300ms, 250ms;
+  transition-timing-function: var(--spring), var(--ease), var(--ease), var(--ease);
+}
+.btn:active, .tap-btn:active, .sample-card:active, .q-tile:active, .q-pill:active, .q-skip:active, .chip:active, .faq-tab:active, .lang-switch a:active, .mic:active, .link-btn:active {
+  transform: scale(0.965);
+  transition-duration: 90ms;
+}
+.scheme-card { transition: transform 500ms var(--spring), background-color 250ms var(--ease); }
+@media (hover: hover) { .scheme-card:hover { transform: translateY(-4px); } }
+
+/* A tapped answer: the tile settles and its tick pops in */
+.q-tile.is-chosen { animation: tile-pick 420ms var(--spring); }
+@keyframes tile-pick { 0% { transform: scale(0.96); } 100% { transform: none; } }
+.q-tile.is-chosen .q-tick { background: var(--paper); color: var(--brand); animation: tick-pop 460ms var(--spring) both; }
+@keyframes tick-pop { from { transform: scale(0) rotate(-30deg); } to { transform: none; } }
+
+/* Rewards */
+.sparkle { position: fixed; z-index: 3000; width: 14px; height: 14px; margin: -7px 0 0 -7px; pointer-events: none; animation: sparkle-fly 1050ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.sparkle svg { display: block; width: 100%; height: 100%; fill: #f5c542; }
+@keyframes sparkle-fly {
+  0% { opacity: 0; transform: translate(0, 0) scale(0) rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(var(--s)) rotate(var(--r)); }
+}
+[data-count-inr] { display: inline-block; font-variant-numeric: tabular-nums; }
+[data-count-inr].is-landed { animation: amount-land 600ms var(--spring); }
+@keyframes amount-land { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
+[data-track].is-done { animation: done-pop 560ms var(--spring); }
+[data-copy].is-done { animation: done-pop 560ms var(--spring); }
+@keyframes done-pop { 0% { transform: scale(0.9); } 55% { transform: scale(1.06); } 100% { transform: scale(1); } }
+a.is-bump { animation: nav-bump 700ms var(--spring); }
+@keyframes nav-bump { 0% { transform: none; } 30% { transform: translateY(-4px) scale(1.12); } 100% { transform: none; } }
+.wi-change { display: inline-block; animation: tick-pop 500ms var(--spring) both; transform-origin: left center; }
+.toast { transition: opacity 300ms var(--ease), transform 520ms var(--spring); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkle { display: none; }
+  .tour-focus { animation: none; }
+}
