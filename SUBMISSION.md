@@ -1,14 +1,14 @@
 # Submission text (copy into the hackathon form)
 
-**Project name:** Prapti (ప్రాప్తి · प्राप्ति) — receive what's yours
+**Project name:** Prapti (ప్రాప్తి · प्राप्ति): receive what's yours
 
 **Problem statement:** PS5 · Citizens and Public Services · Claim What's Yours
 
 **One-line description:**
-A student in Telangana describes their life in plain words (typed or spoken, in Telugu, Hindi or English) and Prapti shows which scholarships they are likely eligible for, the exact rule behind each match, the documents to collect, the steps on the official portal, and reminders before every last date.
+A student in Telangana describes their life in plain words, even Telugu or Hindi typed in English letters, and Prapti shows which scholarships they are likely eligible for and why, one combined document list for a single trip to Mee Seva, the steps to apply, and reminders before every last date.
 
 **Description (about 150 words):**
-Every year, eligible students in Telangana miss scholarships because the rules are scattered and hard to read, the document list is unclear, and middlemen charge for help that should be free. Prapti asks for nothing but plain words, never an ID number. It reads the message (offline, or with Claude when a key is set) and asks only the few questions that would change a result. A plain rules engine then checks 10 Telangana and central schemes: ePASS, fee reimbursement, NMMS, Central Sector, AICTE Pragati and Saksham, and PM-Vidyalaxmi. Every match shows its rule and the student's own answer. The result is a personal checklist, portal steps, and a tracker with reminders, all in Telugu, Hindi or English. Rules are stored as editable data with a last-verified date. It is free for students; CSR funds, NGOs and Mee Seva centres pay through Helper mode, which includes printable checklists.
+Every year, eligible students in Telangana miss scholarships because the rules are scattered, the document list is unclear, and middlemen charge for help that should be free. Prapti asks only for plain words, never an ID number. Its offline reader understands English, Telugu, Hindi, and Telugu or Hindi typed in English letters (100% of details read correctly on 72 test messages, nothing invented), then asks only the questions that would change a result. A plain rules engine checks 10 Telangana and central schemes and shows every rule with the student's own answer, including "nearly a match: ₹20,000 over the limit". All documents for all their schemes come as one list grouped by place, with a warning when a certificate takes longer than the days left. A tracker, reminders and WhatsApp sharing follow. Rules are editable data; a page checker flags official pages that changed. Free for students; NGOs, CSR funds and Mee Seva centres use Helper mode.
 
 **Team:** (fill in your names / solo)
 
@@ -19,9 +19,9 @@ Every year, eligible students in Telangana miss scholarships because the rules a
 **How to run:** see README.md (`pip install -r requirements.txt`, then `python app.py`, open http://127.0.0.1:5050).
 
 **Demo path for judges (2 minutes):**
-1. Home → tap "Ravi" → results with the reasons.
-2. Open "AICTE Pragati" → not a match, with the one rule that failed.
-3. New search in Telugu: "నేను డిగ్రీ మొదటి సంవత్సరం, మా ఊరు నల్గొండ, మేము SC, మా ఆదాయం 80 వేలు" → one quick question → results.
-4. Add a scheme to My tracker → tick documents → see the next step.
-5. Switch to తెలుగు or हिंदी in the top bar.
-6. /helper (operator mode, print checklist) and /about (who pays).
+1. Open the link on a phone. Type `nenu ammayi, B.Tech first year, memu SC, aadayam nelaku 8 velu, Nalgonda palle` → answer two taps → results with the amount and the first step.
+2. Open "AICTE Pragati" → every rule with her own answer, last date, and documents.
+3. Back → "See my one-trip list" → documents grouped by place, with the "apply today" warning.
+4. Add a scheme to My tracker → see days left and the next step.
+5. Switch to తెలుగు or हिंदी in the top bar; "Send on WhatsApp" on the results.
+6. About → "See when each scheme was last checked" → "Check the official pages now".
