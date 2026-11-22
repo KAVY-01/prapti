@@ -757,22 +757,21 @@
     ball.setAttribute("aria-hidden", "true");
     document.body.appendChild(ball);
     document.documentElement.classList.add("has-ball");
-    var mx = -100, my = -100, bx = -100, by = -100, raf = null;
-    var ease = reduceMotion ? 1 : 0.28;
-    function loop() {
-      bx += (mx - bx) * ease;
-      by += (my - by) * ease;
-      ball.style.transform = "translate3d(" + bx + "px," + by + "px,0)";
-      raf = (Math.abs(mx - bx) > 0.2 || Math.abs(my - by) > 0.2) ? requestAnimationFrame(loop) : null;
+    // The ball sits exactly on the pointer, no easing: it moves the moment the mouse moves
+    function place(x, y) { ball.style.transform = "translate3d(" + x + "px," + y + "px,0)"; }
+    var rawMoves = "onpointerrawupdate" in window; // Chrome: every mouse sample, not just once per frame
+    if (rawMoves) {
+      document.addEventListener("pointerrawupdate", function (ev) {
+        if (ev.pointerType === "mouse") place(ev.clientX, ev.clientY);
+      }, { passive: true });
     }
     document.addEventListener("pointermove", function (ev) {
       if (ev.pointerType !== "mouse") return;
-      mx = ev.clientX; my = ev.clientY;
-      if (!ball.classList.contains("is-on")) { bx = mx; by = my; ball.classList.add("is-on"); }
+      if (!rawMoves) place(ev.clientX, ev.clientY);
+      ball.classList.add("is-on");
       var t = ev.target;
       ball.classList.toggle("is-hover", !!(t.closest && t.closest("a, button, summary, label, [role=button], .q-tile, .sample-card")));
       ball.classList.toggle("is-text", !!(t.closest && t.closest("input, textarea, select, [contenteditable]")));
-      if (!raf) raf = requestAnimationFrame(loop);
     }, { passive: true });
     document.addEventListener("pointerdown", function () { ball.classList.add("is-down"); });
     document.addEventListener("pointerup", function () { ball.classList.remove("is-down"); });
