@@ -28,7 +28,8 @@ TELANGANA_DISTRICTS = [
 DISTRICT_ALIASES = {
     "హైదరాబాద్": "Hyderabad", "हैदराबाद": "Hyderabad", "వరంగల్": "Warangal", "नलगोंडा": "Nalgonda",
     "నల్గొండ": "Nalgonda", "కరీంనగర్": "Karimnagar", "ఖమ్మం": "Khammam", "నిజామాబాద్": "Nizamabad",
-    "secunderabad": "Hyderabad", "ranga reddy": "Rangareddy",
+    "secunderabad": "Hyderabad", "ranga reddy": "Rangareddy", "hyd": "Hyderabad", "hyderabad": "Hyderabad",
+    "రంగారెడ్డి": "Rangareddy", "medchal-malkajgiri": "Medchal",
 }
 URBAN_DISTRICTS = {"Hyderabad", "Medchal", "Rangareddy"}
 
@@ -45,9 +46,15 @@ def _num(s: str) -> float:
     return float(s.replace(",", ""))
 
 
-_MONTHLY = re.compile(r"^\s*(?:rupees|rs\.?|₹)?\s*(?:per|a|every|each|/)\s*month|^\s*monthly|^\s*(?:నెలకు|ప్రతి నెల)|^\s*(?:महीना|महीने|प्रति माह|हर महीने)", re.I)
-
-_MONTH_BEFORE = re.compile(r"month|నెల|महीन|माह", re.I)
+# Words for "month", "thousand" and "lakh" as students type them: English, Telugu, Hindi,
+# and Telugu or Hindi written in English letters ("velu", "hazaar", "nelaku", "mahine").
+_MONTH_WORDS = r"month|monthly|నెల|महीन|माह|nelaku|nela\b|mahin[ae]|mahina|mahine"
+_MONTHLY = re.compile(r"^\s*(?:rupees|rs\.?|₹)?\s*(?:per|a|every|each|/|ka|ki|ke)?\s*(?:" + _MONTH_WORDS + ")", re.I)
+_MONTH_BEFORE = re.compile(_MONTH_WORDS, re.I)
+_LAKH = r"(?:lakhs?|lacs?|lac|lpa\b|l\b|lakshalu|laksha\w*|లక్షలు|లక్ష|लाख)"
+_THOUSAND = r"(?:thousand|k\b|velu|vela\b|వేలు|వేల|hazaa?r|hajar|हज़ार|हजार)"
+_INCOME_WORDS = r"income|earn\w*|salary|kamai|kamaata|aamdani|amdani|aadayam|adayam|sampad\w*|ఆదాయం|आय|आमदनी|कमाई"
+_NUMBER = r"(\d{1,3}(?:,\d{2,3})+|\d{4,7})"
 
 
 def _income(t: str):
@@ -60,17 +67,24 @@ def _income(t: str):
 
 
 def _income_once(t: str):
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(?:lakhs?|lacs?|lac|l\b|లక్షలు|లక్ష|लाख)", t, re.I)
+    # "1 lakh 20 thousand"
+    m = re.search(r"(\d+(?:\.\d+)?)\s*" + _LAKH + r"\s*(?:and\s*)?(\d+)\s*" + _THOUSAND, t, re.I)
+    if m:
+        return int(_num(m.group(1)) * 100000 + _num(m.group(2)) * 1000), m.start(), m.end()
+    m = re.search(r"(\d+(?:\.\d+)?)\s*" + _LAKH, t, re.I)
     if m:
         return int(_num(m.group(1)) * 100000), m.start(), m.end()
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(?:thousand|k\b|వేలు|వేల|हज़ार|हजार)", t, re.I)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*" + _THOUSAND, t, re.I)
     if m:
         return int(_num(m.group(1)) * 1000), m.start(), m.end()
-    # plain number near an income word, e.g. "income is 80,000"
-    m = re.search(r"(?:income|earn\w*|salary|ఆదాయం|आय|आमदनी)\D{0,30}?(\d{1,3}(?:,\d{2,3})+|\d{4,7})", t, re.I)
+    # plain number near an income word, e.g. "income is 80,000", "papa ki kamai 6000", "nelaku 15000 sampadistharu"
+    m = re.search(r"(?:" + _INCOME_WORDS + r")\D{0,30}?" + _NUMBER, t, re.I)
     if m:
-        return int(_num(m.group(1))), m.start(), m.end()
-    m = re.search(r"(\d{1,3}(?:,\d{2,3})+|\d{5,7})\s*(?:a year|per year|per annum|yearly|/year)", t, re.I)
+        return int(_num(m.group(1))), m.start(1), m.end()
+    m = re.search(_NUMBER + r"\s*(?:\S+\s*){0,1}(?:" + _INCOME_WORDS + ")", t, re.I)
+    if m:
+        return int(_num(m.group(1))), m.start(), m.end(1)
+    m = re.search(_NUMBER + r"\s*(?:a year|per year|per annum|yearly|/year)", t, re.I)
     if m:
         return int(_num(m.group(1))), m.start(), m.end()
     return None
@@ -78,28 +92,35 @@ def _income_once(t: str):
 
 def _community(t: str):
     # Short codes (SC, ST, BC, OC) are matched in capitals and standing alone, so that
-    # "B.Sc", "BCA" or "St. Ann's" are not read as a community.
-    if re.search(r"(?<![\w.])EBC(?!\w)", t) or re.search(r"\bebc\b", t, re.I):
+    # "B.Sc", "BCA" or "St. Ann's" are not read as a community. Lower case counts only
+    # next to a word like "category" ("sc category", "we are st").
+    def code(c):
+        return (re.search(r"(?<![\w.])" + c + r"(?!\w)", t)
+                or re.search(r"\b" + c + r"\s*(?:category|caste|community|student|candidate|quota)\b"
+                             r"|\b(?:we are|i am|memu|hum|ham)\s+" + c + r"\b", t, re.I))
+    if code("EBC"):
         return "EBC"
-    if re.search(r"(?<![\w.])S\.?C\b\.?", t) or re.search(r"scheduled caste|దళిత|दलित", t, re.I):
+    if code(r"S\.?C\.?") or re.search(r"scheduled caste|దళిత|दलित|ఎస్సీ|एससी|एस\.?सी", t, re.I):
         return "SC"
-    if re.search(r"(?<![\w.])S\.?T\b\.?(?!\s*[A-Z][a-z])", t) or re.search(r"scheduled tribe|tribal|గిరిజన|आदिवासी", t, re.I):
+    if (re.search(r"(?<![\w.])S\.?T\b\.?(?!\s*[A-Z][a-z])", t) or code("ST")
+            or re.search(r"scheduled tribe|tribal|\blambad[ai]\b|\bbanjara\b|\bkoya\b|\bgonds?\b|ఎస్టీ|గిరిజన|आदिवासी|एसटी", t, re.I)):
         return "ST"
-    if re.search(r"(?<![\w.])O?BC(?:[\s-][A-E])?(?!\w)", t) or re.search(r"backward|బీసీ", t, re.I):
+    if (re.search(r"(?<![\w.])O?BC(?:[\s-][A-E])?(?!\w)", t) or code("BC") or code("OBC")
+            or re.search(r"backward|బీసీ|ओबीसी|पिछड़", t, re.I)):
         return "BC"
     if re.search(r"minorit|muslim|christian|sikh|మైనారిటీ|ముస్లిం|अल्पसंख्यक|मुस्लिम", t, re.I):
         return "Minority"
-    if re.search(r"(?<![\w.])OC(?!\w)", t) or re.search(r"general (?:category|caste)|forward caste", t, re.I):
+    if (code("OC") or code("EWS") or re.search(r"general (?:category|caste)|forward caste|\bgeneral\s+category", t, re.I)):
         return "OC"
     return None
 
 
 def _education(t: str):
     checks = [
-        ("pg", r"\b(?:m\.?\s?tech|mba|mca|m\.?\s?sc\b|m\.\s?com\b|mcom\b|(?-i:M\.?A\b)|post\s?grad\w*|pg\b|masters?\b)"),
-        ("professional", r"b\.?\s?tech|(?-i:\bB\.?E\b)|engineering|mbbs|b\.?\s?pharm|pharmacy|medicine|medical (?:college|course|student)|\bbds\b|nursing|b\.?\s?arch|ఇంజనీరింగ్|इंजीनियरिंग"),
+        ("pg", r"\b(?:m\.?\s?tech|mba|mca|m\.?\s?sc\b|m\.\s?com\b|mcom\b|m\.?\s?pharm\w*|(?-i:M\.?A\b)|post\s?grad\w*|pg\b|masters?\b)"),
+        ("professional", r"b\.?\s?tech|(?-i:\bB\.?E\b)|engineering|\bengg\b|mbbs|b\.?\s?pharm|pharmacy|medicine|medical (?:college|course|student)|\bbds\b|nursing|b\.?\s?arch|ఇంజనీరింగ్|इंजीनियरिंग"),
         ("iti_polytechnic", r"polytechnic|diploma|\biti\b|పాలిటెక్నిక్|पॉलिटेक्निक"),
-        ("degree", r"\bdegree\b|b\.?\s?com|b\.?\s?sc|b\.?\s?a\b|\bbba\b|\bbca\b|graduat|డిగ్రీ|डिग्री"),
+        ("degree", r"\bdegree\b|\bb\.?\s?com|\bb\.?\s?sc|\bb\.?\s?a\b|\bbba\b|\bbca\b|graduat|డిగ్రీ|डिग्री"),
         ("inter", r"\binter\b|intermediate|junior college|\b1[12]th\b|\b1[12]\s*(?:class|std)|class\s*1[12]|ఇంటర్|इंटर"),
         ("class_10", r"class\s*10|10th\s*(?:class|std|standard)|\bin\s*10th|\bssc\b|పదవ తరగతి|दसवीं"),
         ("class_9", r"class\s*9|9th\s*(?:class|std|standard)|\bin\s*9th|తొమ్మిదవ తరగతి|नौवीं"),
@@ -110,22 +131,30 @@ def _education(t: str):
     return None
 
 
+_YEAR_WORDS = {
+    "first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4, "final": 4,
+    "మొదటి": 1, "రెండవ": 2, "రెండో": 2, "మూడవ": 3, "నాలుగవ": 4, "पहले": 1, "पहला": 1, "दूसरे": 2, "दूसरा": 2, "तीसरे": 3,
+    "modati": 1, "modhati": 1, "rendo": 2, "rendava": 2, "moodo": 3, "mudo": 3, "mudava": 3, "naalugo": 4, "nalugo": 4,
+    "pehle": 1, "pehla": 1, "pahle": 1, "doosre": 2, "dusre": 2, "doosra": 2, "dusra": 2, "teesre": 3, "tisre": 3,
+}
+
+
 def _year(t: str):
-    words = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4, "final": 4,
-             "మొదటి": 1, "రెండవ": 2, "రెండో": 2, "మూడవ": 3, "నాలుగవ": 4, "पहले": 1, "पहला": 1, "दूसरे": 2, "दूसरा": 2, "तीसरे": 3}
-    m = re.search(r"(first|1st|second|2nd|third|3rd|fourth|4th|final|మొదటి|రెండవ|రెండో|మూడవ|నాలుగవ|पहले|पहला|दूसरे|दूसरा|तीसरे)\s*(?:-|\s)?\s*(?:year|yr|సంవత్సరం|साल|वर्ष)", t, re.I)
+    m = re.search(r"(" + "|".join(_YEAR_WORDS) + r")\s*(?:-|\s)?\s*(?:year|yr|సంవత్సరం|साल|वर्ष|samvatsaram|saal|sal\b)", t, re.I)
     if m:
-        return words[m.group(1).lower()]
-    m = re.search(r"(?:year|yr)\s*(\d)", t, re.I)
+        return _YEAR_WORDS[m.group(1).lower()]
+    m = re.search(r"(?:year|yr)\s*(\d)\b", t, re.I)
     if m:
         return int(m.group(1))
     return None
 
 
 def _gender(t: str):
-    if re.search(r"\b(?:girl|female|daughter|woman|she|her)\b|विद्यार्थिनी|छात्रा|रही\s*(?:हूँ|हूं)|విద్యార్థిని|అమ్మాయి", t, re.I):
+    if re.search(r"\b(?:girl|female|daughter|woman|she|her|sister|ammayi|ammai|ladki|beti|didi)\b"
+                 r"|\b(?:rahi|rhi)\s*(?:hoon|hun|hu|hu?n)\b|विद्यार्थिनी|छात्रा|रही\s*(?:हूँ|हूं)|విద్యార్థిని|అమ్మాయి", t, re.I):
         return "female"
-    if re.search(r"\b(?:boy|male|son|man|he|his)\b|छात्र\b|रहा\s*(?:हूँ|हूं)|అబ్బాయి", t, re.I):
+    if re.search(r"\b(?:boy|male|son|man|he|his|brother|abbayi|abbai|ladka|beta)\b"
+                 r"|\b(?:raha|rha)\s*(?:hoon|hun|hu|hu?n)\b|छात्र\b|रहा\s*(?:हूँ|हूं)|అబ్బాయి", t, re.I):
         return "male"
     return None
 
@@ -135,42 +164,53 @@ def _district(t: str):
         if re.search(r"\b" + re.escape(d) + r"\b", t, re.I):
             return d
     for alias, d in DISTRICT_ALIASES.items():
-        if alias.lower() in t.lower():
+        if re.search(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", t, re.I):
             return d
     return None
 
 
 def _area(t: str, district):
-    if re.search(r"village|rural|gram|గ్రామం|పల్లె|ఊరు|गाँव|गांव|ग्रामीण", t, re.I):
+    if re.search(r"village|rural|\bgram\b|గ్రామం|పల్లె|ఊరు|गाँव|गांव|ग्रामीण|\bgaon\b|\bgaav\b|\bgav\b|\bpalle\b|\bpalli\b|\bthanda\b|\btanda\b|\b(?:maa\s+)?vooru\b", t, re.I):
         return "rural"
-    if re.search(r"\bcity\b|urban|\btown\b|शहर|నగరం|పట్టణం", t, re.I):
+    if re.search(r"\bcity\b|urban|\btown\b|शहर|నగరం|పట్టణం|\bshehar\b|\bshahar\b|\bnagaram\b|\bpattanam\b", t, re.I):
         return "urban"
     if district in URBAN_DISTRICTS:
         return "urban"
     return None
 
 
+_DISABILITY = r"disab|handicap|\bpwd\b|\bph\b|divyang|blind|deaf|hearing|wheelchair|వికలాంగ|దివ్యాంగ|दिव्यांग|विकलांग"
+
+
 def _disability(t: str):
-    if re.search(r"disab|handicap|\bpwd\b|divyang|blind|deaf|wheelchair|వికలాంగ|దివ్యాంగ|दिव्यांग|विकलांग", t, re.I):
-        if re.search(r"\bno\s+disab|not\s+disabled", t, re.I):
+    if re.search(_DISABILITY, t, re.I):
+        if re.search(r"\bno\s+disab|not\s+disabled|\bno\s+handicap", t, re.I):
             return False
         return True
     return None
 
 
 def _marks(t: str):
-    m = re.search(r"(\d{2,3}(?:\.\d+)?)\s*(?:%|percent|per cent|శాతం|प्रतिशत)", t, re.I)
-    if m:
+    for m in re.finditer(r"(\d{2,3}(?:\.\d+)?)\s*(?:%|percent|per cent|శాతం|प्रतिशत)", t, re.I):
+        near = t[max(0, m.start() - 30):m.end() + 15]
+        if re.search(_DISABILITY, near, re.I):
+            continue  # "60% handicapped" is a disability certificate, not exam marks
         v = _num(m.group(1))
         if 0 < v <= 100:
             return v
+    # Telangana SSC gives a GPA out of 10; the board's own conversion is GPA x 9.5
+    m = re.search(r"(\d{1,2}(?:\.\d+)?)\s*(?:/\s*10\s*)?(?:gpa|cgpa)|(?:gpa|cgpa)\s*(?:of|is|:)?\s*(\d{1,2}(?:\.\d+)?)", t, re.I)
+    if m:
+        v = _num(m.group(1) or m.group(2))
+        if 0 < v <= 10:
+            return round(v * 9.5, 2)
     return None
 
 
 def _college(t: str):
-    if re.search(r"government|govt|aided|zphs|zilla parishad|ప్రభుత్వ|सरकारी", t, re.I):
+    if re.search(r"government|govt|aided|zphs|zilla parishad|ప్రభుత్వ|सरकारी|\bsarkari\b|\bprabhutva\b|\bprabutva\b", t, re.I):
         return "government"
-    if re.search(r"private|ప్రైవేట్|प्राइवेट|निजी", t, re.I):
+    if re.search(r"private|ప్రైవేట్|प्राइवेट|निजी|\bprivet\b", t, re.I):
         return "private"
     return None
 
