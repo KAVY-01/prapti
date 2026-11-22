@@ -4,17 +4,22 @@
   "audience": "students",
   "schemes": [
     {
-      "deadline": "2026-12-31",
-      "deadline_note": "Tentative last date for 2026-27 (reported by Buddy4Study). Confirm on the ePASS portal.",
-      "last_verified": "2026-11-21",
+      "deadline": null,
+      "deadline_note": "Registration for 2026-27 is open, but the ePASS portal has not published a last date yet. Apply early: past years closed without much warning.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "medium",
         "sources": [
           "https://www.buddy4study.com/article/telangana-post-matric-scholarship",
-          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/"
+          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/",
+          {
+            "name": "BeInCareer (TS ePASS renewal 2026-27)",
+            "url": "https://beincareer.com/ts-epass-scholarship-renewal-2026/",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "Limits from 2026-27 guides; official ePASS notice not readable online."
+        "note": "No official 2026-27 last date on ePASS as of 22 Nov 2026; the 31 Dec date seen on some sites is a guess, so it was removed. Limits from 2026-27 guides."
       },
       "id": "ts-postmatric-sc-st",
       "name_en": "Telangana Post-Matric Scholarship (SC / ST)",
@@ -175,17 +180,22 @@
       "source_url": "https://telanganaepass.cgg.gov.in"
     },
     {
-      "deadline": "2026-12-31",
-      "deadline_note": "Tentative last date for 2026-27 (reported by Buddy4Study). Confirm on the ePASS portal.",
-      "last_verified": "2026-11-21",
+      "deadline": null,
+      "deadline_note": "Registration for 2026-27 is open, but the ePASS portal has not published a last date yet. Apply early: past years closed without much warning.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "medium",
         "sources": [
           "https://www.buddy4study.com/article/telangana-post-matric-scholarship",
-          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/"
+          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/",
+          {
+            "name": "BeInCareer (TS ePASS renewal 2026-27)",
+            "url": "https://beincareer.com/ts-epass-scholarship-renewal-2026/",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "Limits from 2026-27 guides; official ePASS notice not readable online."
+        "note": "No official 2026-27 last date on ePASS as of 22 Nov 2026; the 31 Dec date seen on some sites is a guess, so it was removed. Limits from 2026-27 guides."
       },
       "id": "ts-postmatric-bc-ebc",
       "name_en": "Telangana Post-Matric Scholarship (BC / EBC)",
@@ -346,17 +356,22 @@
       "source_url": "https://telanganaepass.cgg.gov.in"
     },
     {
-      "deadline": "2026-12-31",
-      "deadline_note": "Tentative last date for 2026-27 (reported by Buddy4Study). Confirm on the ePASS portal.",
-      "last_verified": "2026-11-21",
+      "deadline": null,
+      "deadline_note": "Registration for 2026-27 is open, but the ePASS portal has not published a last date yet. Apply early: past years closed without much warning.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "medium",
         "sources": [
           "https://www.buddy4study.com/article/telangana-post-matric-scholarship",
-          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/"
+          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/",
+          {
+            "name": "BeInCareer (TS ePASS renewal 2026-27)",
+            "url": "https://beincareer.com/ts-epass-scholarship-renewal-2026/",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "Limits from 2026-27 guides; official ePASS notice not readable online."
+        "note": "No official 2026-27 last date on ePASS as of 22 Nov 2026; the 31 Dec date seen on some sites is a guess, so it was removed. Limits from 2026-27 guides."
       },
       "id": "ts-postmatric-minority",
       "name_en": "Telangana Post-Matric Scholarship (Minorities)",
@@ -510,17 +525,22 @@
       "source_url": "https://telanganaepass.cgg.gov.in"
     },
     {
-      "deadline": "2026-12-31",
-      "deadline_note": "Tentative last date for 2026-27 (reported by Buddy4Study). Confirm on the ePASS portal.",
-      "last_verified": "2026-11-21",
+      "deadline": null,
+      "deadline_note": "Registration for 2026-27 is open, but the ePASS portal has not published a last date yet. Apply early: past years closed without much warning.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "medium",
         "sources": [
           "https://www.buddy4study.com/article/telangana-post-matric-scholarship",
-          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/"
+          "https://leverageedu.com/discover/indian-scholarships/telangana-epass-scholarship/",
+          {
+            "name": "BeInCareer (TS ePASS renewal 2026-27)",
+            "url": "https://beincareer.com/ts-epass-scholarship-renewal-2026/",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "Limits from 2026-27 guides; official ePASS notice not readable online."
+        "note": "No official 2026-27 last date on ePASS as of 22 Nov 2026; the 31 Dec date seen on some sites is a guess, so it was removed. Limits from 2026-27 guides."
       },
       "id": "ts-rtf",
       "name_en": "Telangana Reimbursement of Tuition Fee (RTF)",
@@ -884,17 +904,22 @@
       "source_url": "https://telanganaepass.cgg.gov.in"
     },
     {
-      "deadline": null,
-      "deadline_note": "The 2026-27 NSP window closed on 31 Oct 2026. Next: register for the NMMS exam in Class 8.",
-      "last_verified": "2026-11-21",
+      "deadline": "2026-10-31",
+      "deadline_note": "The 2026-27 application window on NSP closed on 31 Oct 2026. Only for students who passed the NMMS exam in Class 8; if you are in Class 8 now, register for the exam through your school.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "high",
         "sources": [
           "https://dsel.education.gov.in/sites/default/files/update/PIB2167076.pdf",
-          "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2317657"
+          "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2317657",
+          {
+            "name": "Careers360 (NMMS dates)",
+            "url": "https://news.careers360.com/telangana-national-merit-scholarship-2024-nmms-fresh-registration-renewal-last-date-october-31-ipe-class-12-link/amp",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "Income limit raised from ₹1.5L to ₹3.5L (PIB)."
+        "note": "NSP window for 2026-27 closed 31 Oct 2026. Income limit raised from ₹1.5L to ₹3.5L (PIB)."
       },
       "id": "nmms",
       "name_en": "National Means-cum-Merit Scholarship (NMMS)",
@@ -1053,18 +1078,23 @@
       "source_url": "https://scholarships.gov.in"
     },
     {
-      "deadline": null,
-      "deadline_note": "2026-27 NSP window is open; last date not confirmed (2025-26 closed 31 Oct 2025, later extended). Check NSP.",
-      "last_verified": "2026-11-21",
+      "deadline": "2026-11-30",
+      "deadline_note": "Fresh applications on NSP close 30 Nov 2026 (NSP home page). Renewals closed on 30 Sep 2026.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
-        "confidence": "medium",
+        "checked_on": "2026-11-22",
+        "confidence": "high",
         "sources": [
           "https://scholarships.gov.in/public/schemeGuidelines/FAQ_DOHE_CSSS.pdf",
           "https://myscheme.gov.in/schemes/csss-cus",
-          "https://www.goa.gov.in/wp-content/uploads/2025/09/CENTRAL-SECTOR-SCHEME.pdf"
+          "https://www.goa.gov.in/wp-content/uploads/2025/09/CENTRAL-SECTOR-SCHEME.pdf",
+          {
+            "name": "National Scholarship Portal home page",
+            "url": "https://scholarships.gov.in/studentRegPartOne/home",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "80% marks used as a stand-in for the 80th percentile cut-off, which varies by board."
+        "note": "NSP home page lists 30-11-2026 as the last date for fresh PM-USP CSSS applications."
       },
       "id": "central-sector",
       "name_en": "Central Sector Scholarship for College & University Students",
@@ -1171,17 +1201,22 @@
     },
     {
       "deadline": "2026-11-30",
-      "deadline_note": "Official notice said 31 Oct 2026; reported extended to 30 Nov 2026. Confirm on NSP today.",
-      "last_verified": "2026-11-21",
+      "deadline_note": "Student applications on NSP close 30 Nov 2026 (extended from 31 Oct). Your college's verification step closed on 15 Nov, so if your form is waiting for verification, contact your college's Institute Nodal Officer today.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "high",
         "sources": [
           "https://www.thapar.edu/upload/files/NOTICE-AICTE%20PRAGATI,%20SAKSHAM%20&%20SWANATH%20%202026-27.pdf",
           "https://www.buddy4study.com/article/pragati-scholarship",
-          "https://www.myscheme.gov.in/schemes/sak-deg"
+          "https://www.myscheme.gov.in/schemes/sak-deg",
+          {
+            "name": "Careerindia (NSP 2026-27 verification dates)",
+            "url": "https://www.careerindia.com/news/nsp-2026-27-scholarship-last-day-for-institute-verification-and-fixing-pending-applications-011-68691.html",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "AICTE notice dated 19 Jun 2026 gives last date 31 Oct 2026; Buddy4Study reports extension to 30 Nov 2026."
+        "note": "Several sources agree on the 30 Nov 2026 extension; no AICTE notice for the extension found online yet."
       },
       "id": "aicte-pragati",
       "name_en": "AICTE Pragati Scholarship for Girls",
@@ -1318,17 +1353,22 @@
     },
     {
       "deadline": "2026-11-30",
-      "deadline_note": "Official notice said 31 Oct 2026; reported extended to 30 Nov 2026. Confirm on NSP today.",
-      "last_verified": "2026-11-21",
+      "deadline_note": "Student applications on NSP close 30 Nov 2026 (extended from 31 Oct). Your college's verification step closed on 15 Nov, so if your form is waiting for verification, contact your college's Institute Nodal Officer today.",
+      "last_verified": "2026-11-22",
       "verification": {
-        "checked_on": "2026-11-21",
+        "checked_on": "2026-11-22",
         "confidence": "medium",
         "sources": [
           "https://www.thapar.edu/upload/files/NOTICE-AICTE%20PRAGATI,%20SAKSHAM%20&%20SWANATH%20%202026-27.pdf",
           "https://www.buddy4study.com/article/pragati-scholarship",
-          "https://www.myscheme.gov.in/schemes/sak-deg"
+          "https://www.myscheme.gov.in/schemes/sak-deg",
+          {
+            "name": "Careerindia (NSP 2026-27 verification dates)",
+            "url": "https://www.careerindia.com/news/nsp-2026-27-scholarship-last-day-for-institute-verification-and-fixing-pending-applications-011-68691.html",
+            "checked_on": "2026-11-22"
+          }
         ],
-        "note": "AICTE notice dated 19 Jun 2026 gives last date 31 Oct 2026; Buddy4Study reports extension to 30 Nov 2026."
+        "note": "Several sources agree on the 30 Nov 2026 extension; no AICTE notice for the extension found online yet."
       },
       "id": "aicte-saksham",
       "name_en": "AICTE Saksham Scholarship (Students with Disability)",

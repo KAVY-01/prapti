@@ -119,3 +119,13 @@ class TestGuardrailsInData(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestClosedSchemes(unittest.TestCase):
+    def test_closed_scheme_is_not_counted_in_the_amount(self):
+        from datetime import date as _date
+        s = {"id": "x", "name_en": "X", "category": "scholarship", "benefit_max_inr": 9000, "deadline": "2026-10-31",
+             "rules": [{"field": "community", "op": "eq", "value": "SC", "text_en": "SC ({user_value})"}]}
+        r = match_all({"community": "SC"}, [s], today=_date(2026, 11, 22))
+        self.assertEqual(len(r["likely"]), 1)                  # still shown, marked closed
+        self.assertEqual(r["summary"]["likely_value_inr"], 0)  # but not promised as money

@@ -197,7 +197,9 @@ def match_all(profile: dict, schemes: list[dict] | None = None, lang: str = "en"
     schemes = schemes if schemes is not None else load_schemes()
     results = [match_scheme(s, profile, lang, today) for s in schemes]
     groups = {k: sorted([r for r in results if r["status"] == k], key=_sort_key) for k in ("likely", "maybe", "no")}
-    likely_value = sum(r["benefit_max_inr"] or 0 for r in groups["likely"] if r["category"] != "loan")
+    # The headline amount counts only schemes you can still apply for this year (no loans, nothing closed).
+    likely_value = sum(r["benefit_max_inr"] or 0 for r in groups["likely"]
+                       if r["category"] != "loan" and (r["days_left"] is None or r["days_left"] >= 0))
     return {
         "likely": groups["likely"],
         "maybe": groups["maybe"],
