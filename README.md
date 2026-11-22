@@ -65,7 +65,9 @@ Before this work the same reader scored 87% and 85%. Honest caveat: we wrote the
 
 ## Who pays
 
-Free for students, replacing middlemen who charge ₹500–2,000 per application. CSR funds sponsor districts and get an outcome report. NGOs and Mee Seva centres use **Helper mode** (`/helper`): one student after another under nicknames, impact counts, and a printable checklist for students without phones. Banks pay referral fees on loan schemes only, never ranked above free schemes. Districts or the state can run it as a pilot. Full table on `/about`.
+The gap: in 2023-24 only 4,20,262 fresh students registered on Telangana's ePASS portal against about 5.50 lakh expected, and the deadline was extended ([Telangana Today, 1 Feb 2024](https://telanganatoday.com/telangana-govt-extends-last-date-for-registration-of-post-matric-scholarships)).
+
+Free for students, replacing middlemen who charge ₹500–2,000 per application. CSR funds sponsor districts and get an outcome report. NGOs and Mee Seva centres use **Helper mode** (`/helper`): one student after another under nicknames, impact counts, and a printable checklist for students without phones. Banks pay referral fees on loan schemes only, never ranked above free schemes. Districts or the state can run it as a pilot. Running cost stays near zero (plain rules, no paid AI, free-tier hosting). Next step: a pilot with three colleges or NGOs in Warangal and Nalgonda. Full table on `/about`; proposed pilot prices in SUBMISSION.md.
 
 ## Run it
 
@@ -126,5 +128,9 @@ Planned in the Codebenders IDE (its Nexen Guide, on Claude Haiku 5.5, produced t
 ## Credits
 
 Illustrations drawn for Prapti (static/img/art, SVG). Typefaces: Anek Latin, Anek Telugu, Anek Devanagari by Ek Type (Google Fonts, OFL).
+
+Photographs (static/img/photos), both CC BY-SA 4.0 via Wikimedia Commons, credited on the pages where they appear:
+- "Dome of Arts College, Osmania University" by Achalamunigal, https://commons.wikimedia.org/w/index.php?curid=46299151
+- "Kakatiya Kala Thoranam -Warangal -Telangana -001" by Bharat Kumar Jonnalagadda, https://commons.wikimedia.org/w/index.php?curid=81762698
 
 *Prapti is a free guide, not a government website. Final eligibility is decided by the scheme authority. Never pay anyone to apply.*

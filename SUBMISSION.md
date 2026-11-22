@@ -10,6 +10,21 @@ A student in Telangana describes their life in plain words, even Telugu or Hindi
 **Description (about 170 words):**
 Every year, eligible students in Telangana miss scholarships because the rules are scattered, the document list is unclear, and middlemen charge for help that should be free. Prapti asks only for plain words, never an ID number. Its offline reader understands English, Telugu, Hindi, and Telugu or Hindi typed in English letters, typed or spoken (100% of details read correctly on 72 test messages, nothing invented), then asks only the questions that would change a result. A plain rules engine checks 10 Telangana and central schemes and shows every rule with the student's own answer, including "nearly a match: ₹20,000 over the limit". A "What if?" slider re-checks every scheme live as income or marks change and shows the exact limit that decides it. All documents for all their schemes come as one list grouped by place, with a warning when a certificate takes longer than the days left. A tracker, reminders and WhatsApp sharing follow, and opened pages keep working offline. Rules are editable data; a page checker flags official pages that changed. Free for students; NGOs, CSR funds and Mee Seva centres use Helper mode.
 
+**Business model (who pays, and why it stays free for students):**
+- The gap: in 2023-24 only 4,20,262 fresh students registered on Telangana's ePASS portal against about 5.50 lakh expected, and the deadline was extended (Telangana Today, 1 Feb 2024: https://telanganatoday.com/telangana-govt-extends-last-date-for-registration-of-post-matric-scholarships). Middlemen charge ₹500–2,000 per application to fill that gap.
+- Students: free, always.
+- NGOs and education trusts: Helper mode (many students on one device, printable checklists, impact count) as a low-cost licence per district. Proposed pilot price: ₹2,000 per district per month.
+- CSR funds: sponsor a district and receive an outcome report (students reached, rupees of scholarships unlocked per rupee spent). Proposed: ₹1,50,000 per district per year.
+- Banks: a referral fee on education-loan schemes only, always shown below free schemes.
+- State or district: a pilot contract to run it statewide.
+- Running cost stays near zero: eligibility runs on plain rules (no paid AI), on free-tier hosting.
+- Next step: a pilot with three colleges or NGOs in Warangal and Nalgonda, measuring applications filed and scholarships received.
+
+**How we used Codebenders:**
+- Planned in the Codebenders IDE: its Nexen Guide (on Claude Haiku 5.5) produced the product plan, the screen list and a starter project, which set the structure the final app kept (plain-words input, rules engine, per-scheme checklist, tracker).
+- Smaller tasks were done inside the IDE with Haiku 5.5 (the home-screen icon, an image pass).
+- When the IDE had problems on 21 Nov, the organisers allowed participants' own tools; the rest was written with Claude Code (Claude Opus 5.5). Details in README.md, "How this was built".
+
 **Team:** KAVY · Vedangi Karthik and Siddharth Kaithi
 
 **Live demo (works on any phone, nothing to install):** https://prapti-telangana.vercel.app
