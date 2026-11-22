@@ -15,7 +15,8 @@
   {% endif %}
   {# First screen: one clear job. Everything else is one scroll away. #}
   <div class="hero-simple">
-    <h1 class="hero-title">{{ t('home.title') }}</h1>
+    {% set title_parts = t('home.title').split('{') %}
+    <h1 class="hero-title">{{ title_parts[0] }}{% if title_parts | length > 1 %}{% set rest = title_parts[1].split('}') %}<span class="hero-claim">{{ rest[0] }}<svg class="hero-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg></span>{{ rest[1] if rest | length > 1 }}{% endif %}</h1>
     <p class="hero-lead">{{ t('home.lead') }}</p>
     <form action="/start" method="post" class="tap-start">
       <button type="submit" class="tap-btn">
@@ -96,17 +97,17 @@
     <article class="moment">
       <h3 class="moment-title">{{ t('m1.t') }}</h3>
       <p class="moment-text">{{ t('m1.p') }}</p>
-      <img class="moment-pic" src="{{ url_for('static', filename='img/art/tell.svg') }}" width="800" height="600" alt="A phone with a message typed in plain words and a microphone button" loading="lazy" decoding="async" style="--rise: 24px">
+      <img class="moment-pic" src="{{ url_for('static', filename='img/art/tell.svg') }}" width="800" height="800" alt="A speech bubble with a voice wave, and a microphone" loading="lazy" decoding="async" style="--rise: 24px">
     </article>
     <article class="moment">
       <h3 class="moment-title">{{ t('m2.t') }}</h3>
       <p class="moment-text">{{ t('m2.p') }}</p>
-      <img class="moment-pic" src="{{ url_for('static', filename='img/art/why.svg') }}" width="800" height="600" alt="A card listing each rule with a tick, and a coin" loading="lazy" decoding="async" style="--rise: 96px">
+      <img class="moment-pic" src="{{ url_for('static', filename='img/art/why.svg') }}" width="800" height="800" alt="A card of rules, each one ticked, and a rupee coin" loading="lazy" decoding="async" style="--rise: 96px">
     </article>
     <article class="moment">
       <h3 class="moment-title">{{ t('m3.t') }}</h3>
       <p class="moment-text">{{ t('m3.p') }}</p>
-      <img class="moment-pic" src="{{ url_for('static', filename='img/art/track.svg') }}" width="800" height="600" alt="A certificate and a calendar with the last date circled and a reminder bell" loading="lazy" decoding="async" style="--rise: 56px">
+      <img class="moment-pic" src="{{ url_for('static', filename='img/art/track.svg') }}" width="800" height="800" alt="A certificate and a calendar with the last date ticked, and a reminder bell" loading="lazy" decoding="async" style="--rise: 56px">
     </article>
   </div>
 </section>

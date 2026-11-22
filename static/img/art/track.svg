@@ -1,36 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="A certificate and a calendar with the last date circled and a reminder bell">
-  <rect width="800" height="600" fill="#e8eff8"/>
-  <circle cx="680" cy="110" r="110" fill="#e8eff8"/>
-  <circle cx="100" cy="500" r="140" fill="#e8eff8"/>
-  <g transform="rotate(-6 290 300)">
-    <path d="M160 120 h200 l50 50 v300 h-250 z" fill="#ffffff"/>
-    <path d="M360 120 v50 h50 z" fill="#e8eff8"/>
-    <rect x="190" y="160" width="130" height="14" rx="7" fill="#1f3b70"/>
-    <rect x="190" y="200" width="180" height="9" rx="4.5" fill="#c9d8ec"/>
-    <rect x="190" y="222" width="160" height="9" rx="4.5" fill="#c9d8ec"/>
-    <rect x="190" y="244" width="175" height="9" rx="4.5" fill="#c9d8ec"/>
-    <rect x="190" y="266" width="120" height="9" rx="4.5" fill="#c9d8ec"/>
-    <circle cx="330" cy="390" r="40" fill="none" stroke="#3f7fd0" stroke-width="6"/>
-    <circle cx="330" cy="390" r="27" fill="#e8eff8"/>
-    <path d="M318 390 l9 9 l16 -18" stroke="#1f3b70" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="190" y="410" width="80" height="8" rx="4" fill="#1f3b70"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#e8eff8"/>
+  <circle cx="630" cy="620" r="150" fill="#dde7f4"/>
+  <!-- a certificate peeking out behind -->
+  <g transform="rotate(-9 300 420)">
+    <rect x="170" y="270" width="250" height="320" rx="24" fill="#fff"/>
+    <rect x="205" y="318" width="140" height="14" rx="7" fill="#1f3b70"/>
+    <rect x="205" y="352" width="170" height="9" rx="4.5" fill="#c9d8ec"/>
+    <rect x="205" y="374" width="150" height="9" rx="4.5" fill="#c9d8ec"/>
+    <rect x="205" y="396" width="160" height="9" rx="4.5" fill="#c9d8ec"/>
   </g>
-  <rect x="420" y="190" width="250" height="250" rx="26" fill="#ffffff"/>
-  <rect x="420" y="190" width="250" height="64" rx="26" fill="#1f3b70"/>
-  <rect x="420" y="226" width="250" height="28" fill="#1f3b70"/>
-  <rect x="465" y="170" width="14" height="44" rx="7" fill="#3f7fd0"/>
-  <rect x="611" y="170" width="14" height="44" rx="7" fill="#3f7fd0"/>
+  <!-- calendar -->
+  <rect x="330" y="300" width="300" height="290" rx="34" fill="#fff"/>
+  <path d="M364 300h232a34 34 0 0 1 34 34v36H330v-36a34 34 0 0 1 34-34z" fill="#1f3b70"/>
+  <rect x="400" y="276" width="16" height="50" rx="8" fill="#1f3b70"/>
+  <rect x="544" y="276" width="16" height="50" rx="8" fill="#1f3b70"/>
   <g fill="#e8eff8">
-    <rect x="448" y="276" width="34" height="30" rx="8"/><rect x="494" y="276" width="34" height="30" rx="8"/><rect x="540" y="276" width="34" height="30" rx="8"/><rect x="586" y="276" width="34" height="30" rx="8"/>
-    <rect x="448" y="318" width="34" height="30" rx="8"/><rect x="494" y="318" width="34" height="30" rx="8"/><rect x="540" y="318" width="34" height="30" rx="8"/><rect x="586" y="318" width="34" height="30" rx="8"/>
-    <rect x="448" y="360" width="34" height="30" rx="8"/><rect x="494" y="360" width="34" height="30" rx="8"/><rect x="586" y="360" width="34" height="30" rx="8"/>
+    <rect x="362" y="398" width="46" height="40" rx="10"/><rect x="420" y="398" width="46" height="40" rx="10"/><rect x="478" y="398" width="46" height="40" rx="10"/><rect x="536" y="398" width="46" height="40" rx="10"/>
+    <rect x="362" y="452" width="46" height="40" rx="10"/><rect x="420" y="452" width="46" height="40" rx="10"/><rect x="536" y="452" width="46" height="40" rx="10"/>
+    <rect x="362" y="506" width="46" height="40" rx="10"/><rect x="420" y="506" width="46" height="40" rx="10"/><rect x="478" y="506" width="46" height="40" rx="10"/><rect x="536" y="506" width="46" height="40" rx="10"/>
   </g>
-  <rect x="540" y="360" width="34" height="30" rx="8" fill="#1f3b70"/>
-  <circle cx="557" cy="375" r="28" fill="none" stroke="#3f7fd0" stroke-width="6"/>
-  <g transform="translate(650 160)">
-    <circle cx="0" cy="0" r="46" fill="#3f7fd0"/>
-    <path d="M-18 12 q0 -34 18 -34 q18 0 18 34 l6 6 h-48 z" fill="#ffffff"/>
-    <circle cx="0" cy="24" r="6" fill="#ffffff"/>
-    <path d="M30 -30 q12 10 12 26 M-30 -30 q-12 10 -12 26" stroke="#ffffff" stroke-width="5" fill="none" stroke-linecap="round"/>
-  </g>
+  <!-- the last date, ticked -->
+  <rect x="478" y="452" width="46" height="40" rx="10" fill="#3f7fd0"/>
+  <path d="M490 472l8 8 15-16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- reminder bell -->
+  <circle cx="620" cy="300" r="46" fill="#1f3b70"/>
+  <path d="M604 314c0-26 6-36 16-36s16 10 16 36l6 6h-44z" fill="#fff"/>
+  <circle cx="620" cy="328" r="5" fill="#fff"/>
+  <path d="M660 220c2 14 12 24 26 26-14 2-24 12-26 26-2-14-12-24-26-26 14-2 24-12 26-26z" fill="#3f7fd0"/>
 </svg>

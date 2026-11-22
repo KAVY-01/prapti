@@ -198,7 +198,7 @@ class TestFlow(unittest.TestCase):
         self.c.get("/lang/te")
         page = self.c.get("/").get_data(as_text=True)
         self.assertIn('<html lang="te">', page)
-        self.assertIn("మీ స్కాలర్‌షిప్‌లు మీ కోసం ఎదురుచూస్తున్నాయి", page)
+        self.assertIn("ఎదురుచూస్తున్నాయి", page)
         self.c.post("/find", data={"sample": "lakshmi"})
         page = self.c.get("/results").get_data(as_text=True)
         self.assertIn("లక్ష్మి", page)
