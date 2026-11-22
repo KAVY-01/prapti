@@ -88,7 +88,7 @@ PRAPTI_AI=off python -m unittest discover -s tests -t .
 | `ADMIN_PASSWORD` | Scheme editor password (demo default `prapti-demo`). |
 | `PRAPTI_SANDBOX` | `1` keeps editor changes in each visitor's own session (on by default on Vercel). |
 | `SECRET_KEY` | Signs the session cookie; without it a random key is kept in `.secret_key`. |
-| `ANTHROPIC_API_KEY` | Optional: lets Claude read messages the offline reader cannot. Off on the demo; the rules engine always decides eligibility. |
+| `ANTHROPIC_API_KEY` | Optional: lets an AI model read messages the offline reader cannot. Off on the demo; the rules engine always decides eligibility. |
 
 ## How it is built
 
@@ -98,7 +98,7 @@ app.py                  Flask: home, questions, results, scheme, one-trip list, 
 engine/extract.py       Plain words -> profile: ID scrubber + offline reader (5 writing styles)
 engine/match.py         Rules engine: likely / might be / not a match, reasons, near misses
 engine/sources.py       Official-page watcher: text snapshots and change check
-engine/llm.py           Optional Claude reading (never decides eligibility)
+engine/llm.py           Optional AI reading (never decides eligibility)
 engine/ics.py           Calendar file with reminders
 data/schemes.json       10 schemes: rules, documents (tagged by place and time), steps, sources, checks
 data/i18n.json          Every screen in English, Telugu and Hindi
