@@ -150,11 +150,16 @@ def _year(t: str):
 
 
 def _gender(t: str):
-    if re.search(r"\b(?:girl|female|daughter|woman|she|her|sister|ammayi|ammai|ladki|beti|didi)\b"
-                 r"|\b(?:rahi|rhi)\s*(?:hoon|hun|hu|hu?n)\b|विद्यार्थिनी|छात्रा|रही\s*(?:हूँ|हूं)|విద్యార్థిని|అమ్మాయి", t, re.I):
+    # Pronouns (he/she/his/her) are left out on purpose: in these messages they usually describe
+    # a parent ("my father, he is a farmer"), not the student. A sibling counts only when the
+    # sibling is the one studying ("my sister is doing engineering").
+    if re.search(r"\b(?:girl|female|daughter|woman|ammayi|ammai|ladki|beti)\b"
+                 r"|\bsister\s+(?:is\s+)?(?:studying|doing|in|joined|studies|got)\b"
+                 r"|\b(?:rahi|rhi)\s*(?:hoon|hun|hu|hu?n)\b|विद्यार्थिनी|छात्रा|रही\s*(?:हूँ|हूं)|విద్యార్థిని|అమ్మాయి|बेटी|लड़की", t, re.I):
         return "female"
-    if re.search(r"\b(?:boy|male|son|man|he|his|brother|abbayi|abbai|ladka|beta)\b"
-                 r"|\b(?:raha|rha)\s*(?:hoon|hun|hu|hu?n)\b|छात्र\b|रहा\s*(?:हूँ|हूं)|అబ్బాయి", t, re.I):
+    if re.search(r"\b(?:boy|male|son|abbayi|abbai|ladka|beta)\b"
+                 r"|\bbrother\s+(?:is\s+)?(?:studying|doing|in|joined|studies|got)\b"
+                 r"|\b(?:raha|rha)\s*(?:hoon|hun|hu|hu?n)\b|छात्र\b|रहा\s*(?:हूँ|हूं)|అబ్బాయి|बेटा|लड़का", t, re.I):
         return "male"
     return None
 
@@ -198,7 +203,8 @@ def _marks(t: str):
         v = _num(m.group(1))
         if 0 < v <= 100:
             return v
-    # Telangana SSC gives a GPA out of 10; the board's own conversion is GPA x 9.5
+    # Telangana SSC gives a GPA out of 10. GPA x 9.5 is the widely used approximate conversion
+    # (the board publishes no official formula), so a GPA gives an approximate percentage.
     m = re.search(r"(\d{1,2}(?:\.\d+)?)\s*(?:/\s*10\s*)?(?:gpa|cgpa)|(?:gpa|cgpa)\s*(?:of|is|:)?\s*(\d{1,2}(?:\.\d+)?)", t, re.I)
     if m:
         v = _num(m.group(1) or m.group(2))

@@ -21,6 +21,39 @@ app = Flask(__name__)
 # see their change in results, while everyone else still sees the verified data.
 SANDBOX = os.environ.get("PRAPTI_SANDBOX", "").lower() in ("1", "on", "true") or bool(os.environ.get("VERCEL"))
 MAX_TEXT = 600  # characters of free text we read; plenty for "who I am", and keeps AI cost and cookies small
+
+# ---------- Security basics ----------
+ON_HTTPS = bool(os.environ.get("VERCEL")) or os.environ.get("HTTPS", "").lower() in ("1", "on", "true")
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,     # page scripts cannot read the session cookie
+    SESSION_COOKIE_SAMESITE="Lax",    # other websites cannot submit our forms with the visitor's cookie
+    SESSION_COOKIE_SECURE=ON_HTTPS,   # cookie only travels over https on the live site
+    MAX_CONTENT_LENGTH=64 * 1024,     # no request body bigger than 64 KB
+)
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",  # a few small inline scripts; nothing from other sites
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data:",
+    "connect-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+])
+
+
+@app.after_request
+def security_headers(resp):
+    resp.headers.setdefault("Content-Security-Policy", CSP)
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    resp.headers.setdefault("Permissions-Policy", "camera=(), geolocation=(), microphone=(self)")  # mic: voice input
+    if ON_HTTPS:
+        resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
+    return resp
 app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 180  # remember language and answers for 6 months
 # The session only holds the student's answers (never ID numbers) on their own device.
 # Without SECRET_KEY a random key is made once and kept in .secret_key (git-ignored), so nobody can

@@ -1,3 +1,2 @@
 flask
-gunicorn  # production server (Render)
-anthropic  # optional: AI reading of messages when ANTHROPIC_API_KEY is set
+anthropic  # optional: AI reading of messages when ANTHROPIC_API_KEY is set (off on the demo)

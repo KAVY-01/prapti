@@ -143,3 +143,30 @@ HOLDOUT = [
     ("EWS category, BSc 1st year, income 7.5 lakh, govt college",
      dict(community="OC", education_level="degree", year=1, annual_income=750000, college_type="government")),
 ]
+
+# Added after the first round: messages written to tempt the reader into wrong guesses,
+# plus more messages in Telugu and Hindi script. Scored with the practice set.
+TRAPS_AND_SCRIPTS = [
+    ("My father, he is a farmer. I am in inter 1st year, BC, income 1 lakh",
+     dict(education_level="inter", year=1, community="BC", annual_income=100000)),
+    ("My mother works as a maid, she earns 5000 per month. I'm in 10th class, SC",
+     dict(annual_income=60000, education_level="class_10", community="SC")),
+    ("My brother pays my fees. I study B.Com 2nd year, OC, income 2 lakh",
+     dict(education_level="degree", year=2, community="OC", annual_income=200000)),
+    ("St. Joseph's school, class 9, BC-A, income 80000 a year",
+     dict(education_level="class_9", community="BC", annual_income=80000)),
+    ("I scored 450 marks out of 600 in inter 1st year, ST, income 1.2 lakh",
+     dict(education_level="inter", year=1, community="ST", annual_income=120000)),
+    ("We are 5 members in family, income 1.5 lakh, I am in degree 1st year, SC",
+     dict(annual_income=150000, education_level="degree", year=1, community="SC")),
+    ("నేను అమ్మాయిని, డిగ్రీ మొదటి సంవత్సరం, మేము బీసీ, మా ఆదాయం 1 లక్ష, మా ఊరు ఖమ్మం దగ్గర పల్లె",
+     dict(gender="female", education_level="degree", year=1, community="BC", annual_income=100000, area="rural",
+          district="Khammam")),  # "a village near Khammam", read the same way as "near Warangal" above
+    ("నేను పాలిటెక్నిక్ రెండవ సంవత్సరం, ఎస్టీ, ప్రభుత్వ కాలేజీ, ఆదాయం నెలకు 6 వేలు",
+     dict(education_level="iti_polytechnic", year=2, community="ST", college_type="government", annual_income=72000)),
+    ("मैं इंटर दूसरे साल में पढ़ रही हूँ, हम एससी हैं, सरकारी कॉलेज, आय 90 हजार",
+     dict(education_level="inter", year=2, gender="female", community="SC", college_type="government",
+          annual_income=90000)),
+    ("मेरा बेटा दसवीं में है, हम मुस्लिम हैं, गाँव में रहते हैं, महीने की कमाई 7000",
+     dict(gender="male", education_level="class_10", community="Minority", area="rural", annual_income=84000)),
+]

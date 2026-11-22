@@ -1,8 +1,8 @@
-"""Keeps the offline reader honest: 60 realistic messages in five writing styles."""
+"""Keeps the offline reader honest: 70 realistic messages in five writing styles, including traps."""
 import unittest
 
 from scripts.reader_eval import score
-from tests.reader_cases import HOLDOUT, PRACTICE
+from tests.reader_cases import HOLDOUT, PRACTICE, TRAPS_AND_SCRIPTS
 
 
 class TestReaderAccuracy(unittest.TestCase):
@@ -13,6 +13,9 @@ class TestReaderAccuracy(unittest.TestCase):
 
     def test_practice_messages(self):
         self.check(PRACTICE)
+
+    def test_trap_and_script_messages(self):
+        self.check(TRAPS_AND_SCRIPTS)
 
     def test_holdout_messages(self):
         self.check(HOLDOUT)

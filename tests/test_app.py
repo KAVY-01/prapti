@@ -40,6 +40,14 @@ class TestFlow(unittest.TestCase):
         finally:
             app_module.SANDBOX = False
 
+    def test_security_headers_and_limits(self):
+        r = self.c.get("/")
+        self.assertIn("frame-ancestors 'none'", r.headers["Content-Security-Policy"])
+        self.assertEqual(r.headers["X-Content-Type-Options"], "nosniff")
+        self.assertEqual(app.config["SESSION_COOKIE_SAMESITE"], "Lax")
+        big = self.c.post("/api/extract", data="x" * 70000, content_type="application/json")
+        self.assertEqual(big.status_code, 413)
+
     def test_bad_form_values_do_not_crash(self):
         self.c.post("/start")
         r = self.c.post("/questions", data={"field": "annual_income", "value": "lots"})

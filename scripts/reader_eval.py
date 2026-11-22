@@ -1,6 +1,6 @@
 """Score the offline reader against realistic student messages.
 
-    python scripts/reader_eval.py            # practice set, with every miss listed
+    python scripts/reader_eval.py            # practice set + trap/script messages, every miss listed
     python scripts/reader_eval.py --holdout  # the honest number (never tuned on)
 
 Two numbers per set:
@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engine.extract import PROFILE_KEYS, extract  # noqa: E402
-from tests.reader_cases import HOLDOUT, PRACTICE  # noqa: E402
+from tests.reader_cases import HOLDOUT, PRACTICE, TRAPS_AND_SCRIPTS  # noqa: E402
 
 
 def same(field, got, want):
@@ -44,7 +44,7 @@ def score(cases, show=True):
 
 if __name__ == "__main__":
     holdout = "--holdout" in sys.argv
-    cases = HOLDOUT if holdout else PRACTICE
+    cases = HOLDOUT if holdout else PRACTICE + TRAPS_AND_SCRIPTS
     stated, right, invented = score(cases, show=not holdout or "-v" in sys.argv)
     name = "HOLDOUT" if holdout else "PRACTICE"
     print(f"\n{name}: {len(cases)} messages · read correctly {right}/{stated} ({100 * right / stated:.1f}%) · "

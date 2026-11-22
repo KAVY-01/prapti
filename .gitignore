@@ -35,3 +35,6 @@ postcss.config.mjs
 tailwind.config.ts
 tsconfig.json
 .secret_key
+
+# Codebenders IDE screenshots
+preview/

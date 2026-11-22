@@ -1,0 +1,11 @@
+{
+  "name": "Prapti - scholarships you can claim",
+  "short_name": "Prapti",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e5e1d8",
+  "theme_color": "#e5e1d8",
+  "icons": [
+    { "src": "/static/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
