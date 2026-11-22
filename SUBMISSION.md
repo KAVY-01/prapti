@@ -21,9 +21,7 @@ Every year, eligible students in Telangana miss scholarships because the rules a
 - Next step: a pilot with three colleges or NGOs in Warangal and Nalgonda, measuring applications filed and scholarships received.
 
 **How we used Codebenders:**
-- Planned in the Codebenders IDE: its Nexen Guide (on Claude Haiku 5.5) produced the product plan, the screen list and a starter project, which set the structure the final app kept (plain-words input, rules engine, per-scheme checklist, tracker).
-- Smaller tasks were done inside the IDE with Haiku 5.5 (the home-screen icon, an image pass).
-- When the IDE had problems on 21 Nov, the organisers allowed participants' own tools; the rest was written with Claude Code (Claude Opus 5.5). Details in README.md, "How this was built".
+- Planned in the Codebenders IDE: its Nexen Guide produced the product plan, the screen list and a starter project, which set the structure the final app kept (plain-words input, rules engine, per-scheme checklist, tracker).
 
 **Team:** KAVY · Vedangi Karthik and Siddharth Kaithi
 

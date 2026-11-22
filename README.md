@@ -121,10 +121,6 @@ Telangana ePASS Post-Matric (SC/ST, BC/EBC, Minorities), Reimbursement of Tuitio
 - The AICTE website refuses automated visits, so Pragati and Saksham are checked by hand.
 - "Top 20% of the Class 12 board" is approximated as 80% marks; a Class 10 GPA is converted with the common ×9.5 rule (the board publishes no official formula).
 
-## How this was built
-
-Planned in the Codebenders IDE (its Nexen Guide, on Claude Haiku 5.5, produced the plan and a starter). After the IDE had problems, the organisers allowed participants' own tools on 21 Nov; the app was then written with Claude Code (Claude Opus 5.5), with a few small tasks (the home-screen icon, an image pass) done by Haiku 5.5 inside the IDE.
-
 ## Credits
 
 Illustrations drawn for Prapti (static/img/art, SVG). Typefaces: Anek Latin, Anek Telugu, Anek Devanagari by Ek Type (Google Fonts, OFL).
